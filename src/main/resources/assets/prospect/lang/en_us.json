@@ -1,3 +1,16 @@
 {
-  "itemGroup.hearthandharvest": "Prospect"
+  "itemGroup.prospect": "Prospect",
+
+  "item.prospect.copper_pan": "Copper Pan",
+  "item.prospect.iron_pan": "Iron Pan",
+  "item.prospect.gold_pan": "Gold Pan",
+  "item.prospect.netherite_pan": "Netherite Pan",
+
+  "item.prospect.ruby": "Ruby",
+  "item.prospect.sapphire": "Sapphire",
+  "item.prospect.topaz": "Topaz",
+
+  "block.prospect.ruby_ore": "Ruby Ore",
+  "block.prospect.sapphire_ore": "Sapphire Ore",
+  "block.prospect.topaz_ore": "Topaz Ore"
 }

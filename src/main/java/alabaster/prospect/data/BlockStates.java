@@ -1,6 +1,7 @@
 package alabaster.prospect.data;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.registry.ProspectModBlocks;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -31,6 +32,9 @@ public class BlockStates extends BlockStateProvider
 
     @Override
     protected void registerStatesAndModels() {
+        this.simpleBlock(ProspectModBlocks.RUBY_ORE.get());
+        this.simpleBlock(ProspectModBlocks.SAPPHIRE_ORE.get());
+        this.simpleBlock(ProspectModBlocks.TOPAZ_ORE.get());
 
     }
     public void crateBlock(Block block, String cropName) {
