@@ -1,6 +1,6 @@
 {
   "type": "neoforge:add_features",
-  "biomes": "#c:is_hot",
+  "biomes": "#c:is_dry",
   "features": ["prospect:ore_ruby", "prospect:ore_ruby_buried", "prospect:ore_ruby_large", "prospect:ore_ruby_medium"],
   "step": "underground_ores"
 }
