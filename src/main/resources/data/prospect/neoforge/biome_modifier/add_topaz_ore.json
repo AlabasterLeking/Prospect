@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#c:is_jungle",
+  "features": ["prospect:ore_topaz", "prospect:ore_topaz_buried", "prospect:ore_topaz_large", "prospect:ore_topaz_medium"],
+  "step": "underground_ores"
+}

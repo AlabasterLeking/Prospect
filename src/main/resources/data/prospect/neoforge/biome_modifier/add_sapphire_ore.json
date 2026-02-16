@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#c:is_cold",
+  "features": ["prospect:ore_sapphire", "prospect:ore_sapphire_buried", "prospect:ore_sapphire_large", "prospect:ore_sapphire_medium"],
+  "step": "underground_ores"
+}
