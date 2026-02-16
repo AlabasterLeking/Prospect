@@ -18,4 +18,11 @@ public class ProspectModBlocks {
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_ORE)));
     public static final Supplier<Block> TOPAZ_ORE = BLOCKS.register("topaz_ore",
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_ORE)));
+
+    public static final Supplier<Block> DEEPSLATE_RUBY_ORE = BLOCKS.register("deepslate_ruby_ore",
+            () -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)));
+    public static final Supplier<Block> DEEPSLATE_SAPPHIRE_ORE = BLOCKS.register("deepslate_sapphire_ore",
+            () -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)));
+    public static final Supplier<Block> DEEPSLATE_TOPAZ_ORE = BLOCKS.register("deepslate_topaz_ore",
+            () -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)));
 }

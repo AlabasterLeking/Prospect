@@ -12,5 +12,9 @@
 
   "block.prospect.ruby_ore": "Ruby Ore",
   "block.prospect.sapphire_ore": "Sapphire Ore",
-  "block.prospect.topaz_ore": "Topaz Ore"
+  "block.prospect.topaz_ore": "Topaz Ore",
+
+  "block.prospect.deepslate_ruby_ore": "Deepslate Ruby Ore",
+  "block.prospect.deepslate_sapphire_ore": "Deepslate Sapphire Ore",
+  "block.prospect.deepslate_topaz_ore": "Deepslate Topaz Ore"
 }

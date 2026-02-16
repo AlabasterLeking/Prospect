@@ -34,7 +34,7 @@ public class ProspectModItems {
     public static final Supplier<Item> NETHERITE_PAN = registerWithTab("netherite_pan",
             () -> new Item(basicItem()));
 
-    // Minerals and Ores
+    // Ores and Minerals
     public static final Supplier<Item> RUBY = registerWithTab("ruby",
             () -> new Item(basicItem()));
     public static final Supplier<Item> SAPPHIRE = registerWithTab("sapphire",
@@ -48,4 +48,11 @@ public class ProspectModItems {
             () -> new BlockItem(ProspectModBlocks.SAPPHIRE_ORE.get(), basicItem()));
     public static final Supplier<Item> TOPAZ_ORE = registerWithTab("topaz_ore",
             () -> new BlockItem(ProspectModBlocks.TOPAZ_ORE.get(), basicItem()));
+
+    public static final Supplier<Item> DEEPSLATE_RUBY_ORE = registerWithTab("deepslate_ruby_ore",
+            () -> new BlockItem(ProspectModBlocks.DEEPSLATE_RUBY_ORE.get(), basicItem()));
+    public static final Supplier<Item> DEEPSLATE_SAPPHIRE_ORE = registerWithTab("deepslate_sapphire_ore",
+            () -> new BlockItem(ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(), basicItem()));
+    public static final Supplier<Item> DEEPSLATE_TOPAZ_ORE = registerWithTab("deepslate_topaz_ore",
+            () -> new BlockItem(ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get(), basicItem()));
 }

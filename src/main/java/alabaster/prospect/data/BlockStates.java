@@ -35,6 +35,9 @@ public class BlockStates extends BlockStateProvider
         this.simpleBlock(ProspectModBlocks.RUBY_ORE.get());
         this.simpleBlock(ProspectModBlocks.SAPPHIRE_ORE.get());
         this.simpleBlock(ProspectModBlocks.TOPAZ_ORE.get());
+        this.simpleBlock(ProspectModBlocks.DEEPSLATE_RUBY_ORE.get());
+        this.simpleBlock(ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get());
+        this.simpleBlock(ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get());
 
     }
     public void crateBlock(Block block, String cropName) {
