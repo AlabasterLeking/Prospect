@@ -1,8 +1,10 @@
 package alabaster.prospect.data;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.registry.ProspectModBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -40,6 +42,13 @@ public class ProspectBlockTags extends BlockTagsProvider {
     }
 
     protected void registerBlockMineables() {
-
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                ProspectModBlocks.RUBY_ORE.get(),
+                ProspectModBlocks.SAPPHIRE_ORE.get(),
+                ProspectModBlocks.TOPAZ_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_RUBY_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get()
+        );
     }
 }
