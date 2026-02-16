@@ -34,6 +34,10 @@ public class ProspectModItems {
     public static final Supplier<Item> NETHERITE_PAN = registerWithTab("netherite_pan",
             () -> new Item(basicItem()));
 
+    // Tools
+    public static final Supplier<Item> GUNPOWDER_FUSE = registerWithTab("gunpowder_fuse",
+            () -> new BlockItem(ProspectModBlocks.GUNPOWDER_FUSE.get(), basicItem()));
+
     // Ores and Minerals
     public static final Supplier<Item> RUBY = registerWithTab("ruby",
             () -> new Item(basicItem()));

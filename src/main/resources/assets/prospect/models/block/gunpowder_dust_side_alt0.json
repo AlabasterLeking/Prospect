@@ -1,0 +1,6 @@
+{
+  "parent": "prospect:block/gunpowder_dust_side_alt",
+  "textures": {
+    "line": "prospect:block/gunpowder_dust_line0"
+  }
+}

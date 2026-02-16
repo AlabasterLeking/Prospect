@@ -1,6 +1,7 @@
 package alabaster.prospect.common.registry;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.block.GunpowderFuseBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.*;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -25,4 +26,8 @@ public class ProspectModBlocks {
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)));
     public static final Supplier<Block> DEEPSLATE_TOPAZ_ORE = BLOCKS.register("deepslate_topaz_ore",
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)));
+
+    // Tools
+    public static final Supplier<Block> GUNPOWDER_FUSE = BLOCKS.register("gunpowder_fuse",
+            () -> new GunpowderFuseBlock(Block.Properties.ofFullCopy(Blocks.REDSTONE_WIRE)));
 }
