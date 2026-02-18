@@ -23,6 +23,7 @@ public class Prospect {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
         ProspectModBlocks.BLOCKS.register(modEventBus);
         ProspectModItems.ITEMS.register(modEventBus);
+        ProspectModEntities.ENTITIES.register(modEventBus);
         ProspectModCreativeTabs.CREATIVE_TABS.register(modEventBus);
     }
 
