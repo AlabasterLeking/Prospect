@@ -27,17 +27,17 @@ public class ProspectModItems {
 
     // Pans
     public static final Supplier<Item> COPPER_PAN = registerWithTab("copper_pan",
-            () -> new PanItem(basicItem().stacksTo(1)));
+            () -> new PanItem(basicItem().stacksTo(1).durability( 32)));
     public static final Supplier<Item> IRON_PAN = registerWithTab("iron_pan",
-            () -> new PanItem(basicItem().stacksTo(1)));
+            () -> new PanItem(basicItem().stacksTo(1).durability( 64)));
     public static final Supplier<Item> GOLD_PAN = registerWithTab("gold_pan",
-            () -> new PanItem(basicItem().stacksTo(1)));
+            () -> new PanItem(basicItem().stacksTo(1).durability( 16)));
     public static final Supplier<Item> NETHERITE_PAN = registerWithTab("netherite_pan",
-            () -> new PanItem(basicItem().stacksTo(1)));
+            () -> new PanItem(basicItem().stacksTo(1).durability( 128)));
 
     // Tools
-    public static final Supplier<Item> GUNPOWDER_FUSE = registerWithTab("gunpowder_fuse",
-            () -> new BlockItem(ProspectModBlocks.GUNPOWDER_FUSE.get(), basicItem()));
+    //public static final Supplier<Item> GUNPOWDER_FUSE = registerWithTab("gunpowder_fuse",
+    //        () -> new BlockItem(ProspectModBlocks.GUNPOWDER_FUSE.get(), basicItem()));
 
     // Ores and Minerals
     public static final Supplier<Item> RUBY = registerWithTab("ruby",
