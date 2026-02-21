@@ -2,6 +2,8 @@ package alabaster.prospect.common.entity.sparklenode;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 
 import net.minecraft.world.entity.Entity;
@@ -10,8 +12,10 @@ import net.minecraft.world.level.Level;
 
 public class SparkleNodeEntity extends Entity {
 
-    private int age = 0;
-    private int lifetime = 20 * 60 * 3; // 3 minutes default
+    private static EntityDataAccessor<Integer> AGE =
+            SynchedEntityData.defineId(SparkleNodeEntity.class, EntityDataSerializers.INT);
+
+    private int lifetime = 3600; // 3 minutes default
 
     public SparkleNodeEntity(EntityType<?> type, Level level) {
         super(type, level);
@@ -19,51 +23,54 @@ public class SparkleNodeEntity extends Entity {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-    }
-
-    @Override
     public void tick() {
         super.tick();
 
-        age++;
-
-        if (!level().isClientSide) {
-            if (age > lifetime) {
-                discard();
-            }
-            return;
-        }
+        this.entityData.set(AGE, getAge() + 1);
 
         // CLIENT PARTICLES
-        if (random.nextFloat() < 0.4f) {
-            double x = getX() + (random.nextDouble() - 0.5) * 0.3;
-            double y = getY() + 0.1;
-            double z = getZ() + (random.nextDouble() - 0.5) * 0.3;
+        if (random.nextFloat() < 0.2f) {
+
+            double spread = 0.8; // size of sparkle area
+
+            double x = getX() + (random.nextDouble() - 0.5) * spread;
+            double y = getY() + 0.02; // just above water
+            double z = getZ() + (random.nextDouble() - 0.5) * spread;
 
             level().addParticle(
-                    ParticleTypes.END_ROD,
+                    ParticleTypes.WAX_ON,
                     x, y, z,
                     0, 0.01, 0
             );
         }
+
+        if (getAge() >= lifetime) {
+            discard();
+        }
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        age = tag.getInt("Age");
-        lifetime = tag.getInt("Lifetime");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(AGE, 0);
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
-        tag.putInt("Age", age);
-        tag.putInt("Lifetime", lifetime);
+    public void addAdditionalSaveData(CompoundTag compound) {
+        compound.putInt("Age", this.getAge());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        this.entityData.set(AGE, compound.getInt("Age"));
+    }
+
+    private int getAge() {
+        return this.entityData.get(AGE);
     }
 
     @Override
     public boolean isInvisible() {
-        return true;
+        return false;
     }
 
     @Override
