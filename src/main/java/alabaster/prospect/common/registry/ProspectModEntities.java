@@ -17,7 +17,7 @@ public class ProspectModEntities {
             ENTITIES.register("sparkle_node",
                     () -> EntityType.Builder
                             .<SparkleNodeEntity>of(SparkleNodeEntity::new, MobCategory.MISC)
-                            .sized(1f, 1f)
+                            .sized(1f, 0.1f)
                             .clientTrackingRange(32)
                             .updateInterval(3)
                             .build(ResourceLocation.fromNamespaceAndPath("prospect", "sparkle_node").toString()));
