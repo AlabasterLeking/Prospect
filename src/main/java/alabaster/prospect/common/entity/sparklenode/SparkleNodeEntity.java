@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -85,13 +86,33 @@ public class SparkleNodeEntity extends Entity {
         ItemStack panStack = player.getItemInHand(hand);
         if (!(panStack.getItem() instanceof PanItem)) return InteractionResult.PASS;
 
+        // Only start use animation on client
+        player.startUsingItem(hand);
+
+        // Record that the player is harvesting this node
+        if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.getPersistentData().putInt("HarvestingNode", this.getId());
+            serverPlayer.getPersistentData().putString("HarvestingHand", hand.name());
+        }
+
+        return InteractionResult.sidedSuccess(player.level().isClientSide);
+    }
+
+    private ResourceLocation getBiomeLootTable(ServerLevel level) {
+        var biome = level.getBiome(blockPosition());
+        ResourceLocation biomeId = biome.unwrapKey()
+                .map(k -> k.location())
+                .orElse(ResourceLocation.fromNamespaceAndPath("minecraft", "plains"));
+
+        return ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + biomeId.getPath());
+    }
+
+    public void harvestWith(Player player, ItemStack panStack, InteractionHand hand) {
         // Damage the pan
         EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
         panStack.hurtAndBreak(1, player, slot);
 
-        // Loot
         if (!level().isClientSide && level() instanceof ServerLevel server) {
-
             ResourceLocation tableId = getBiomeLootTable(server);
             ResourceKey<LootTable> lootKey =
                     ResourceKey.create(Registries.LOOT_TABLE, tableId);
@@ -110,15 +131,11 @@ public class SparkleNodeEntity extends Entity {
             var drops = table.getRandomItems(params);
 
             if (drops.isEmpty()) {
-
                 ResourceKey<LootTable> defaultKey =
-                        ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/default")
-                        );
-
+                        ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/default"));
                 LootTable defaultTable = server.getServer()
                         .reloadableRegistries()
                         .getLootTable(defaultKey);
-
                 drops = defaultTable.getRandomItems(params);
             }
 
@@ -128,19 +145,8 @@ public class SparkleNodeEntity extends Entity {
                 }
             }
 
-            // Destroy Entity
+            // Destroy the node
             discard();
         }
-
-        return InteractionResult.sidedSuccess(level().isClientSide);
-    }
-
-    private ResourceLocation getBiomeLootTable(ServerLevel level) {
-        var biome = level.getBiome(blockPosition());
-        ResourceLocation biomeId = biome.unwrapKey()
-                .map(k -> k.location())
-                .orElse(ResourceLocation.fromNamespaceAndPath("minecraft", "plains"));
-
-        return ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + biomeId.getPath());
     }
 }
