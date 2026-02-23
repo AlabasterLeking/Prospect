@@ -82,40 +82,53 @@ public class SparkleNodeEntity extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-
-        if (!(stack.getItem() instanceof PanItem)) return InteractionResult.PASS;
+        ItemStack panStack = player.getItemInHand(hand);
+        if (!(panStack.getItem() instanceof PanItem)) return InteractionResult.PASS;
 
         // Damage the pan
         EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-        stack.hurtAndBreak(1, player, slot);
+        panStack.hurtAndBreak(1, player, slot);
 
-        // Generate loot
-        if (!level().isClientSide && level() instanceof ServerLevel serverLevel) {
+        // Loot
+        if (!level().isClientSide && level() instanceof ServerLevel server) {
 
-            ResourceLocation tableId = getBiomeLootTable(serverLevel);
-            ResourceKey<LootTable> tableKey = ResourceKey.create(Registries.LOOT_TABLE, tableId);
+            ResourceLocation tableId = getBiomeLootTable(server);
+            ResourceKey<LootTable> lootKey =
+                    ResourceKey.create(Registries.LOOT_TABLE, tableId);
 
-            LootTable table = serverLevel.getServer().reloadableRegistries().getLootTable(tableKey);
+            LootTable table = server.getServer()
+                    .reloadableRegistries()
+                    .getLootTable(lootKey);
 
-            if (table != null) {
-                DamageSource source = null;
+            LootParams params = new LootParams.Builder(server)
+                    .withParameter(LootContextParams.ORIGIN, position())
+                    .withParameter(LootContextParams.THIS_ENTITY, this)
+                    .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
+                    .withParameter(LootContextParams.DAMAGE_SOURCE, null)
+                    .create(LootContextParamSets.ENTITY);
 
-                table.getRandomItems(
-                        new LootParams.Builder(serverLevel)
-                                .withParameter(LootContextParams.ORIGIN, position())
-                                .withParameter(LootContextParams.THIS_ENTITY, this)
-                                .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
-                                .withParameter(LootContextParams.DAMAGE_SOURCE, source)
-                                .create(LootContextParamSets.ENTITY)
-                ).forEach(loot -> {
-                    if (!player.getInventory().add(loot)) {
-                        // If inventory is full, drop it on the ground at the player
-                        player.drop(loot, false);
-                    }
-                });
+            var drops = table.getRandomItems(params);
+
+            if (drops.isEmpty()) {
+
+                ResourceKey<LootTable> defaultKey =
+                        ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/default")
+                        );
+
+                LootTable defaultTable = server.getServer()
+                        .reloadableRegistries()
+                        .getLootTable(defaultKey);
+
+                drops = defaultTable.getRandomItems(params);
             }
 
+            for (ItemStack lootStack : drops) {
+                if (!player.getInventory().add(lootStack)) {
+                    player.drop(lootStack, false);
+                }
+            }
+
+            // Destroy Entity
             discard();
         }
 
@@ -125,17 +138,9 @@ public class SparkleNodeEntity extends Entity {
     private ResourceLocation getBiomeLootTable(ServerLevel level) {
         var biome = level.getBiome(blockPosition());
         ResourceLocation biomeId = biome.unwrapKey()
-                .map(key -> key.location())
+                .map(k -> k.location())
                 .orElse(ResourceLocation.fromNamespaceAndPath("minecraft", "plains"));
 
-        ResourceLocation lootTableId = ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + biomeId.getPath());
-
-        // Check if the table is actually registered
-        if (level.getServer().get(lootTableId) != null) {
-            return lootTableId;
-        }
-
-        // Fallback to default
-        return ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/default");
+        return ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + biomeId.getPath());
     }
 }
