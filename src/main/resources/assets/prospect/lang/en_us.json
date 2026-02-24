@@ -16,5 +16,9 @@
 
   "block.prospect.deepslate_ruby_ore": "Deepslate Ruby Ore",
   "block.prospect.deepslate_sapphire_ore": "Deepslate Sapphire Ore",
-  "block.prospect.deepslate_topaz_ore": "Deepslate Topaz Ore"
+  "block.prospect.deepslate_topaz_ore": "Deepslate Topaz Ore",
+
+  "trim_material.prospect.ruby": "Ruby Material",
+  "trim_material.prospect.sapphire": "Sapphire Material",
+  "trim_material.prospect.topaz": "Topaz Material"
 }

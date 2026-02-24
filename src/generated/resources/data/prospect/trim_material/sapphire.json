@@ -1,0 +1,9 @@
+{
+  "asset_name": "sapphire",
+  "description": {
+    "color": "#137AFF",
+    "translate": "trim_material.prospect.sapphire"
+  },
+  "ingredient": "prospect:sapphire",
+  "item_model_index": -1.0
+}

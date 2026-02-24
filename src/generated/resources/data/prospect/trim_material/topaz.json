@@ -1,0 +1,9 @@
+{
+  "asset_name": "topaz",
+  "description": {
+    "color": "#F5AB01",
+    "translate": "trim_material.prospect.topaz"
+  },
+  "ingredient": "prospect:topaz",
+  "item_model_index": -1.0
+}
