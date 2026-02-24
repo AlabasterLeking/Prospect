@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/item/ItemUseAnimation",
+      "name": "PAN",
+      "constructor": "(ILjava/lang/String;)V",
+      "parameters": [
+        -1,
+        "prospect:iron_pan"
+      ]
+    }
+  ]
+}
