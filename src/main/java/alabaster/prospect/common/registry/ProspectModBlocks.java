@@ -4,6 +4,7 @@ import alabaster.prospect.Prospect;
 import alabaster.prospect.common.block.GunpowderFuseBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -28,6 +29,7 @@ public class ProspectModBlocks {
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)));
 
     // Tools
-    public static final Supplier<Block> GUNPOWDER_FUSE = BLOCKS.register("gunpowder_fuse",
-            () -> new GunpowderFuseBlock(Block.Properties.ofFullCopy(Blocks.REDSTONE_WIRE)));
+    //public static final Supplier<Block> GUNPOWDER_FUSE = BLOCKS.register("gunpowder_fuse",
+    //        () -> new GunpowderFuseBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F)
+    //                .lightLevel(state -> state.getValue(GunpowderFuseBlock.LIT) ? 6 : 0)));
 }
