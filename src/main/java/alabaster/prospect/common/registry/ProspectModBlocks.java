@@ -29,7 +29,9 @@ public class ProspectModBlocks {
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)));
 
     // Tools
-    //public static final Supplier<Block> GUNPOWDER_FUSE = BLOCKS.register("gunpowder_fuse",
-    //        () -> new GunpowderFuseBlock(BlockBehaviour.Properties.of().noOcclusion().strength(0.1F)
-    //                .lightLevel(state -> state.getValue(GunpowderFuseBlock.LIT) ? 6 : 0)));
+    public static final Supplier<Block> GUNPOWDER_FUSE = BLOCKS.register("gunpowder_fuse",
+            () -> new GunpowderFuseBlock(BlockBehaviour.Properties.of()
+                    .noOcclusion()
+                    .strength(0.1F)
+                    .lightLevel(state -> GunpowderFuseBlock.isLit(state) ? 6 : 0)));
 }

@@ -37,8 +37,7 @@ public class GunpowderPlacementHandler {
         // Normal placement
         if (level.isEmptyBlock(placePos)) {
 
-            BlockState state = ProspectModBlocks.GUNPOWDER_FUSE.get()
-                    .defaultBlockState();
+            BlockState state = ProspectModBlocks.GUNPOWDER_FUSE.get().defaultBlockState();
 
             if (state.canSurvive(level, placePos)) {
 
