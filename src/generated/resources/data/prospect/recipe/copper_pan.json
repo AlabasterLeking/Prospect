@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:bowl"
+    },
+    "M": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "pattern": [
+    "MBM",
+    " M "
+  ],
+  "result": {
+    "count": 1,
+    "id": "prospect:copper_pan"
+  }
+}
