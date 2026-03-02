@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "prospect:item/iron_pan_water"
+  }
+}

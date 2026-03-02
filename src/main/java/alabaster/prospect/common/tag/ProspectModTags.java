@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.Block;
 
 public class ProspectModTags {
 
+    public static final TagKey<Block> SPAWNS_SPARKLE_NODES = modBlockTag("spawns_sparkle_nodes");
+
     private static TagKey<Block> modBlockTag(String path) {
         return BlockTags.create(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, path));
     }

@@ -1,0 +1,12 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "prospect:item/iron_pan"
+  },
+  "overrides": [
+    {
+      "predicate": { "prospect:panning": 1.0 },
+      "model": "prospect:item/iron_pan_water"
+    }
+  ]
+}

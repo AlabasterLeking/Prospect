@@ -2,9 +2,12 @@ package alabaster.prospect.data;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.registry.ProspectModBlocks;
+import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -28,7 +31,12 @@ public class ProspectBlockTags extends BlockTagsProvider {
     }
 
     protected void registerModTags() {
-
+        tag(ProspectModTags.SPAWNS_SPARKLE_NODES)
+                .addTags(
+                    BlockTags.SAND,
+                    BlockTags.DIRT)
+                .add(
+                        Blocks.GRAVEL);
     }
 
     protected void registerMinecraftTags() {

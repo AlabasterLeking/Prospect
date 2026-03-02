@@ -1,6 +1,7 @@
 package alabaster.prospect.data;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.registry.ProspectModItems;
 import com.google.common.collect.Sets;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -27,6 +28,12 @@ public class ItemModels extends ItemModelProvider
     protected void registerModels() {
         Set<Item> items = BuiltInRegistries.ITEM.stream().filter(i -> Prospect.MODID.equals(BuiltInRegistries.ITEM.getKey(i).getNamespace()))
                 .collect(Collectors.toSet());
+
+        // Custom Models
+        items.remove(ProspectModItems.COPPER_PAN.get());
+        items.remove(ProspectModItems.IRON_PAN.get());
+        items.remove(ProspectModItems.GOLD_PAN.get());
+        items.remove(ProspectModItems.NETHERITE_PAN.get());
 
         // Blocks with special item sprites
         Set<Item> spriteBlockItems = Sets.newHashSet(

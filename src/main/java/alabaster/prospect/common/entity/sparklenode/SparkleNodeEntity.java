@@ -11,10 +11,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -31,7 +29,7 @@ public class SparkleNodeEntity extends Entity {
     private static final EntityDataAccessor<Integer> AGE =
             SynchedEntityData.defineId(SparkleNodeEntity.class, EntityDataSerializers.INT);
 
-    private int lifetime = 3600; // 3 minutes default
+    private int lifetime = 1200; // 1 minutes default
 
     public SparkleNodeEntity(EntityType<?> type, Level level) {
         super(type, level);
@@ -83,6 +81,8 @@ public class SparkleNodeEntity extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
+        if (hand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
+
         ItemStack panStack = player.getItemInHand(hand);
         if (!(panStack.getItem() instanceof PanItem)) return InteractionResult.PASS;
 
