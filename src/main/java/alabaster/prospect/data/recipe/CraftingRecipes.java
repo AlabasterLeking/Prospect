@@ -38,10 +38,10 @@ public class CraftingRecipes {
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.NETHERITE_PAN.get(), 1)
                 .pattern("MBM")
                 .pattern(" M ")
-                .define('M', Items.NETHERITE_INGOT)
-                .define('B', Items.BOWL)
+                .define('M', Items.NETHERITE_SCRAP)
+                .define('B', ProspectModItems.GOLD_PAN.get())
                 .unlockedBy("has_bowl", InventoryChangeTrigger.TriggerInstance.hasItems(Items.BOWL))
-                .unlockedBy("has_netherite_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.NETHERITE_INGOT))
+                .unlockedBy("has_netherite_scrap", InventoryChangeTrigger.TriggerInstance.hasItems(Items.NETHERITE_SCRAP))
                 .save(output);
     }
 }
