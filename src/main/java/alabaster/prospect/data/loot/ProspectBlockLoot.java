@@ -1,8 +1,10 @@
 package alabaster.prospect.data.loot;
 
+import alabaster.prospect.common.registry.ProspectModBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 
@@ -18,7 +20,7 @@ public class ProspectBlockLoot extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-
+        dropOther(ProspectModBlocks.GUNPOWDER_FUSE.get(), Items.GUNPOWDER);
     }
 
     @Override

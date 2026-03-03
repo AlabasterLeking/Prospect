@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "prospect:gold_pan"
+        "recipe": "prospect:golden_pan"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -37,7 +37,7 @@
   ],
   "rewards": {
     "recipes": [
-      "prospect:gold_pan"
+      "prospect:golden_pan"
     ]
   }
 }

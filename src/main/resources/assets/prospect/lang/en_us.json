@@ -3,8 +3,14 @@
 
   "item.prospect.copper_pan": "Copper Pan",
   "item.prospect.iron_pan": "Iron Pan",
-  "item.prospect.gold_pan": "Gold Pan",
+  "item.prospect.golden_pan": "Golden Pan",
   "item.prospect.netherite_pan": "Netherite Pan",
+
+  "item.prospect.stone_prospecting_pickaxe": "Stone Prospecting Pickaxe",
+  "item.prospect.iron_prospecting_pickaxe": "Iron Prospecting Pickaxe",
+  "item.prospect.golden_prospecting_pickaxe": "Golden Prospecting Pickaxe",
+  "item.prospect.diamond_prospecting_pickaxe": "Diamond Prospecting Pickaxe",
+  "item.prospect.netherite_prospecting_pickaxe": "Netherite Prospecting Pickaxe",
 
   "item.prospect.ruby": "Ruby",
   "item.prospect.sapphire": "Sapphire",

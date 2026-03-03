@@ -32,7 +32,7 @@ public class ItemModels extends ItemModelProvider
         // Custom Models
         items.remove(ProspectModItems.COPPER_PAN.get());
         items.remove(ProspectModItems.IRON_PAN.get());
-        items.remove(ProspectModItems.GOLD_PAN.get());
+        items.remove(ProspectModItems.GOLDEN_PAN.get());
         items.remove(ProspectModItems.NETHERITE_PAN.get());
 
         // Blocks with special item sprites
@@ -52,7 +52,11 @@ public class ItemModels extends ItemModelProvider
 
         // Handheld items
         Set<Item> handheldItems = Sets.newHashSet(
-
+                ProspectModItems.STONE_PROSPECTING_PICKAXE.get(),
+                ProspectModItems.IRON_PROSPECTING_PICKAXE.get(),
+                ProspectModItems.GOLDEN_PROSPECTING_PICKAXE.get(),
+                ProspectModItems.DIAMOND_PROSPECTING_PICKAXE.get(),
+                ProspectModItems.NETHERITE_PROSPECTING_PICKAXE.get()
         );
         takeAll(items, handheldItems.toArray(new Item[0])).forEach(item -> itemHandheldModel(item, resourceItem(itemName(item))));
 

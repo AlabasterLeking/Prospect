@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "prospect:item/netherite_prospecting_pickaxe"
+  }
+}

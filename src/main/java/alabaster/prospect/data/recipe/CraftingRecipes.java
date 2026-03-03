@@ -27,7 +27,7 @@ public class CraftingRecipes {
                 .unlockedBy("has_bowl", InventoryChangeTrigger.TriggerInstance.hasItems(Items.BOWL))
                 .unlockedBy("has_iron_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
                 .save(output);
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.GOLD_PAN.get(), 1)
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.GOLDEN_PAN.get(), 1)
                 .pattern("MBM")
                 .pattern(" M ")
                 .define('M', Items.GOLD_INGOT)
@@ -39,7 +39,7 @@ public class CraftingRecipes {
                 .pattern("MBM")
                 .pattern(" M ")
                 .define('M', Items.NETHERITE_SCRAP)
-                .define('B', ProspectModItems.GOLD_PAN.get())
+                .define('B', ProspectModItems.GOLDEN_PAN.get())
                 .unlockedBy("has_bowl", InventoryChangeTrigger.TriggerInstance.hasItems(Items.BOWL))
                 .unlockedBy("has_netherite_scrap", InventoryChangeTrigger.TriggerInstance.hasItems(Items.NETHERITE_SCRAP))
                 .save(output);

@@ -2,6 +2,7 @@ package alabaster.prospect.common.registry;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.item.PanItem;
+import alabaster.prospect.common.item.ProspectingPickaxeItem;
 import com.google.common.collect.Sets;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.*;
@@ -30,10 +31,22 @@ public class ProspectModItems {
             () -> new PanItem(basicItem().stacksTo(1).durability( 32)));
     public static final Supplier<Item> IRON_PAN = registerWithTab("iron_pan",
             () -> new PanItem(basicItem().stacksTo(1).durability( 64)));
-    public static final Supplier<Item> GOLD_PAN = registerWithTab("gold_pan",
+    public static final Supplier<Item> GOLDEN_PAN = registerWithTab("golden_pan",
             () -> new PanItem(basicItem().stacksTo(1).durability( 16)));
     public static final Supplier<Item> NETHERITE_PAN = registerWithTab("netherite_pan",
             () -> new PanItem(basicItem().stacksTo(1).durability( 128)));
+    
+    // Prospecting Pickaxes
+    public static final Supplier<Item> STONE_PROSPECTING_PICKAXE = registerWithTab("stone_prospecting_pickaxe",
+            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.STONE, basicItem().stacksTo(1)));
+    public static final Supplier<Item> IRON_PROSPECTING_PICKAXE = registerWithTab("iron_prospecting_pickaxe",
+            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.IRON, basicItem().stacksTo(1)));
+    public static final Supplier<Item> GOLDEN_PROSPECTING_PICKAXE = registerWithTab("golden_prospecting_pickaxe",
+            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.GOLD, basicItem().stacksTo(1)));
+    public static final Supplier<Item> DIAMOND_PROSPECTING_PICKAXE = registerWithTab("diamond_prospecting_pickaxe",
+            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.DIAMOND, basicItem().stacksTo(1)));
+    public static final Supplier<Item> NETHERITE_PROSPECTING_PICKAXE = registerWithTab("netherite_prospecting_pickaxe",
+            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.NETHERITE, basicItem().stacksTo(1)));
 
     // Ores and Minerals
     public static final Supplier<Item> RUBY = registerWithTab("ruby",
