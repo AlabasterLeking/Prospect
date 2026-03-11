@@ -21,6 +21,7 @@ public class ProspectBlockLoot extends BlockLootSubProvider {
     @Override
     protected void generate() {
         dropOther(ProspectModBlocks.GUNPOWDER_FUSE.get(), Items.GUNPOWDER);
+        dropSelf(ProspectModBlocks.TOPAZ_BLOCK.get());
     }
 
     @Override

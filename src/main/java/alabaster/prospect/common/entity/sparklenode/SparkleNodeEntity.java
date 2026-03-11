@@ -42,12 +42,12 @@ public class SparkleNodeEntity extends Entity {
         this.entityData.set(AGE, getAge() + 1);
 
         if (random.nextFloat() < 0.2f) {
-            double spread = 0.8;
+            double spread = 0.9;
             double x = getX() + (random.nextDouble() - 0.5) * spread;
             double y = getY() + 0.02;
             double z = getZ() + (random.nextDouble() - 0.5) * spread;
 
-            level().addParticle(ParticleTypes.WAX_ON, x, y, z, 0, 0.01, 0);
+            level().addParticle(ParticleTypes.WAX_OFF, x, y, z, 0, 0.01, 0);
         }
 
         if (getAge() >= lifetime) {

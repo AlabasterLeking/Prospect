@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "prospect:block/topaz_block"
+    }
+  }
+}

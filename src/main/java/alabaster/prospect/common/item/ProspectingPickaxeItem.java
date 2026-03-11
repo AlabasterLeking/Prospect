@@ -63,6 +63,9 @@ public class ProspectingPickaxeItem extends DiggerItem {
         ORE_COLORS.put("minecraft:emerald_ores",   ChatFormatting.GREEN);
         ORE_COLORS.put("minecraft:quartz_ores",    ChatFormatting.WHITE);
         ORE_COLORS.put("minecraft:netherite_ores", ChatFormatting.DARK_RED);
+        ORE_COLORS.put("prospect:ruby_ores",       ChatFormatting.RED);
+        ORE_COLORS.put("prospect:sapphire_ores",   ChatFormatting.BLUE);
+        ORE_COLORS.put("prospect:topaz_ores",      ChatFormatting.GOLD);
         ORE_COLORS.put("minecraft:ores",           ChatFormatting.GRAY);
     }
 
@@ -258,11 +261,11 @@ public class ProspectingPickaxeItem extends DiggerItem {
             MutableComponent strength = Component.literal(label.label())
                     .withStyle(label.color());
 
-            message = Component.literal("Ore signal: ")
-                    .withStyle(ChatFormatting.GRAY)
-                    .append(strength)
-                    .append(Component.literal(" – ").withStyle(ChatFormatting.GRAY))
-                    .append(oreName);
+            message = Component.translatable("Detected ")
+                    .withStyle(ChatFormatting.WHITE)
+                    .append(oreName)
+                    .append(Component.literal(" – ").withStyle(ChatFormatting.WHITE))
+                    .append(strength);
         }
 
         player.displayClientMessage(message, true);

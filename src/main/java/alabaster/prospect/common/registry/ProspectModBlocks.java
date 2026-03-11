@@ -28,6 +28,13 @@ public class ProspectModBlocks {
     public static final Supplier<Block> DEEPSLATE_TOPAZ_ORE = BLOCKS.register("deepslate_topaz_ore",
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)));
 
+    //public static final Supplier<Block> RUBY_ORE = BLOCKS.register("ruby_ore",
+    //        () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_ORE)));
+    //public static final Supplier<Block> SAPPHIRE_ORE = BLOCKS.register("sapphire_ore",
+    //        () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_ORE)));
+    public static final Supplier<Block> TOPAZ_BLOCK = BLOCKS.register("topaz_block",
+            () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)));
+
     // Tools
     public static final Supplier<Block> GUNPOWDER_FUSE = BLOCKS.register("gunpowder_fuse",
             () -> new GunpowderFuseBlock(BlockBehaviour.Properties.of()

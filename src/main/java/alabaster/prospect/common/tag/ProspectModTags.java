@@ -12,6 +12,10 @@ public class ProspectModTags {
 
     public static final TagKey<Block> SPAWNS_SPARKLE_NODES = modBlockTag("spawns_sparkle_nodes");
 
+    public static final TagKey<Block> RUBY_ORES = modBlockTag("ruby_ores");
+    public static final TagKey<Block> SAPPHIRE_ORES = modBlockTag("sapphire_ores");
+    public static final TagKey<Block> TOPAZ_ORES = modBlockTag("topaz_ores");
+
     private static TagKey<Block> modBlockTag(String path) {
         return BlockTags.create(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, path));
     }

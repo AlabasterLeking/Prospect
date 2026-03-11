@@ -37,6 +37,21 @@ public class ProspectBlockTags extends BlockTagsProvider {
                     BlockTags.DIRT)
                 .add(
                         Blocks.GRAVEL);
+
+        tag(ProspectModTags.RUBY_ORES).add(
+                ProspectModBlocks.RUBY_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_RUBY_ORE.get()
+        );
+
+        tag(ProspectModTags.SAPPHIRE_ORES).add(
+                ProspectModBlocks.SAPPHIRE_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get()
+        );
+
+        tag(ProspectModTags.TOPAZ_ORES).add(
+                ProspectModBlocks.TOPAZ_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get()
+        );
     }
 
     protected void registerMinecraftTags() {
