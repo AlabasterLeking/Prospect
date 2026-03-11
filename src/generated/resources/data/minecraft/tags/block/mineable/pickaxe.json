@@ -5,6 +5,7 @@
     "prospect:topaz_ore",
     "prospect:deepslate_ruby_ore",
     "prospect:deepslate_sapphire_ore",
-    "prospect:deepslate_topaz_ore"
+    "prospect:deepslate_topaz_ore",
+    "prospect:topaz_block"
   ]
 }

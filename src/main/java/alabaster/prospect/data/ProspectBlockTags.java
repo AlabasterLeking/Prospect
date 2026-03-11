@@ -135,7 +135,8 @@ public class ProspectBlockTags extends BlockTagsProvider {
                 ProspectModBlocks.TOPAZ_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_RUBY_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(),
-                ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get()
+                ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get(),
+                ProspectModBlocks.TOPAZ_BLOCK.get()
         );
     }
 }
