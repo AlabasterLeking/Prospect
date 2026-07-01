@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "alabaster.prospect.common.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractMinecartMixin",
+    "AbstractMinecartLerpAccessor"
+  ],
+  "client": [
+    "AbstractMinecartClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

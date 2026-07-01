@@ -70,10 +70,10 @@ public class ProspectModItems {
     public static final Supplier<Item> DEEPSLATE_TOPAZ_ORE = registerWithTab("deepslate_topaz_ore",
             () -> new BlockItem(ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get(), basicItem()));
 
-    //public static final Supplier<Item> DEEPSLATE_RUBY_ORE = registerWithTab("deepslate_ruby_ore",
-    //        () -> new BlockItem(ProspectModBlocks.DEEPSLATE_RUBY_ORE.get(), basicItem()));
-    //public static final Supplier<Item> DEEPSLATE_SAPPHIRE_ORE = registerWithTab("deepslate_sapphire_ore",
-    //        () -> new BlockItem(ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(), basicItem()));
+    public static final Supplier<Item> RUBY_BLOCK = registerWithTab("ruby_block",
+            () -> new BlockItem(ProspectModBlocks.RUBY_BLOCK.get(), basicItem()));
+    //public static final Supplier<Item> SAPPHIRE_BLOCK = registerWithTab("sapphire_block",
+    //        () -> new BlockItem(ProspectModBlocks.SAPPHIRE_BLOCK.get(), basicItem()));
     public static final Supplier<Item> TOPAZ_BLOCK = registerWithTab("topaz_block",
             () -> new BlockItem(ProspectModBlocks.TOPAZ_BLOCK.get(), basicItem()));
 }

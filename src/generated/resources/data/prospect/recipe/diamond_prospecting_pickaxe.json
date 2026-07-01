@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "m": {
+      "item": "minecraft:diamond"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "mm ",
+    " sm",
+    " s "
+  ],
+  "result": {
+    "count": 1,
+    "id": "prospect:diamond_prospecting_pickaxe"
+  }
+}

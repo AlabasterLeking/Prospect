@@ -5,6 +5,7 @@ import alabaster.prospect.data.loot.ProspectBlockLoot;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 
 public class CraftingRecipes {
     public static void register(RecipeOutput output) {
@@ -20,6 +21,13 @@ public class CraftingRecipes {
                 .pattern("###")
                 .define('#', ProspectModItems.TOPAZ.get())
                 .unlockedBy("has_topaz", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.TOPAZ.get()))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ProspectModItems.RUBY_BLOCK.get(), 1)
+                .pattern("###")
+                .pattern("###")
+                .pattern("###")
+                .define('#', ProspectModItems.RUBY.get())
+                .unlockedBy("has_ruby", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.RUBY.get()))
                 .save(output);
     }
 
@@ -56,12 +64,54 @@ public class CraftingRecipes {
                 .unlockedBy("has_bowl", InventoryChangeTrigger.TriggerInstance.hasItems(Items.BOWL))
                 .unlockedBy("has_netherite_scrap", InventoryChangeTrigger.TriggerInstance.hasItems(Items.NETHERITE_SCRAP))
                 .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.STONE_PROSPECTING_PICKAXE.get(), 1)
+                .pattern("mm ")
+                .pattern(" sm")
+                .pattern(" s ")
+                .define('m', Items.COBBLESTONE)
+                .define('s', Items.STICK)
+                .unlockedBy("has_stick", InventoryChangeTrigger.TriggerInstance.hasItems(Items.STICK))
+                .unlockedBy("has_cobblestone", InventoryChangeTrigger.TriggerInstance.hasItems(Items.COBBLESTONE))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.IRON_PROSPECTING_PICKAXE.get(), 1)
+                .pattern("mm ")
+                .pattern(" sm")
+                .pattern(" s ")
+                .define('m', Items.IRON_INGOT)
+                .define('s', Items.STICK)
+                .unlockedBy("has_stick", InventoryChangeTrigger.TriggerInstance.hasItems(Items.STICK))
+                .unlockedBy("has_iron_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.GOLDEN_PROSPECTING_PICKAXE.get(), 1)
+                .pattern("mm ")
+                .pattern(" sm")
+                .pattern(" s ")
+                .define('m', Items.GOLD_INGOT)
+                .define('s', Items.STICK)
+                .unlockedBy("has_stick", InventoryChangeTrigger.TriggerInstance.hasItems(Items.STICK))
+                .unlockedBy("has_gold_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.GOLD_INGOT))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.DIAMOND_PROSPECTING_PICKAXE.get(), 1)
+                .pattern("mm ")
+                .pattern(" sm")
+                .pattern(" s ")
+                .define('m', Items.DIAMOND)
+                .define('s', Items.STICK)
+                .unlockedBy("has_stick", InventoryChangeTrigger.TriggerInstance.hasItems(Items.STICK))
+                .unlockedBy("has_diamond", InventoryChangeTrigger.TriggerInstance.hasItems(Items.DIAMOND))
+                .save(output);
     }
 
     private static void recipesMaterials(RecipeOutput output) {
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ProspectModItems.TOPAZ.get(), 9)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ProspectModItems.TOPAZ.get(), 9)
                 .requires(ProspectModItems.TOPAZ_BLOCK.get())
                 .unlockedBy("has_topaz_block", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.TOPAZ_BLOCK.get()))
+                .save(output);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ProspectModItems.RUBY.get(), 9)
+                .requires(ProspectModItems.RUBY_BLOCK.get())
+                .unlockedBy("has_ruby_block", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.RUBY_BLOCK.get()))
                 .save(output);
     }
 }
