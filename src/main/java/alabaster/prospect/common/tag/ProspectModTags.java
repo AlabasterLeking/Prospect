@@ -16,6 +16,8 @@ public class ProspectModTags {
     public static final TagKey<Block> SAPPHIRE_ORES = modBlockTag("sapphire_ores");
     public static final TagKey<Block> TOPAZ_ORES = modBlockTag("topaz_ores");
 
+    public static final TagKey<Item> MINING_HELMET_LIGHT = modItemTag("mining_helmet_light");
+
     private static TagKey<Block> modBlockTag(String path) {
         return BlockTags.create(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, path));
     }

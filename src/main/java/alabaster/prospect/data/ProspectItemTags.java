@@ -1,13 +1,16 @@
 package alabaster.prospect.data;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.registry.ProspectModBlocks;
 import alabaster.prospect.common.registry.ProspectModItems;
 import alabaster.prospect.common.registry.ProspectTrimMaterials;
+import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -36,6 +39,9 @@ public class ProspectItemTags extends ItemTagsProvider {
                 .add(ProspectModItems.RUBY.get())
                 .add(ProspectModItems.SAPPHIRE.get())
                 .add(ProspectModItems.TOPAZ.get());
+
+        tag(ProspectModTags.MINING_HELMET_LIGHT)
+                .add(Items.LEATHER_HELMET);
 
         this.registerModTags();
     }
