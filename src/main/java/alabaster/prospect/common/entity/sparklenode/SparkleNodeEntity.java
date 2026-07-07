@@ -1,9 +1,11 @@
 package alabaster.prospect.common.entity.sparklenode;
 
 import alabaster.prospect.common.item.PanItem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -24,10 +26,17 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SparkleNodeEntity extends Entity {
 
     private static final EntityDataAccessor<Integer> AGE =
             SynchedEntityData.defineId(SparkleNodeEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> IN_LAVA =
+            SynchedEntityData.defineId(SparkleNodeEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private static final Map<Integer, Boolean> CLIENT_HARVEST_LAVA = new HashMap<>();
 
     private int lifetime = 1200; // 1 minutes default
 
@@ -47,7 +56,8 @@ public class SparkleNodeEntity extends Entity {
             double y = getY() + 0.02;
             double z = getZ() + (random.nextDouble() - 0.5) * spread;
 
-            level().addParticle(ParticleTypes.WAX_OFF, x, y, z, 0, 0.01, 0);
+            var particle = isInLava() ? ParticleTypes.SMALL_FLAME : ParticleTypes.WAX_OFF;
+            level().addParticle(particle, x, y, z, 0, 0.01, 0);
         }
 
         if (getAge() >= lifetime) {
@@ -58,20 +68,31 @@ public class SparkleNodeEntity extends Entity {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(AGE, 0);
+        builder.define(IN_LAVA, false);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("Age", getAge());
+        compound.putBoolean("InLava", isInLava());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         this.entityData.set(AGE, compound.getInt("Age"));
+        this.entityData.set(IN_LAVA, compound.getBoolean("InLava"));
     }
 
     private int getAge() {
         return this.entityData.get(AGE);
+    }
+
+    public void setInLava(boolean inLava) {
+        this.entityData.set(IN_LAVA, inLava);
+    }
+
+    public boolean isInLava() {
+        return this.entityData.get(IN_LAVA);
     }
 
     @Override
@@ -84,18 +105,32 @@ public class SparkleNodeEntity extends Entity {
         if (hand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 
         ItemStack panStack = player.getItemInHand(hand);
-        if (!(panStack.getItem() instanceof PanItem)) return InteractionResult.PASS;
+        if (!(panStack.getItem() instanceof PanItem panItem)) return InteractionResult.PASS;
+
+        if (isInLava() && !panItem.canHarvestLava()) {
+            if (!player.level().isClientSide) {
+                player.displayClientMessage(Component.translatable("tooltip.prospect.pan.too_hot")
+                        .withStyle(ChatFormatting.RED), true);
+            }
+            return InteractionResult.FAIL;
+        }
 
         // Only start use animation on client
         player.startUsingItem(hand);
 
-        // Record that the player is harvesting this node
-        if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (player.level().isClientSide) {
+            CLIENT_HARVEST_LAVA.put(player.getId(), isInLava());
+        } else if (player instanceof ServerPlayer serverPlayer) {
+            // Record that the player is harvesting this node
             serverPlayer.getPersistentData().putInt("HarvestingNode", this.getId());
             serverPlayer.getPersistentData().putString("HarvestingHand", hand.name());
         }
 
         return InteractionResult.sidedSuccess(player.level().isClientSide);
+    }
+
+    public static boolean isClientHarvestingLava(int playerEntityId) {
+        return CLIENT_HARVEST_LAVA.getOrDefault(playerEntityId, false);
     }
 
     private ResourceLocation getBiomeLootTable(ServerLevel level) {
@@ -108,6 +143,10 @@ public class SparkleNodeEntity extends Entity {
     }
 
     public void harvestWith(Player player, ItemStack panStack, InteractionHand hand) {
+        if (isInLava() && !(panStack.getItem() instanceof PanItem panItem && panItem.canHarvestLava())) {
+            return;
+        }
+
         // Damage the pan
         EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
         panStack.hurtAndBreak(1, player, slot);
@@ -131,8 +170,9 @@ public class SparkleNodeEntity extends Entity {
             var drops = table.getRandomItems(params);
 
             if (drops.isEmpty()) {
+                String fallbackName = isInLava() ? "nether_default" : "default";
                 ResourceKey<LootTable> defaultKey =
-                        ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/default"));
+                        ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + fallbackName));
                 LootTable defaultTable = server.getServer()
                         .reloadableRegistries()
                         .getLootTable(defaultKey);

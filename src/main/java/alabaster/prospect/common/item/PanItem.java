@@ -27,8 +27,19 @@ public class PanItem extends Item {
     private static final int PARTICLE_INTERVAL_TICKS = 3;
     private static final int PARTICLES_PER_BURST = 5;
 
+    private final boolean canHarvestLava;
+
     public PanItem(Properties props) {
+        this(props, false);
+    }
+
+    public PanItem(Properties props, boolean canHarvestLava) {
         super(props);
+        this.canHarvestLava = canHarvestLava;
+    }
+
+    public boolean canHarvestLava() {
+        return canHarvestLava;
     }
 
     @Override
@@ -71,14 +82,17 @@ public class PanItem extends Item {
 
         int elapsed = USE_DURATION - remainingUseDuration;
         if (elapsed % PARTICLE_INTERVAL_TICKS != 0) return;
-        spawnWaterParticles(player, level);
+        boolean lava = SparkleNodeEntity.isClientHarvestingLava(player.getId());
+        spawnAmbientParticles(player, level, lava);
     }
 
-    private void spawnWaterParticles(Player player, Level level) {
+    private void spawnAmbientParticles(Player player, Level level, boolean lava) {
         Vec3 look = player.getLookAngle();
         Vec3 origin = player.getEyePosition()
                 .add(look.scale(1.2))
                 .subtract(0, 0.6, 0);
+
+        var particle = lava ? ParticleTypes.LAVA : ParticleTypes.SPLASH;
 
         for (int i = 0; i < PARTICLES_PER_BURST; i++) {
             double ox = (level.random.nextDouble() - 0.5) * 0.5;
@@ -88,7 +102,7 @@ public class PanItem extends Item {
             double vy = 0.08 + level.random.nextDouble() * 0.08;
             double vz = (level.random.nextDouble() - 0.5) * 0.1;
 
-            level.addParticle(ParticleTypes.SPLASH,
+            level.addParticle(particle,
                     origin.x + ox, origin.y + oy, origin.z + oz,
                     vx, vy, vz);
         }

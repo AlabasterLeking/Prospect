@@ -33,10 +33,15 @@ public class ProspectBlockTags extends BlockTagsProvider {
     protected void registerModTags() {
         tag(ProspectModTags.SPAWNS_SPARKLE_NODES)
                 .addTags(
-                    BlockTags.SAND,
-                    BlockTags.DIRT)
+                        BlockTags.SAND,
+                        BlockTags.DIRT)
                 .add(
-                        Blocks.GRAVEL);
+                        Blocks.GRAVEL,
+                        Blocks.NETHERRACK,
+                        Blocks.BASALT,
+                        Blocks.BLACKSTONE,
+                        Blocks.SOUL_SAND,
+                        Blocks.SOUL_SOIL);
 
         tag(ProspectModTags.RUBY_ORES).add(
                 ProspectModBlocks.RUBY_ORE.get(),

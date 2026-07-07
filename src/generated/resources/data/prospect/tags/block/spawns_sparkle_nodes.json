@@ -2,6 +2,11 @@
   "values": [
     "#minecraft:sand",
     "#minecraft:dirt",
-    "minecraft:gravel"
+    "minecraft:gravel",
+    "minecraft:netherrack",
+    "minecraft:basalt",
+    "minecraft:blackstone",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil"
   ]
 }

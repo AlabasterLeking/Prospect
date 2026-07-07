@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "name": "default",
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:clay_ball", "weight": 20 },
+        { "type": "minecraft:item", "name": "minecraft:slime_ball", "weight": 10 },
+        { "type": "minecraft:item", "name": "minecraft:lily_pad", "weight": 8 },
+        { "type": "minecraft:item", "name": "minecraft:iron_nugget", "weight": 10 },
+        { "type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 6 },
+        { "type": "minecraft:item", "name": "prospect:sapphire", "weight": 1 }
+      ]
+    }
+  ]
+}

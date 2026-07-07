@@ -2,6 +2,7 @@ package alabaster.prospect.client.event;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.client.renderer.SparkleNodeRenderer;
+import alabaster.prospect.common.entity.sparklenode.SparkleNodeEntity;
 import alabaster.prospect.common.item.PanItem;
 import alabaster.prospect.common.registry.ProspectModEntities;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -27,19 +28,31 @@ public class ClientSetupEvents {
     // Custom Item Rendering for Pans
     private static final ResourceLocation PANNING_PROPERTY =
             ResourceLocation.fromNamespaceAndPath(Prospect.MODID, "panning");
+    private static final ResourceLocation PANNING_LAVA_PROPERTY =
+            ResourceLocation.fromNamespaceAndPath(Prospect.MODID, "panning_lava");
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             BuiltInRegistries.ITEM.stream()
                     .filter(item -> item instanceof PanItem)
-                    .forEach(item -> ItemProperties.register(
-                            item,
-                            PANNING_PROPERTY,
-                            (stack, level, entity, seed) ->
-                                    entity != null && entity.isUsingItem() && entity.getUseItem() == stack
-                                            ? 1.0f : 0.0f
-                    ));
+                    .forEach(item -> {
+                        ItemProperties.register(
+                                item,
+                                PANNING_PROPERTY,
+                                (stack, level, entity, seed) ->
+                                        entity != null && entity.isUsingItem() && entity.getUseItem() == stack
+                                                ? 1.0f : 0.0f
+                        );
+                        ItemProperties.register(
+                                item,
+                                PANNING_LAVA_PROPERTY,
+                                (stack, level, entity, seed) ->
+                                        entity != null && entity.isUsingItem() && entity.getUseItem() == stack
+                                                && SparkleNodeEntity.isClientHarvestingLava(entity.getId())
+                                                ? 1.0f : 0.0f
+                        );
+                    });
         });
     }
 }

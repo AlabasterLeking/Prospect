@@ -15,15 +15,8 @@ public class SparkleNodeRenderer extends EntityRenderer<SparkleNodeEntity> {
     }
 
     @Override
-    public void render(
-            SparkleNodeEntity entity,
-            float entityYaw,
-            float partialTick,
-            PoseStack poseStack,
-            MultiBufferSource buffer,
-            int packedLight
+    public void render(SparkleNodeEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight
     ) {
-        // Intentionally empty — invisible
     }
 
     @Override

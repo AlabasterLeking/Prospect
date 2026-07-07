@@ -8,12 +8,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 @EventBusSubscriber(modid = Prospect.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -58,7 +58,7 @@ public class SparkleNodeSpawnHandler {
             int z = minZ + random.nextInt(16);
 
             int seaLevel = level.getSeaLevel();
-            BlockPos candidate = findWaterSurface(level, x, z, seaLevel + 16, level.getMinBuildHeight());
+            BlockPos candidate = findFluidSurface(level, x, z, seaLevel + 16, level.getMinBuildHeight());
 
             if (candidate != null) {
                 if (SparkleNodeSpawner.trySpawn(level, candidate)) {
@@ -68,21 +68,23 @@ public class SparkleNodeSpawnHandler {
         }
     }
 
-    private static BlockPos findWaterSurface(ServerLevel level, int x, int z, int topY, int bottomY) {
+    private static BlockPos findFluidSurface(ServerLevel level, int x, int z, int topY, int bottomY) {
         for (int y = topY; y >= bottomY; y--) {
             BlockPos pos = new BlockPos(x, y, z);
-            if (isWaterSurface(level, pos)) {
+            if (isFluidSurface(level, pos)) {
                 return pos;
             }
         }
         return null;
     }
 
-    private static boolean isWaterSurface(ServerLevel level, BlockPos pos) {
+    private static boolean isFluidSurface(ServerLevel level, BlockPos pos) {
         var fluid = level.getFluidState(pos);
         if (fluid.isEmpty()) return false;
-        if (!fluid.is(net.minecraft.world.level.material.Fluids.WATER)
-                && !fluid.is(net.minecraft.world.level.material.Fluids.FLOWING_WATER)) return false;
+
+        boolean isWater = fluid.is(Fluids.WATER) || fluid.is(Fluids.FLOWING_WATER);
+        boolean isLava = fluid.is(Fluids.LAVA) || fluid.is(Fluids.FLOWING_LAVA);
+        if (!isWater && !isLava) return false;
 
         var aboveFluid = level.getFluidState(pos.above());
         return aboveFluid.isEmpty();

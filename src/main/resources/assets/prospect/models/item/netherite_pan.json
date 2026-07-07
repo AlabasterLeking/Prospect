@@ -7,6 +7,10 @@
     {
       "predicate": { "prospect:panning": 1.0 },
       "model": "prospect:item/netherite_pan_water"
+    },
+    {
+      "predicate": { "prospect:panning_lava": 1.0 },
+      "model": "prospect:item/netherite_pan_lava"
     }
   ]
 }

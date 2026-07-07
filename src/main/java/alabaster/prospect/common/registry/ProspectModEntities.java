@@ -20,5 +20,6 @@ public class ProspectModEntities {
                             .sized(1f, 0.1f)
                             .clientTrackingRange(32)
                             .updateInterval(3)
+                            .fireImmune()
                             .build(ResourceLocation.fromNamespaceAndPath("prospect", "sparkle_node").toString()));
 }

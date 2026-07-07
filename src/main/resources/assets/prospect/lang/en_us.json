@@ -5,6 +5,7 @@
   "item.prospect.iron_pan": "Iron Pan",
   "item.prospect.golden_pan": "Golden Pan",
   "item.prospect.netherite_pan": "Netherite Pan",
+  "tooltip.prospect.pan.too_hot": "This pan can't withstand the heat!",
 
   "item.prospect.stone_prospecting_pickaxe": "Stone Prospecting Pickaxe",
   "item.prospect.iron_prospecting_pickaxe": "Iron Prospecting Pickaxe",
