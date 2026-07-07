@@ -32,6 +32,14 @@ public class CraftingRecipes {
     }
 
     private static void recipesTools(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.MINING_HELMET.get(), 1)
+                .pattern("ILI")
+                .pattern("ISI")
+                .define('I', Items.IRON_INGOT)
+                .define('L', Items.LANTERN)
+                .define('S', Items.LEATHER)
+                .unlockedBy("has_iron_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+                .save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.COPPER_PAN.get(), 1)
                 .pattern("MBM")
                 .pattern(" M ")
