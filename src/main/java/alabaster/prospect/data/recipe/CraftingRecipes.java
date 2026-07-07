@@ -33,8 +33,9 @@ public class CraftingRecipes {
 
     private static void recipesTools(RecipeOutput output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.MINING_HELMET.get(), 1)
+                .pattern("III")
                 .pattern("ILI")
-                .pattern("ISI")
+                .pattern("S S")
                 .define('I', Items.IRON_INGOT)
                 .define('L', Items.LANTERN)
                 .define('S', Items.LEATHER)

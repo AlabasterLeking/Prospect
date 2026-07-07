@@ -1,6 +1,7 @@
 package alabaster.prospect.common.event;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -52,7 +53,7 @@ public class MiningHelmetLightEvents {
 
         UUID id = entity.getUUID();
         ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-        boolean wearing = helmet.is(ProspectModTags.MINING_HELMET_LIGHT);
+        boolean wearing = helmet.is(ProspectModTags.MINING_HELMET_LIGHT) && MiningHelmetItem.isLightOn(helmet);
 
         if (!wearing) {
             BlockPos active = ACTIVE_LIGHTS.remove(id);

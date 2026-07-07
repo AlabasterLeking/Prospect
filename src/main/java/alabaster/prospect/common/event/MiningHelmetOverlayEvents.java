@@ -1,6 +1,7 @@
 package alabaster.prospect.common.event;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -26,7 +27,7 @@ public class MiningHelmetOverlayEvents {
         if (mc.player == null || mc.level == null) return;
 
         ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);
-        if (!helmet.is(ProspectModTags.MINING_HELMET_LIGHT)) return;
+        if (!helmet.is(ProspectModTags.MINING_HELMET_LIGHT) || !MiningHelmetItem.isLightOn(helmet)) return;
 
         BlockPos pos = mc.player.blockPosition();
         if (mc.level.canSeeSky(pos)) return;

@@ -4,6 +4,7 @@ import alabaster.prospect.Prospect;
 import alabaster.prospect.client.renderer.SparkleNodeRenderer;
 import alabaster.prospect.common.entity.sparklenode.SparkleNodeEntity;
 import alabaster.prospect.common.item.PanItem;
+import alabaster.prospect.common.registry.ProspectKeyBindings;
 import alabaster.prospect.common.registry.ProspectModEntities;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,6 +14,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
 @EventBusSubscriber(modid = Prospect.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetupEvents {
@@ -54,5 +56,10 @@ public class ClientSetupEvents {
                         );
                     });
         });
+    }
+
+    @SubscribeEvent
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(ProspectKeyBindings.TOGGLE_MINING_HELMET_LIGHT);
     }
 }

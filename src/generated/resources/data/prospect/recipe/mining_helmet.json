@@ -13,8 +13,9 @@
     }
   },
   "pattern": [
+    "III",
     "ILI",
-    "ISI"
+    "S S"
   ],
   "result": {
     "count": 1,

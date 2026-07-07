@@ -2,6 +2,11 @@
   "itemGroup.prospect": "Prospect",
 
   "item.prospect.mining_helmet": "Mining Helmet",
+  "tooltip.prospect.mining_helmet.light_on": "Light on",
+  "tooltip.prospect.mining_helmet.light_off": "Light off",
+
+  "key.prospect.toggle_mining_helmet_light": "Toggle Mining Helmet Light",
+  "key.categories.prospect": "Prospect",
 
   "item.prospect.copper_pan": "Copper Pan",
   "item.prospect.iron_pan": "Iron Pan",
