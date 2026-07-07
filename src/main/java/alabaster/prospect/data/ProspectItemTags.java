@@ -43,6 +43,13 @@ public class ProspectItemTags extends ItemTagsProvider {
         tag(ProspectModTags.MINING_HELMET_LIGHT)
                 .add(Items.LEATHER_HELMET);
 
+        tag(ItemTags.DURABILITY_ENCHANTABLE)
+                .add(ProspectModItems.STONE_PROSPECTING_PICKAXE.get())
+                .add(ProspectModItems.IRON_PROSPECTING_PICKAXE.get())
+                .add(ProspectModItems.GOLDEN_PROSPECTING_PICKAXE.get())
+                .add(ProspectModItems.DIAMOND_PROSPECTING_PICKAXE.get())
+                .add(ProspectModItems.NETHERITE_PROSPECTING_PICKAXE.get());
+
         this.registerModTags();
     }
 

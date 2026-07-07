@@ -12,6 +12,18 @@
   "item.prospect.diamond_prospecting_pickaxe": "Diamond Prospecting Pickaxe",
   "item.prospect.netherite_prospecting_pickaxe": "Netherite Prospecting Pickaxe",
 
+  "tooltip.prospect.prospecting_pickaxe.no_ore": "No ores detected nearby.",
+  "tooltip.prospect.prospecting_pickaxe.found_it": "Found it! %s",
+  "tooltip.prospect.prospecting_pickaxe.detected": "Detected %s – %s",
+  "tooltip.prospect.prospecting_pickaxe.detected_exact": "Detected %s at exactly %s",
+  "tooltip.prospect.prospecting_pickaxe.distance.block": "%s block away",
+  "tooltip.prospect.prospecting_pickaxe.distance.blocks": "%s blocks away",
+  "tooltip.prospect.prospecting_pickaxe.strength.very_strong": "Very Strong",
+  "tooltip.prospect.prospecting_pickaxe.strength.strong": "Strong",
+  "tooltip.prospect.prospecting_pickaxe.strength.moderate": "Moderate",
+  "tooltip.prospect.prospecting_pickaxe.strength.faint": "Faint",
+  "tooltip.prospect.prospecting_pickaxe.strength.very_faint": "Very Faint",
+
   "item.prospect.ruby": "Ruby",
   "item.prospect.sapphire": "Sapphire",
   "item.prospect.topaz": "Topaz",
