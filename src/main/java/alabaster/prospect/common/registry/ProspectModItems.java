@@ -1,6 +1,7 @@
 package alabaster.prospect.common.registry;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.item.PanItem;
 import alabaster.prospect.common.item.ProspectingPickaxeItem;
 import com.google.common.collect.Sets;
@@ -25,6 +26,10 @@ public class ProspectModItems {
     public static Item.Properties basicItem() {
         return (new Item.Properties());
     }
+
+    // Misc Tools
+    public static final Supplier<Item> MINING_HELMET = registerWithTab("mining_helmet",
+            () -> new MiningHelmetItem(basicItem().stacksTo(1)));
 
     // Pans
     public static final Supplier<Item> COPPER_PAN = registerWithTab("copper_pan",

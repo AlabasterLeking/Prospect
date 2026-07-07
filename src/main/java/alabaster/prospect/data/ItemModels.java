@@ -34,6 +34,7 @@ public class ItemModels extends ItemModelProvider
         items.remove(ProspectModItems.IRON_PAN.get());
         items.remove(ProspectModItems.GOLDEN_PAN.get());
         items.remove(ProspectModItems.NETHERITE_PAN.get());
+        items.remove(ProspectModItems.MINING_HELMET.get());
 
         // Blocks with special item sprites
         Set<Item> spriteBlockItems = Sets.newHashSet(

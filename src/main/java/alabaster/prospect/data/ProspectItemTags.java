@@ -41,7 +41,7 @@ public class ProspectItemTags extends ItemTagsProvider {
                 .add(ProspectModItems.TOPAZ.get());
 
         tag(ProspectModTags.MINING_HELMET_LIGHT)
-                .add(Items.LEATHER_HELMET);
+                .add(ProspectModItems.MINING_HELMET.get());
 
         tag(ItemTags.DURABILITY_ENCHANTABLE)
                 .add(ProspectModItems.STONE_PROSPECTING_PICKAXE.get())

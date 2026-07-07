@@ -1,0 +1,21 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "prospect:item/2d_mining_helmet"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "prospect:item/2d_mining_helmet"
+    },
+    "ground": {
+      "parent": "prospect:item/2d_mining_helmet"
+    },
+    "fixed": {
+      "parent": "prospect:item/2d_mining_helmet"
+    },
+    "head": {
+      "parent": "prospect:item/3d_mining_helmet"
+    }
+  }
+}
