@@ -12,13 +12,15 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @EventBusSubscriber(modid = Prospect.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ProspectModNetworking {
 
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
-
         registrar.playToServer(
                 ToggleMiningHelmetLightPayload.TYPE,
                 ToggleMiningHelmetLightPayload.STREAM_CODEC,
@@ -36,5 +38,24 @@ public class ProspectModNetworking {
                             true);
                 })
         );
+
+        registrar.playToClient(
+                MinecartJumpingPayload.TYPE,
+                MinecartJumpingPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (payload.jumping()) {
+                        REMOTE_JUMPING.put(payload.entityId(), true);
+                    } else {
+                        REMOTE_JUMPING.remove(payload.entityId());
+                    }
+                })
+        );
     }
+
+    private static final Map<Integer, Boolean> REMOTE_JUMPING = new ConcurrentHashMap<>();
+
+    public static boolean isRemoteJumping(int entityId) {
+        return REMOTE_JUMPING.getOrDefault(entityId, false);
+    }
+
 }
