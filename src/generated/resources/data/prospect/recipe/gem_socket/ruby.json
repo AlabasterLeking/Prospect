@@ -1,0 +1,10 @@
+{
+  "type": "prospect:gem_socket",
+  "addition": {
+    "item": "prospect:ruby"
+  },
+  "base": {
+    "item": "prospect:prospecting_pickaxe"
+  },
+  "gem_id": "prospect:ruby"
+}

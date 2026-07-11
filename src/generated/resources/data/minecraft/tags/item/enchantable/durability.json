@@ -1,9 +1,5 @@
 {
   "values": [
-    "prospect:stone_prospecting_pickaxe",
-    "prospect:iron_prospecting_pickaxe",
-    "prospect:golden_prospecting_pickaxe",
-    "prospect:diamond_prospecting_pickaxe",
-    "prospect:netherite_prospecting_pickaxe"
+    "prospect:prospecting_pickaxe"
   ]
 }

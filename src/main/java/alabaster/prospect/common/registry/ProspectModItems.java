@@ -40,18 +40,10 @@ public class ProspectModItems {
             () -> new PanItem(basicItem().stacksTo(1).durability( 16), false));
     public static final Supplier<Item> NETHERITE_PAN = registerWithTab("netherite_pan",
             () -> new PanItem(basicItem().stacksTo(1).durability( 128), true));
-    
-    // Prospecting Pickaxes
-    public static final Supplier<Item> STONE_PROSPECTING_PICKAXE = registerWithTab("stone_prospecting_pickaxe",
-            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.STONE, basicItem().stacksTo(1)));
-    public static final Supplier<Item> IRON_PROSPECTING_PICKAXE = registerWithTab("iron_prospecting_pickaxe",
-            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.IRON, basicItem().stacksTo(1)));
-    public static final Supplier<Item> GOLDEN_PROSPECTING_PICKAXE = registerWithTab("golden_prospecting_pickaxe",
-            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.GOLD, basicItem().stacksTo(1)));
-    public static final Supplier<Item> DIAMOND_PROSPECTING_PICKAXE = registerWithTab("diamond_prospecting_pickaxe",
-            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.DIAMOND, basicItem().stacksTo(1)));
-    public static final Supplier<Item> NETHERITE_PROSPECTING_PICKAXE = registerWithTab("netherite_prospecting_pickaxe",
-            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.ProspectingTier.NETHERITE, basicItem().stacksTo(1)));
+
+    // Prospecting Pickaxe
+    public static final Supplier<Item> PROSPECTING_PICKAXE = registerWithTab("prospecting_pickaxe",
+            () -> new ProspectingPickaxeItem(ProspectingPickaxeItem.defaultProperties()));
 
     // Ores and Minerals
     public static final Supplier<Item> RUBY = registerWithTab("ruby",
@@ -77,8 +69,8 @@ public class ProspectModItems {
 
     public static final Supplier<Item> RUBY_BLOCK = registerWithTab("ruby_block",
             () -> new BlockItem(ProspectModBlocks.RUBY_BLOCK.get(), basicItem()));
-    //public static final Supplier<Item> SAPPHIRE_BLOCK = registerWithTab("sapphire_block",
-    //        () -> new BlockItem(ProspectModBlocks.SAPPHIRE_BLOCK.get(), basicItem()));
+    public static final Supplier<Item> SAPPHIRE_BLOCK = registerWithTab("sapphire_block",
+            () -> new BlockItem(ProspectModBlocks.SAPPHIRE_BLOCK.get(), basicItem()));
     public static final Supplier<Item> TOPAZ_BLOCK = registerWithTab("topaz_block",
             () -> new BlockItem(ProspectModBlocks.TOPAZ_BLOCK.get(), basicItem()));
 }

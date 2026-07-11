@@ -39,14 +39,8 @@ public class BlockStates extends BlockStateProvider
         this.simpleBlock(ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get());
         this.simpleBlock(ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get());
         this.simpleBlock(ProspectModBlocks.RUBY_BLOCK.get());
+        this.simpleBlock(ProspectModBlocks.SAPPHIRE_BLOCK.get());
         this.simpleBlock(ProspectModBlocks.TOPAZ_BLOCK.get());
 
-    }
-    public void crateBlock(Block block, String cropName) {
-        this.simpleBlock(block,
-                models().cubeBottomTop(blockName(block),
-                        resourceBlock(cropName + "_crate_side"),
-                        resourceBlock("crate_bottom"),
-                        resourceBlock(cropName + "_crate_top")));
     }
 }

@@ -1,0 +1,10 @@
+{
+  "type": "prospect:gem_socket",
+  "addition": {
+    "item": "minecraft:emerald"
+  },
+  "base": {
+    "item": "prospect:prospecting_pickaxe"
+  },
+  "gem_id": "prospect:emerald"
+}

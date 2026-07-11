@@ -1,5 +1,6 @@
 package alabaster.prospect;
 
+import alabaster.prospect.common.prospecting.ProspectingGems;
 import alabaster.prospect.common.registry.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,6 +26,10 @@ public class Prospect {
         ProspectModItems.ITEMS.register(modEventBus);
         ProspectModEntities.ENTITIES.register(modEventBus);
         ProspectModCreativeTabs.CREATIVE_TABS.register(modEventBus);
+        ProspectParticleTypes.PARTICLE_TYPES.register(modEventBus);
+        ProspectRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+        ProspectDataComponents.DATA_COMPONENTS.register(modEventBus);
+        ProspectingGems.bootstrap();
     }
 
     @SubscribeEvent

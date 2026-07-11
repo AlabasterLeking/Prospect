@@ -18,9 +18,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @EventBusSubscriber(modid = Prospect.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ProspectModNetworking {
 
+    private static final Map<Integer, Boolean> REMOTE_JUMPING = new ConcurrentHashMap<>();
+
+    public static boolean isRemoteJumping(int entityId) {
+        return REMOTE_JUMPING.getOrDefault(entityId, false);
+    }
+
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
+
         registrar.playToServer(
                 ToggleMiningHelmetLightPayload.TYPE,
                 ToggleMiningHelmetLightPayload.STREAM_CODEC,
@@ -50,12 +57,22 @@ public class ProspectModNetworking {
                     }
                 })
         );
+
+        registrar.playToClient(
+                TopazGlintPayload.TYPE,
+                TopazGlintPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+                    if (mc.level == null) return;
+                    net.minecraft.core.BlockPos pos = payload.pos();
+                    for (int i = 0; i < 6; i++) {
+                        double x = pos.getX() + mc.level.random.nextDouble();
+                        double y = pos.getY() + mc.level.random.nextDouble();
+                        double z = pos.getZ() + mc.level.random.nextDouble();
+                        mc.level.addParticle(alabaster.prospect.common.registry.ProspectParticleTypes.TOPAZ_GLINT.get(),
+                                x, y, z, 0, 0, 0);
+                    }
+                })
+        );
     }
-
-    private static final Map<Integer, Boolean> REMOTE_JUMPING = new ConcurrentHashMap<>();
-
-    public static boolean isRemoteJumping(int entityId) {
-        return REMOTE_JUMPING.getOrDefault(entityId, false);
-    }
-
 }

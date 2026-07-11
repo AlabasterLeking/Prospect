@@ -1,21 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_gold_ingot": {
+    "has_sapphire": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:gold_ingot"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "has_stick": {
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:stick"
+            "items": "prospect:sapphire"
           }
         ]
       },
@@ -23,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "prospect:golden_prospecting_pickaxe"
+        "recipe": "prospect:sapphire_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -31,13 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_stick",
-      "has_gold_ingot"
+      "has_sapphire"
     ]
   ],
   "rewards": {
     "recipes": [
-      "prospect:golden_prospecting_pickaxe"
+      "prospect:sapphire_block"
     ]
   }
 }

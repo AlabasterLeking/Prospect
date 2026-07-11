@@ -30,8 +30,8 @@ public class ProspectModBlocks {
 
     public static final Supplier<Block> RUBY_BLOCK = BLOCKS.register("ruby_block",
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)));
-    //public static final Supplier<Block> SAPPHIRE_BLOCK = BLOCKS.register("sapphire_block",
-    //        () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)));
+    public static final Supplier<Block> SAPPHIRE_BLOCK = BLOCKS.register("sapphire_block",
+            () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)));
     public static final Supplier<Block> TOPAZ_BLOCK = BLOCKS.register("topaz_block",
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)));
 

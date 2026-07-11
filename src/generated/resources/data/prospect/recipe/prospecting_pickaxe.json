@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "m": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:iron_ingot"
     },
     "s": {
       "item": "minecraft:stick"
@@ -16,6 +16,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "prospect:diamond_prospecting_pickaxe"
+    "id": "prospect:prospecting_pickaxe"
   }
 }

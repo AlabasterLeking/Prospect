@@ -1,21 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_diamond": {
+    "has_sapphire_block": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:diamond"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "has_stick": {
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:stick"
+            "items": "prospect:sapphire_block"
           }
         ]
       },
@@ -23,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "prospect:diamond_prospecting_pickaxe"
+        "recipe": "prospect:sapphire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -31,13 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_stick",
-      "has_diamond"
+      "has_sapphire_block"
     ]
   ],
   "rewards": {
     "recipes": [
-      "prospect:diamond_prospecting_pickaxe"
+      "prospect:sapphire"
     ]
   }
 }

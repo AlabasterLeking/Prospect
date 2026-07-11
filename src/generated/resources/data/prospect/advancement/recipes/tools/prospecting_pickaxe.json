@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "prospect:iron_prospecting_pickaxe"
+        "recipe": "prospect:prospecting_pickaxe"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -37,7 +37,7 @@
   ],
   "rewards": {
     "recipes": [
-      "prospect:iron_prospecting_pickaxe"
+      "prospect:prospecting_pickaxe"
     ]
   }
 }

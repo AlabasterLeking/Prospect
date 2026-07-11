@@ -53,11 +53,7 @@ public class ItemModels extends ItemModelProvider
 
         // Handheld items
         Set<Item> handheldItems = Sets.newHashSet(
-                ProspectModItems.STONE_PROSPECTING_PICKAXE.get(),
-                ProspectModItems.IRON_PROSPECTING_PICKAXE.get(),
-                ProspectModItems.GOLDEN_PROSPECTING_PICKAXE.get(),
-                ProspectModItems.DIAMOND_PROSPECTING_PICKAXE.get(),
-                ProspectModItems.NETHERITE_PROSPECTING_PICKAXE.get()
+                ProspectModItems.PROSPECTING_PICKAXE.get()
         );
         takeAll(items, handheldItems.toArray(new Item[0])).forEach(item -> itemHandheldModel(item, resourceItem(itemName(item))));
 

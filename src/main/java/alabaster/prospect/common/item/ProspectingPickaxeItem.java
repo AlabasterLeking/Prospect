@@ -1,22 +1,34 @@
 package alabaster.prospect.common.item;
 
+import alabaster.prospect.common.prospecting.OreCandidate;
+import alabaster.prospect.common.prospecting.ProspectingContext;
+import alabaster.prospect.common.prospecting.ProspectingGemEffect;
+import alabaster.prospect.common.prospecting.ProspectingGems;
+import alabaster.prospect.common.prospecting.ProspectingSockets;
+import alabaster.prospect.common.prospecting.QuartzGemEffect;
+import alabaster.prospect.common.registry.ProspectDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -26,29 +38,10 @@ import java.util.*;
 
 public class ProspectingPickaxeItem extends DiggerItem {
 
-    public enum ProspectingTier {
-        STONE(Tiers.STONE,         5,0.10f,false,false,40),
-        IRON(Tiers.IRON,          12,0.05f,false,false,30),
-        GOLD(Tiers.GOLD,          15,0.00f,false,true, 25),
-        DIAMOND(Tiers.DIAMOND,    20,0.00f,false,false,20),
-        NETHERITE(Tiers.NETHERITE,25,0.00f,false,true, 10);
-
-        public final Tiers vanillaTier;
-        public final int radius;
-        public final float falsePositiveRate;
-        public final boolean directional;
-        public final boolean exactDistance;
-        public final int cooldownTicks;
-
-        ProspectingTier(Tiers vanillaTier, int radius, float falsePositiveRate, boolean directional, boolean exactDistance, int cooldownTicks) {
-            this.vanillaTier = vanillaTier;
-            this.radius = radius;
-            this.falsePositiveRate = falsePositiveRate;
-            this.directional = directional;
-            this.exactDistance = exactDistance;
-            this.cooldownTicks = cooldownTicks;
-        }
-    }
+    private static final int BASE_RADIUS = 12;
+    private static final int COOLDOWN_TICKS = 30;
+    private static final double PING_RANGE = 32.0;
+    public static int distanceIncrement = 3;
 
     private static final Map<String, ChatFormatting> ORE_COLORS = new LinkedHashMap<>();
 
@@ -84,26 +77,23 @@ public class ProspectingPickaxeItem extends DiggerItem {
             ChatFormatting.RED, ChatFormatting.GOLD, ChatFormatting.YELLOW, ChatFormatting.GREEN, ChatFormatting.DARK_GREEN
     };
 
-    public static int distanceIncrement = 3;
-
-    private static final double PING_RANGE = 32.0;
-
-    private final ProspectingTier prospectingTier;
-
-    public ProspectingPickaxeItem(ProspectingTier prospectingTier, Properties properties) {
-        super(
-                prospectingTier.vanillaTier != null ? prospectingTier.vanillaTier : Tiers.IRON,
-                BlockTags.MINEABLE_WITH_PICKAXE,
-                properties
-        );
-        this.prospectingTier = prospectingTier;
+    public ProspectingPickaxeItem(Properties properties) {
+        super(Tiers.NETHERITE, BlockTags.MINEABLE_WITH_PICKAXE, properties);
     }
 
-    public static Properties defaultProperties(ProspectingTier tier) {
-        Tiers vt = tier.vanillaTier != null ? tier.vanillaTier : Tiers.IRON;
+    public static Properties defaultProperties() {
         return new Properties()
-                .durability(vt.getUses())
-                .attributes(DiggerItem.createAttributes(vt, 1.5f, -2.8f));
+                .durability(Tiers.NETHERITE.getUses())
+                .attributes(DiggerItem.createAttributes(Tiers.NETHERITE, 1.5f, -2.8f));
+    }
+
+    private static List<ProspectingGemEffect> activeGems(ItemStack stack) {
+        ProspectingSockets sockets = stack.getOrDefault(ProspectDataComponents.PROSPECTING_SOCKETS.get(), ProspectingSockets.EMPTY);
+        List<ProspectingGemEffect> gems = new ArrayList<>();
+        for (ResourceLocation id : sockets.gemIds()) {
+            ProspectingGems.get(id).ifPresent(gems::add);
+        }
+        return gems;
     }
 
     @Override
@@ -115,41 +105,106 @@ public class ProspectingPickaxeItem extends DiggerItem {
         }
 
         ItemStack stack = ctx.getItemInHand();
+        BlockPos clickedPos = ctx.getClickedPos();
+        BlockState clickedState = level.getBlockState(clickedPos);
+
+        boolean hasQuartz = stack.getOrDefault(ProspectDataComponents.PROSPECTING_SOCKETS.get(), ProspectingSockets.EMPTY)
+                .has(ProspectingGems.QUARTZ);
+
+        // Sneak+click sets/clears the Quartz lock instead of running a search.
+        if (hasQuartz && player.isShiftKeyDown()) {
+            String oreTag = getOreTag(level, clickedState);
+            if (oreTag != null) {
+                QuartzGemEffect.setLockedTag(stack, oreTag);
+                player.displayClientMessage(Component.translatable("tooltip.prospect.prospecting_pickaxe.quartz_set", oreTag), true);
+            } else {
+                QuartzGemEffect.clearLockedTag(stack);
+                player.displayClientMessage(Component.translatable("tooltip.prospect.prospecting_pickaxe.quartz_cleared"), true);
+            }
+            return InteractionResult.sidedSuccess(false);
+        }
 
         if (player.getCooldowns().isOnCooldown(stack.getItem())) {
             return InteractionResult.PASS;
         }
 
-        BlockPos clickedPos = ctx.getClickedPos();
-        Direction clickedFace = ctx.getClickedFace();
-        BlockState clickedState = level.getBlockState(clickedPos);
+        ProspectingContext gemCtx = new ProspectingContext(level, player, stack, clickedPos, ctx.getClickedFace());
+        List<ProspectingGemEffect> gems = activeGems(stack);
 
-        if (getOreColor(level, clickedState) != null) {
+        int radius = BASE_RADIUS;
+        for (ProspectingGemEffect gem : gems) {
+            radius = gem.modifyRadius(radius, gemCtx);
+        }
+
+        TagKey<Block> lockedTag = null;
+        for (ProspectingGemEffect gem : gems) {
+            TagKey<Block> lock = gem.lockedOreTag(stack);
+            if (lock != null) {
+                lockedTag = lock;
+                break;
+            }
+        }
+
+        ChatFormatting clickedColor = getOreColor(level, clickedState);
+        if (clickedColor != null && (lockedTag == null || clickedState.is(lockedTag))) {
             announceArrival(player, level, clickedPos, clickedState);
             return InteractionResult.sidedSuccess(false);
         }
 
-        List<BlockPos> candidates = prospectingTier.directional
-                ? collectDirectional(level, clickedPos, clickedFace, prospectingTier.radius)
-                : collectSpherical(level, clickedPos, prospectingTier.radius);
+        List<BlockPos> candidatePositions = collectSpherical(clickedPos, radius);
+        List<OreCandidate> candidates = new ArrayList<>();
+        for (BlockPos pos : candidatePositions) {
+            BlockState state = level.getBlockState(pos);
+            String tagId = getOreTag(level, state);
+            if (tagId == null) continue;
+            if (lockedTag != null && !state.is(lockedTag)) continue;
+            ChatFormatting color = ORE_COLORS.get(tagId);
+            double dist = Math.sqrt(clickedPos.distSqr(pos));
+            candidates.add(new OreCandidate(pos, dist, color, state.getBlock().getDescriptionId(), tagId));
+        }
 
-        OreHit hit = findNearestOre(level, clickedPos, candidates);
+        OreCandidate best = null;
+        for (OreCandidate candidate : candidates) {
+            if (best == null || candidate.distanceFromOrigin() < best.distanceFromOrigin()) {
+                best = candidate;
+            }
+        }
+        for (ProspectingGemEffect gem : gems) {
+            OreCandidate selected = gem.selectCandidate(candidates, best, gemCtx);
+            if (selected != null) best = selected;
+        }
 
-        hit = applyFalsePositive(hit, clickedPos, player.getRandom(),
-                prospectingTier.falsePositiveRate, prospectingTier.radius);
-
-        if (hit == null) {
+        if (best == null) {
             player.displayClientMessage(Component.translatable("tooltip.prospect.prospecting_pickaxe.no_ore")
                     .withStyle(ChatFormatting.DARK_GRAY), true);
+            for (ProspectingGemEffect gem : gems) {
+                gem.onNoOreFound(gemCtx);
+            }
         } else {
-            sendOreMessage(player, hit, prospectingTier);
-            playPingSound(level, hit.pos(), hit.distance());
+            sendFuzzyOreMessage(player, best);
+            playPingSound(level, best.pos(), best.distanceFromOrigin());
+            spawnProximityParticles(level, best);
+            for (ProspectingGemEffect gem : gems) {
+                gem.onHitFound(best, gemCtx);
+            }
         }
 
         stack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(stack));
-        player.getCooldowns().addCooldown(stack.getItem(), prospectingTier.cooldownTicks);
+        player.getCooldowns().addCooldown(stack.getItem(), COOLDOWN_TICKS);
 
         return InteractionResult.sidedSuccess(false);
+    }
+
+    private static void spawnProximityParticles(Level level, OreCandidate hit) {
+        if (!(level instanceof ServerLevel serverLevel)) return;
+        BlockState state = level.getBlockState(hit.pos());
+        // Closer ore = more particles. Clamped so it never fully drops to
+        // zero (still a hint something's there even at max range) or gets
+        // excessive up close.
+        int count = Mth.clamp(12 - (int) (hit.distanceFromOrigin() / 3), 2, 12);
+        serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+                hit.pos().getX() + 0.5, hit.pos().getY() + 0.5, hit.pos().getZ() + 0.5,
+                count, 0.25, 0.25, 0.25, 0.0);
     }
 
     private static void playPingSound(Level level, BlockPos pos, double distance) {
@@ -170,7 +225,7 @@ public class ProspectingPickaxeItem extends DiggerItem {
         level.playSound(null, pos, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.2f);
     }
 
-    private static List<BlockPos> collectSpherical(Level level, BlockPos origin, int radius) {
+    private static List<BlockPos> collectSpherical(BlockPos origin, int radius) {
         List<BlockPos> result = new ArrayList<>();
         BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
         for (int dx = -radius; dx <= radius; dx++) {
@@ -188,90 +243,28 @@ public class ProspectingPickaxeItem extends DiggerItem {
         return result;
     }
 
-    private static List<BlockPos> collectDirectional(Level level, BlockPos origin, Direction face, int radius) {
-        List<BlockPos> result = new ArrayList<>();
-        Direction inward = face.getOpposite();
-        BlockPos cur = origin.relative(inward);
-        for (int i = 0; i < radius; i++) {
-            result.add(cur);
-            cur = cur.relative(inward);
-        }
-        return result;
-    }
-
-    private static OreHit applyFalsePositive(OreHit realHit, BlockPos origin, RandomSource rng, float rate, int radius) {
-        if (rate <= 0f || rng.nextFloat() >= rate) return realHit;
-
-        String fakeTag = ORE_TAG_KEYS.get(rng.nextInt(ORE_TAG_KEYS.size() - 1));
-        ChatFormatting fakeColor = ORE_COLORS.get(fakeTag);
-        double fakeDist = 1 + rng.nextInt(radius);
-        BlockPos fakePos = origin.offset(
-                rng.nextInt(radius * 2 + 1) - radius,
-                rng.nextInt(radius * 2 + 1) - radius,
-                rng.nextInt(radius * 2 + 1) - radius
-        );
-
-        if (realHit == null || fakeDist < realHit.distance()) {
-            return new OreHit(fakePos, fakeDist, fakeColor, "block." + fakeTag.replace("minecraft:", "minecraft.").replace("_ores", "").replace(":", ".") + "_ore");
-        }
-
-        return realHit;
-    }
-
-    private record OreHit(BlockPos pos, double distance, ChatFormatting color, String oreName) {}
-
-    private static OreHit findNearestOre(Level level, BlockPos origin, List<BlockPos> candidates) {
-        OreHit best = null;
-
-        for (BlockPos pos : candidates) {
-            BlockState state = level.getBlockState(pos);
-            ChatFormatting color = getOreColor(level, state);
-            if (color == null) continue;
-
-            double dist = Math.sqrt(origin.distSqr(pos));
-            if (best == null || dist < best.distance()) {
-                String name = state.getBlock().getDescriptionId();
-                best = new OreHit(pos, dist, color, name);
-            }
-        }
-
-        return best;
-    }
-
-    private static ChatFormatting getOreColor(Level level, BlockState state) {
-        for (Map.Entry<String, ChatFormatting> entry : ORE_COLORS.entrySet()) {
-            TagKey<Block> tag = BlockTags.create(ResourceLocation.parse(entry.getKey()));
-            if (state.is(tag)) {
-                return entry.getValue();
-            }
+    private static String getOreTag(Level level, BlockState state) {
+        for (String tagId : ORE_TAG_KEYS) {
+            TagKey<Block> tag = BlockTags.create(ResourceLocation.parse(tagId));
+            if (state.is(tag)) return tagId;
         }
         return null;
     }
 
-    private static void sendOreMessage(Player player, OreHit hit, ProspectingTier tier) {
-        double dist = hit.distance();
-
-        MutableComponent oreName = Component.translatable(hit.oreName())
-                .withStyle(Style.EMPTY.withColor(hit.color()));
-
-        MutableComponent message;
-
-        if (tier.exactDistance) {
-            int distInt = (int) Math.ceil(dist);
-            MutableComponent distance = distanceComponent(distInt).withStyle(ChatFormatting.AQUA);
-            message = Component.translatable("tooltip.prospect.prospecting_pickaxe.detected_exact", oreName, distance);
-        } else {
-            DistanceLabel label = getFuzzyLabel((int) Math.ceil(dist));
-            MutableComponent strength = Component.translatable(label.key()).withStyle(label.color());
-            message = Component.translatable("tooltip.prospect.prospecting_pickaxe.detected", oreName, strength);
-        }
-
-        player.displayClientMessage(message, true);
+    private static ChatFormatting getOreColor(Level level, BlockState state) {
+        String tagId = getOreTag(level, state);
+        return tagId == null ? null : ORE_COLORS.get(tagId);
     }
 
-    private static MutableComponent distanceComponent(int distInt) {
-        String key = distInt == 1 ? "tooltip.prospect.prospecting_pickaxe.distance.block" : "tooltip.prospect.prospecting_pickaxe.distance.blocks";
-        return Component.translatable(key, distInt);
+    private static void sendFuzzyOreMessage(Player player, OreCandidate hit) {
+        MutableComponent oreName = Component.translatable(hit.oreTranslationKey())
+                .withStyle(Style.EMPTY.withColor(hit.color()));
+
+        DistanceLabel label = getFuzzyLabel((int) Math.ceil(hit.distanceFromOrigin()));
+        MutableComponent strength = Component.translatable(label.key()).withStyle(label.color());
+        Component message = Component.translatable("tooltip.prospect.prospecting_pickaxe.detected", oreName, strength);
+
+        player.displayClientMessage(message, true);
     }
 
     private static DistanceLabel getFuzzyLabel(int distance) {
@@ -279,7 +272,22 @@ public class ProspectingPickaxeItem extends DiggerItem {
         return new DistanceLabel(STRENGTH_KEYS[index], LABEL_COLORS[index]);
     }
 
-    public ProspectingTier getProspectingTier() {
-        return prospectingTier;
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
+
+        ProspectingSockets sockets = stack.getOrDefault(ProspectDataComponents.PROSPECTING_SOCKETS.get(), ProspectingSockets.EMPTY);
+        if (sockets.gemIds().isEmpty()) return;
+
+        tooltip.add(Component.translatable("tooltip.prospect.prospecting_pickaxe.gems_header")
+                .withStyle(ChatFormatting.GRAY));
+
+        for (ResourceLocation id : sockets.gemIds()) {
+            Component gemName = Component.translatable("gem.prospect." + id.getPath())
+                    .withStyle(ChatFormatting.WHITE);
+            tooltip.add(Component.translatable("tooltip.prospect.prospecting_pickaxe.gem_entry", gemName)
+                    .withStyle(ChatFormatting.GRAY));
+            ProspectingGems.get(id).ifPresent(gem -> tooltip.addAll(gem.getTooltipLines(stack)));
+        }
     }
 }
