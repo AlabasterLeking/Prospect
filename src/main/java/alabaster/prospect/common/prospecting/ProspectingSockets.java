@@ -12,6 +12,8 @@ import java.util.Set;
 
 public record ProspectingSockets(Set<ResourceLocation> gemIds) {
 
+    public static final int MAX_GEMS = 2;
+
     public static final ProspectingSockets EMPTY = new ProspectingSockets(Set.of());
 
     public static final Codec<ProspectingSockets> CODEC = ResourceLocation.CODEC

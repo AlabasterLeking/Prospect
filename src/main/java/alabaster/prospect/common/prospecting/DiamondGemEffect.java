@@ -7,18 +7,20 @@ import java.util.Map;
 public class DiamondGemEffect implements ProspectingGemEffect {
 
     private static final Map<String, Integer> RARITY = Map.ofEntries(
-            Map.entry("minecraft:coal_ores", 0),
-            Map.entry("minecraft:copper_ores", 0),
-            Map.entry("minecraft:iron_ores", 1),
-            Map.entry("minecraft:gold_ores", 1),
-            Map.entry("minecraft:redstone_ores", 2),
-            Map.entry("minecraft:lapis_ores", 2),
-            Map.entry("minecraft:diamond_ores", 2),
-            Map.entry("minecraft:emerald_ores", 2),
-            Map.entry("prospect:ruby_ores", 2),
-            Map.entry("prospect:sapphire_ores", 2),
-            Map.entry("prospect:topaz_ores", 2),
-            Map.entry("minecraft:netherite_ores", 3)
+            Map.entry("c:ores/coal", 0),
+            Map.entry("c:ores/copper", 0),
+            Map.entry("c:ores/iron", 1),
+            Map.entry("c:ores/gold", 1),
+            Map.entry("c:ores/zinc", 1),
+            Map.entry("c:ores/redstone", 2),
+            Map.entry("c:ores/lapis", 2),
+            Map.entry("c:ores/diamond", 2),
+            Map.entry("c:ores/emerald", 2),
+            Map.entry("c:ores/quartz", 2),
+            Map.entry("c:ores/ruby", 2),
+            Map.entry("c:ores/sapphire", 2),
+            Map.entry("c:ores/topaz", 2),
+            Map.entry("c:ores/netherite_scrap", 3)
     );
 
     private static final double DISTANCE_WEIGHT_PER_RANK = 6.0;

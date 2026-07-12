@@ -46,20 +46,21 @@ public class ProspectingPickaxeItem extends DiggerItem {
     private static final Map<String, ChatFormatting> ORE_COLORS = new LinkedHashMap<>();
 
     static {
-        ORE_COLORS.put("minecraft:coal_ores",      ChatFormatting.DARK_GRAY);
-        ORE_COLORS.put("minecraft:iron_ores",      ChatFormatting.WHITE);
-        ORE_COLORS.put("minecraft:copper_ores",    ChatFormatting.GOLD);
-        ORE_COLORS.put("minecraft:gold_ores",      ChatFormatting.YELLOW);
-        ORE_COLORS.put("minecraft:redstone_ores",  ChatFormatting.RED);
-        ORE_COLORS.put("minecraft:lapis_ores",     ChatFormatting.BLUE);
-        ORE_COLORS.put("minecraft:diamond_ores",   ChatFormatting.AQUA);
-        ORE_COLORS.put("minecraft:emerald_ores",   ChatFormatting.GREEN);
-        ORE_COLORS.put("minecraft:quartz_ores",    ChatFormatting.WHITE);
-        ORE_COLORS.put("minecraft:netherite_ores", ChatFormatting.DARK_RED);
-        ORE_COLORS.put("prospect:ruby_ores",       ChatFormatting.RED);
-        ORE_COLORS.put("prospect:sapphire_ores",   ChatFormatting.BLUE);
-        ORE_COLORS.put("prospect:topaz_ores",      ChatFormatting.GOLD);
-        ORE_COLORS.put("minecraft:ores",           ChatFormatting.GRAY);
+        ORE_COLORS.put("c:ores/coal",            ChatFormatting.DARK_GRAY);
+        ORE_COLORS.put("c:ores/iron",            ChatFormatting.GRAY);
+        ORE_COLORS.put("c:ores/copper",          ChatFormatting.GOLD);
+        ORE_COLORS.put("c:ores/gold",            ChatFormatting.YELLOW);
+        ORE_COLORS.put("c:ores/zinc",            ChatFormatting.DARK_GREEN);
+        ORE_COLORS.put("c:ores/redstone",        ChatFormatting.RED);
+        ORE_COLORS.put("c:ores/lapis",           ChatFormatting.BLUE);
+        ORE_COLORS.put("c:ores/diamond",         ChatFormatting.AQUA);
+        ORE_COLORS.put("c:ores/emerald",         ChatFormatting.GREEN);
+        ORE_COLORS.put("c:ores/quartz",          ChatFormatting.WHITE);
+        ORE_COLORS.put("c:ores/netherite_scrap", ChatFormatting.DARK_RED);
+        ORE_COLORS.put("c:ores/ruby",            ChatFormatting.RED);
+        ORE_COLORS.put("c:ores/sapphire",        ChatFormatting.BLUE);
+        ORE_COLORS.put("c:ores/topaz",           ChatFormatting.GOLD);
+        ORE_COLORS.put("c:ores",                 ChatFormatting.GRAY);
     }
 
     private static final List<String> ORE_TAG_KEYS = new ArrayList<>(ORE_COLORS.keySet());
@@ -198,9 +199,6 @@ public class ProspectingPickaxeItem extends DiggerItem {
     private static void spawnProximityParticles(Level level, OreCandidate hit) {
         if (!(level instanceof ServerLevel serverLevel)) return;
         BlockState state = level.getBlockState(hit.pos());
-        // Closer ore = more particles. Clamped so it never fully drops to
-        // zero (still a hint something's there even at max range) or gets
-        // excessive up close.
         int count = Mth.clamp(12 - (int) (hit.distanceFromOrigin() / 3), 2, 12);
         serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
                 hit.pos().getX() + 0.5, hit.pos().getY() + 0.5, hit.pos().getZ() + 0.5,
@@ -279,7 +277,8 @@ public class ProspectingPickaxeItem extends DiggerItem {
         ProspectingSockets sockets = stack.getOrDefault(ProspectDataComponents.PROSPECTING_SOCKETS.get(), ProspectingSockets.EMPTY);
         if (sockets.gemIds().isEmpty()) return;
 
-        tooltip.add(Component.translatable("tooltip.prospect.prospecting_pickaxe.gems_header")
+        tooltip.add(Component.translatable("tooltip.prospect.prospecting_pickaxe.gems_header",
+                        sockets.gemIds().size(), ProspectingSockets.MAX_GEMS)
                 .withStyle(ChatFormatting.GRAY));
 
         for (ResourceLocation id : sockets.gemIds()) {

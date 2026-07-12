@@ -2,6 +2,7 @@ package alabaster.prospect.common.crafting;
 
 import alabaster.prospect.common.prospecting.ProspectingSockets;
 import alabaster.prospect.common.registry.ProspectDataComponents;
+import alabaster.prospect.common.registry.ProspectModItems;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
@@ -11,28 +12,29 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmithingRecipe;
 import net.minecraft.world.item.crafting.SmithingRecipeInput;
+import net.minecraft.world.item.crafting.SmithingTransformRecipe;
 import net.minecraft.world.level.Level;
 
-public class GemSocketRecipe implements SmithingRecipe {
+public class GemSocketRecipe extends SmithingTransformRecipe {
 
-    private final Ingredient base;
-    private final Ingredient gem;
+    private final Ingredient gemSocketBase;
+    private final Ingredient gemSocketAddition;
     private final ResourceLocation gemId;
 
     public GemSocketRecipe(Ingredient base, Ingredient gem, ResourceLocation gemId) {
-        this.base = base;
-        this.gem = gem;
+        super(Ingredient.of(), base, gem, new ItemStack(ProspectModItems.PROSPECTING_PICKAXE.get()));
+        this.gemSocketBase = base;
+        this.gemSocketAddition = gem;
         this.gemId = gemId;
     }
 
     @Override
     public boolean matches(SmithingRecipeInput input, Level level) {
         if (!input.template().isEmpty()) return false;
-        if (!base.test(input.base()) || !gem.test(input.addition())) return false;
+        if (!gemSocketBase.test(input.base()) || !gemSocketAddition.test(input.addition())) return false;
         ProspectingSockets sockets = input.base().getOrDefault(ProspectDataComponents.PROSPECTING_SOCKETS.get(), ProspectingSockets.EMPTY);
+        if (sockets.gemIds().size() >= ProspectingSockets.MAX_GEMS) return false;
         return !sockets.has(gemId);
     }
 
@@ -45,23 +47,28 @@ public class GemSocketRecipe implements SmithingRecipe {
     }
 
     @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return new ItemStack(ProspectModItems.PROSPECTING_PICKAXE.get());
+    }
+
+    @Override
     public boolean isTemplateIngredient(ItemStack stack) {
         return stack.isEmpty();
     }
 
     @Override
     public boolean isBaseIngredient(ItemStack stack) {
-        return base.test(stack);
+        return gemSocketBase.test(stack);
     }
 
     @Override
     public boolean isAdditionIngredient(ItemStack stack) {
-        return gem.test(stack);
+        return gemSocketAddition.test(stack);
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return ItemStack.EMPTY;
+    public boolean isIncomplete() {
+        return gemSocketBase.hasNoItems() || gemSocketAddition.hasNoItems();
     }
 
     @Override
@@ -69,24 +76,31 @@ public class GemSocketRecipe implements SmithingRecipe {
         return Serializer.INSTANCE;
     }
 
-    @Override
-    public RecipeType<?> getType() {
-        return RecipeType.SMITHING;
+    public Ingredient getBase() {
+        return gemSocketBase;
+    }
+
+    public Ingredient getGem() {
+        return gemSocketAddition;
+    }
+
+    public ResourceLocation getGemId() {
+        return gemId;
     }
 
     public static class Serializer implements RecipeSerializer<GemSocketRecipe> {
         public static final Serializer INSTANCE = new Serializer();
 
         public static final MapCodec<GemSocketRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-                Ingredient.CODEC.fieldOf("base").forGetter(r -> r.base),
-                Ingredient.CODEC.fieldOf("addition").forGetter(r -> r.gem),
-                ResourceLocation.CODEC.fieldOf("gem_id").forGetter(r -> r.gemId)
+                Ingredient.CODEC.fieldOf("base").forGetter(GemSocketRecipe::getBase),
+                Ingredient.CODEC.fieldOf("addition").forGetter(GemSocketRecipe::getGem),
+                ResourceLocation.CODEC.fieldOf("gem_id").forGetter(GemSocketRecipe::getGemId)
         ).apply(inst, GemSocketRecipe::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, GemSocketRecipe> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, r -> r.base,
-                Ingredient.CONTENTS_STREAM_CODEC, r -> r.gem,
-                ResourceLocation.STREAM_CODEC, r -> r.gemId,
+                Ingredient.CONTENTS_STREAM_CODEC, GemSocketRecipe::getBase,
+                Ingredient.CONTENTS_STREAM_CODEC, GemSocketRecipe::getGem,
+                ResourceLocation.STREAM_CODEC, GemSocketRecipe::getGemId,
                 GemSocketRecipe::new
         );
 

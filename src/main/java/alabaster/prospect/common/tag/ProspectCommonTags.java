@@ -9,6 +9,10 @@ import net.minecraft.world.level.block.Block;
 
 public class ProspectCommonTags {
 
+    public static final TagKey<Block> RUBY_ORES = commonBlockTag("ores/ruby");
+    public static final TagKey<Block> SAPPHIRE_ORES = commonBlockTag("ores/sapphire");
+    public static final TagKey<Block> TOPAZ_ORES = commonBlockTag("ores/topaz");
+
     private static TagKey<Block> commonBlockTag(String path) {
         return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", path));
     }

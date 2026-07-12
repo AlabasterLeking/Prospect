@@ -2,6 +2,7 @@ package alabaster.prospect.data;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.registry.ProspectModBlocks;
+import alabaster.prospect.common.tag.ProspectCommonTags;
 import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -125,6 +126,21 @@ public class ProspectBlockTags extends BlockTagsProvider {
                 ProspectModBlocks.TOPAZ_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_RUBY_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get()
+        );
+
+        tag(ProspectCommonTags.RUBY_ORES).add(
+                ProspectModBlocks.RUBY_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_RUBY_ORE.get()
+        );
+
+        tag(ProspectCommonTags.SAPPHIRE_ORES).add(
+                ProspectModBlocks.SAPPHIRE_ORE.get(),
+                ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get()
+        );
+
+        tag(ProspectCommonTags.TOPAZ_ORES).add(
+                ProspectModBlocks.TOPAZ_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get()
         );
     }
