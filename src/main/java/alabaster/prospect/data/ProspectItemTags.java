@@ -46,6 +46,9 @@ public class ProspectItemTags extends ItemTagsProvider {
         tag(ItemTags.DURABILITY_ENCHANTABLE)
                 .add(ProspectModItems.PROSPECTING_PICKAXE.get());
 
+        tag(ItemTags.DYEABLE)
+                .add(ProspectModItems.MINING_HELMET.get());
+
         this.registerModTags();
     }
 

@@ -1,5 +1,6 @@
 package alabaster.prospect.common.event;
 
+import alabaster.prospect.Config;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.tag.ProspectModTags;
@@ -23,7 +24,10 @@ public class MiningHelmetOverlayEvents {
 
     @SubscribeEvent
     public static void onRenderGui(RenderGuiEvent.Post event) {
+        if (!Config.ENABLE_MINING_HELMET_OVERLAY.get()) return;
+
         Minecraft mc = Minecraft.getInstance();
+        if (mc.options.hideGui) return;
         if (mc.player == null || mc.level == null) return;
 
         ItemStack helmet = mc.player.getItemBySlot(EquipmentSlot.HEAD);

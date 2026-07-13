@@ -13,6 +13,8 @@ public class Config {
     public static ModConfigSpec COMMON_CONFIG;
     private static final Map<String, ModConfigSpec.BooleanValue> ITEMS = new HashMap<>();
 
+    public static ModConfigSpec.BooleanValue ENABLE_MINING_HELMET_OVERLAY;
+
     public Config() {
     }
 
@@ -23,6 +25,11 @@ public class Config {
 
     static {
         ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
+
+        ENABLE_MINING_HELMET_OVERLAY = COMMON_BUILDER
+                .comment("Whether the vignette glow overlay is shown while wearing a lit mining helmet underground.")
+                .define("enableMiningHelmetOverlay", true);
+
         COMMON_CONFIG = COMMON_BUILDER.build();
     }
 }

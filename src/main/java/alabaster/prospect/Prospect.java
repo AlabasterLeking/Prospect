@@ -1,5 +1,6 @@
 package alabaster.prospect;
 
+import alabaster.prospect.common.event.MiningHelmetCleaning;
 import alabaster.prospect.common.prospecting.ProspectingGems;
 import alabaster.prospect.common.registry.*;
 import net.neoforged.bus.api.IEventBus;
@@ -7,6 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
@@ -30,11 +32,17 @@ public class Prospect {
         ProspectRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         ProspectDataComponents.DATA_COMPONENTS.register(modEventBus);
         ProspectingGems.bootstrap();
+
+        modEventBus.addListener(this::commonSetup);
     }
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
         LOGGER.info("Prospect is starting");
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(MiningHelmetCleaning::register);
     }
 }

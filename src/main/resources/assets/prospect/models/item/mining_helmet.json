@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "minecraft:item/generated",
   "loader": "neoforge:separate_transforms",
   "base": {
     "parent": "prospect:item/2d_mining_helmet"
