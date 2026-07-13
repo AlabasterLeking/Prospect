@@ -6,6 +6,7 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "prospect:item/3d_mining_helmet",
+		"1": "prospect:item/3d_mining_helmet_overlay",
 		"particle": "prospect:item/3d_mining_helmet"
 	},
 	"elements": [
@@ -14,11 +15,11 @@
 			"to": [12, 9, 12],
 			"rotation": {"angle": 0, "axis": "y", "origin": [4, 6, 4]},
 			"faces": {
-				"north": {"uv": [5, 8, 9, 9.5], "texture": "#0"},
-				"east": {"uv": [9, 0, 13, 1.5], "texture": "#0"},
-				"south": {"uv": [9, 1.5, 13, 3], "texture": "#0"},
-				"west": {"uv": [9, 3, 13, 4.5], "texture": "#0"},
-				"up": {"uv": [9, 4, 5, 0], "texture": "#0"},
+				"north": {"uv": [5, 8, 9, 9.5], "texture": "#1", "tintindex": 1},
+				"east": {"uv": [9, 0, 13, 1.5], "texture": "#1", "tintindex": 1},
+				"south": {"uv": [9, 1.5, 13, 3], "texture": "#1", "tintindex": 1},
+				"west": {"uv": [9, 3, 13, 4.5], "texture": "#1", "tintindex": 1},
+				"up": {"uv": [9, 4, 5, 0], "texture": "#1", "tintindex": 1},
 				"down": {"uv": [9, 4, 5, 8], "texture": "#0"}
 			}
 		},
@@ -72,6 +73,32 @@
 				"west": {"uv": [0, 11, 1, 13], "texture": "#0"},
 				"up": {"uv": [0, 1, 0, 0], "texture": "#0"},
 				"down": {"uv": [0, 0, 0, 1], "texture": "#0"}
+			}
+		},
+		{
+			"from": [7, 9, 4],
+			"to": [9, 9.01, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 9, 4]},
+			"faces": {
+				"north": {"uv": [0, 1, 1, 1], "texture": "#missing"},
+				"east": {"uv": [0, 1, 4, 1], "texture": "#missing"},
+				"south": {"uv": [0, 1, 1, 1], "texture": "#missing"},
+				"west": {"uv": [0, 1, 4, 1], "texture": "#missing"},
+				"up": {"uv": [6.5, 0, 7.5, 4], "texture": "#0"},
+				"down": {"uv": [0, 0, 1, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"from": [7, 6, 12],
+			"to": [9, 9, 12.01],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 6, 12]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 1.5], "texture": "#missing"},
+				"east": {"uv": [1, 0, 1, 1.5], "texture": "#missing"},
+				"south": {"uv": [10.5, 1.5, 11.5, 3], "texture": "#0"},
+				"west": {"uv": [0, 0, 0, 1.5], "texture": "#missing"},
+				"up": {"uv": [0, 0, 1, 0], "texture": "#missing"},
+				"down": {"uv": [0, 1, 1, 1], "texture": "#missing"}
 			}
 		}
 	],
