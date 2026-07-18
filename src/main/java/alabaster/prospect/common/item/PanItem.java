@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -28,18 +29,26 @@ public class PanItem extends Item {
     private static final int PARTICLES_PER_BURST = 5;
 
     private final boolean canHarvestLava;
+    private final ItemLike repairMaterial;
 
-    public PanItem(Properties props) {
-        this(props, false);
-    }
-
-    public PanItem(Properties props, boolean canHarvestLava) {
+    public PanItem(Properties props, boolean canHarvestLava, ItemLike repairMaterial) {
         super(props);
         this.canHarvestLava = canHarvestLava;
+        this.repairMaterial = repairMaterial;
     }
 
     public boolean canHarvestLava() {
         return canHarvestLava;
+    }
+
+    @Override
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repairCandidate) {
+        return repairCandidate.is(repairMaterial.asItem());
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 10;
     }
 
     @Override

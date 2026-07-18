@@ -18,16 +18,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 
-/**
- * Deliberately plain Item + Equipable, NOT ArmorItem. Extending ArmorItem
- * would give correct armor stats "for free" but also hijacks worn-item
- * rendering: vanilla's HumanoidArmorLayer renders armor by looking up the
- * item's ArmorMaterial and drawing one of its fixed vanilla texture layers
- * on the standard humanoid shape, completely bypassing this item's own
- * custom 3D "head" perspective model. Staying a plain Item keeps the custom
- * worn model intact, and as a side effect also blocks armor trim
- * application entirely, since trims only apply to genuine ArmorItems.
- */
 public class MiningHelmetItem extends Item implements Equipable {
 
     private static final String LIGHT_ON_KEY = "LightOn";

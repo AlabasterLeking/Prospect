@@ -3,7 +3,6 @@ package alabaster.prospect.common.network;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.tag.ProspectModTags;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -37,12 +36,7 @@ public class ProspectModNetworking {
                     ItemStack helmet = serverPlayer.getItemBySlot(EquipmentSlot.HEAD);
                     if (!helmet.is(ProspectModTags.MINING_HELMET_LIGHT)) return;
 
-                    boolean nowOn = MiningHelmetItem.toggleLight(helmet);
-                    serverPlayer.displayClientMessage(
-                            Component.translatable(nowOn
-                                    ? "tooltip.prospect.mining_helmet.light_on"
-                                    : "tooltip.prospect.mining_helmet.light_off"),
-                            true);
+                    MiningHelmetItem.toggleLight(helmet);
                 })
         );
 

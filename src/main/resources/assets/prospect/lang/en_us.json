@@ -44,6 +44,7 @@
   "gem.prospect.ruby": "Ruby",
   "gem.prospect.sapphire": "Sapphire",
 
+  "jei.info.prospecting_pickaxe": "Can be used to help locate hidden ores. Can have gems slotted into it at the Smithing Table to enhance its capabilities. Slotted gems can be removed by clicking on a Grindstone.",
   "jei.info.gem_quartz": "When socketed into a Prospecting Pickaxe, locks its search to a single ore type. Sneak+click an ore to set the lock, sneak+click anything else to clear it.",
   "jei.info.gem_diamond": "When socketed into a Prospecting Pickaxe, prioritizes rarer ores over the nearest one when multiple are in range.",
   "jei.info.gem_emerald": "When socketed into a Prospecting Pickaxe, reveals how many connected ore blocks are in the same vein.",
@@ -71,5 +72,7 @@
 
   "trim_material.prospect.ruby": "Ruby Material",
   "trim_material.prospect.sapphire": "Sapphire Material",
-  "trim_material.prospect.topaz": "Topaz Material"
+  "trim_material.prospect.topaz": "Topaz Material",
+
+  "enchantment.prospect.panning_luck": "Panning Luck"
 }

@@ -10,6 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
@@ -44,10 +45,36 @@ public class ProspectItemTags extends ItemTagsProvider {
                 .add(ProspectModItems.MINING_HELMET.get());
 
         tag(ItemTags.DURABILITY_ENCHANTABLE)
-                .add(ProspectModItems.PROSPECTING_PICKAXE.get());
+                .add(ProspectModItems.PROSPECTING_PICKAXE.get())
+                .add(ProspectModItems.COPPER_PAN.get())
+                .add(ProspectModItems.IRON_PAN.get())
+                .add(ProspectModItems.GOLDEN_PAN.get())
+                .add(ProspectModItems.NETHERITE_PAN.get());
+
+        tag(ProspectModTags.ENCHANTABLE_PANS)
+                .add(ProspectModItems.COPPER_PAN.get())
+                .add(ProspectModItems.IRON_PAN.get())
+                .add(ProspectModItems.GOLDEN_PAN.get())
+                .add(ProspectModItems.NETHERITE_PAN.get());
 
         tag(ItemTags.DYEABLE)
                 .add(ProspectModItems.MINING_HELMET.get());
+
+        tag(ItemTags.PIGLIN_LOVED)
+                .add(ProspectModItems.GOLDEN_PAN.get());
+
+        tag(ProspectModTags.RUBY_ORES)
+                .add(ProspectModItems.RUBY_ORE.get())
+                .add(ProspectModItems.DEEPSLATE_RUBY_ORE.get());
+
+        tag(ProspectModTags.SAPPHIRE_ORES)
+                .add(ProspectModItems.SAPPHIRE_ORE.get())
+                .add(ProspectModItems.DEEPSLATE_SAPPHIRE_ORE.get());
+
+        tag(ProspectModTags.TOPAZ_ORES)
+                .add(ProspectModItems.TOPAZ_ORE.get())
+                .add(ProspectModItems.DEEPSLATE_TOPAZ_ORE.get());
+
 
         this.registerModTags();
     }

@@ -2,6 +2,7 @@ package alabaster.prospect.common.entity.sparklenode;
 
 import alabaster.prospect.common.item.PanItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -20,13 +21,17 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import alabaster.prospect.common.registry.ProspectEnchantments;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SparkleNodeEntity extends Entity {
@@ -167,19 +172,30 @@ public class SparkleNodeEntity extends Entity {
                     .withParameter(LootContextParams.DAMAGE_SOURCE, null)
                     .create(LootContextParamSets.ENTITY);
 
-            var drops = table.getRandomItems(params);
+            Holder<Enchantment> panningLuck = server.registryAccess()
+                    .lookupOrThrow(Registries.ENCHANTMENT)
+                    .getOrThrow(ProspectEnchantments.PANNING_LUCK);
+            int luckLevel = panStack.getEnchantmentLevel(panningLuck);
+            int rolls = 1 + luckLevel;
 
-            if (drops.isEmpty()) {
-                String fallbackName = isInLava() ? "nether_default" : "default";
-                ResourceKey<LootTable> defaultKey =
-                        ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + fallbackName));
-                LootTable defaultTable = server.getServer()
-                        .reloadableRegistries()
-                        .getLootTable(defaultKey);
-                drops = defaultTable.getRandomItems(params);
+            List<ItemStack> allDrops = new ArrayList<>();
+            for (int i = 0; i < rolls; i++) {
+                var drops = table.getRandomItems(params);
+
+                if (drops.isEmpty()) {
+                    String fallbackName = isInLava() ? "nether_default" : "default";
+                    ResourceKey<LootTable> defaultKey =
+                            ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + fallbackName));
+                    LootTable defaultTable = server.getServer()
+                            .reloadableRegistries()
+                            .getLootTable(defaultKey);
+                    drops = defaultTable.getRandomItems(params);
+                }
+
+                allDrops.addAll(drops);
             }
 
-            for (ItemStack lootStack : drops) {
+            for (ItemStack lootStack : allDrops) {
                 if (!player.getInventory().add(lootStack)) {
                     player.drop(lootStack, false);
                 }

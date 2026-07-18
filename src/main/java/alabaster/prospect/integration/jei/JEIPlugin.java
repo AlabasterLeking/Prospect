@@ -33,6 +33,8 @@ public class JEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.PROSPECTING_PICKAXE.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.prospecting_pickaxe"));
         registration.addIngredientInfo(new ItemStack(Items.QUARTZ), VanillaTypes.ITEM_STACK,
                 Component.translatable("jei.info.gem_quartz"));
         registration.addIngredientInfo(new ItemStack(Items.DIAMOND), VanillaTypes.ITEM_STACK,
