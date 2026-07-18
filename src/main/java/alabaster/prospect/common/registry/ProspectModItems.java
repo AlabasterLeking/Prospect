@@ -33,13 +33,13 @@ public class ProspectModItems {
 
     // Pans
     public static final Supplier<Item> COPPER_PAN = registerWithTab("copper_pan",
-            () -> new PanItem(basicItem().stacksTo(1).durability( 32), false));
+            () -> new PanItem(basicItem().stacksTo(1).durability(32), false, Items.COPPER_INGOT));
     public static final Supplier<Item> IRON_PAN = registerWithTab("iron_pan",
-            () -> new PanItem(basicItem().stacksTo(1).durability( 64), false));
+            () -> new PanItem(basicItem().stacksTo(1).durability(64), false, Items.IRON_INGOT));
     public static final Supplier<Item> GOLDEN_PAN = registerWithTab("golden_pan",
-            () -> new PanItem(basicItem().stacksTo(1).durability( 16), false));
+            () -> new PanItem(basicItem().stacksTo(1).durability(16), false, Items.GOLD_INGOT));
     public static final Supplier<Item> NETHERITE_PAN = registerWithTab("netherite_pan",
-            () -> new PanItem(basicItem().stacksTo(1).durability( 128), true));
+            () -> new PanItem(basicItem().stacksTo(1).durability(128).fireResistant(), true, Items.NETHERITE_INGOT));
 
     // Prospecting Pickaxe
     public static final Supplier<Item> PROSPECTING_PICKAXE = registerWithTab("prospecting_pickaxe",

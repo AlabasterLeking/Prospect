@@ -7,9 +7,7 @@ import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -44,17 +42,17 @@ public class ProspectBlockTags extends BlockTagsProvider {
                         Blocks.SOUL_SAND,
                         Blocks.SOUL_SOIL);
 
-        tag(ProspectModTags.RUBY_ORES).add(
+        tag(ProspectModTags.RUBY_ORE_BLOCKS).add(
                 ProspectModBlocks.RUBY_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_RUBY_ORE.get()
         );
 
-        tag(ProspectModTags.SAPPHIRE_ORES).add(
+        tag(ProspectModTags.SAPPHIRE_ORE_BLOCKS).add(
                 ProspectModBlocks.SAPPHIRE_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_SAPPHIRE_ORE.get()
         );
 
-        tag(ProspectModTags.TOPAZ_ORES).add(
+        tag(ProspectModTags.TOPAZ_ORE_BLOCKS).add(
                 ProspectModBlocks.TOPAZ_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get()
         );

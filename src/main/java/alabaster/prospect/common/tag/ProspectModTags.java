@@ -12,9 +12,13 @@ public class ProspectModTags {
 
     public static final TagKey<Block> SPAWNS_SPARKLE_NODES = modBlockTag("spawns_sparkle_nodes");
 
-    public static final TagKey<Block> RUBY_ORES = modBlockTag("ruby_ores");
-    public static final TagKey<Block> SAPPHIRE_ORES = modBlockTag("sapphire_ores");
-    public static final TagKey<Block> TOPAZ_ORES = modBlockTag("topaz_ores");
+    public static final TagKey<Item> RUBY_ORES = modItemTag("ruby_ores");
+    public static final TagKey<Item> SAPPHIRE_ORES = modItemTag("sapphire_ores");
+    public static final TagKey<Item> TOPAZ_ORES = modItemTag("topaz_ores");
+
+    public static final TagKey<Block> RUBY_ORE_BLOCKS = modBlockTag("ruby_ores");
+    public static final TagKey<Block> SAPPHIRE_ORE_BLOCKS = modBlockTag("sapphire_ores");
+    public static final TagKey<Block> TOPAZ_ORE_BLOCKS = modBlockTag("topaz_ores");
 
     public static final TagKey<Item> MINING_HELMET_LIGHT = modItemTag("mining_helmet_light");
 
