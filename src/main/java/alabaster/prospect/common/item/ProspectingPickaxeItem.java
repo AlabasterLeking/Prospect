@@ -21,7 +21,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
@@ -36,7 +35,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 
-public class ProspectingPickaxeItem extends DiggerItem {
+public class ProspectingPickaxeItem extends Item {
 
     private static final int BASE_RADIUS = 12;
     private static final int COOLDOWN_TICKS = 30;
@@ -46,21 +45,20 @@ public class ProspectingPickaxeItem extends DiggerItem {
     private static final Map<String, ChatFormatting> ORE_COLORS = new LinkedHashMap<>();
 
     static {
-        ORE_COLORS.put("c:ores/coal",            ChatFormatting.DARK_GRAY);
-        ORE_COLORS.put("c:ores/iron",            ChatFormatting.GRAY);
-        ORE_COLORS.put("c:ores/copper",          ChatFormatting.GOLD);
-        ORE_COLORS.put("c:ores/gold",            ChatFormatting.YELLOW);
-        ORE_COLORS.put("c:ores/zinc",            ChatFormatting.DARK_GREEN);
-        ORE_COLORS.put("c:ores/redstone",        ChatFormatting.RED);
-        ORE_COLORS.put("c:ores/lapis",           ChatFormatting.BLUE);
-        ORE_COLORS.put("c:ores/diamond",         ChatFormatting.AQUA);
-        ORE_COLORS.put("c:ores/emerald",         ChatFormatting.GREEN);
-        ORE_COLORS.put("c:ores/quartz",          ChatFormatting.WHITE);
-        ORE_COLORS.put("c:ores/netherite_scrap", ChatFormatting.DARK_RED);
-        ORE_COLORS.put("c:ores/ruby",            ChatFormatting.RED);
-        ORE_COLORS.put("c:ores/sapphire",        ChatFormatting.BLUE);
-        ORE_COLORS.put("c:ores/topaz",           ChatFormatting.GOLD);
-        ORE_COLORS.put("c:ores",                 ChatFormatting.GRAY);
+        ORE_COLORS.put("minecraft:coal_ores",      ChatFormatting.DARK_GRAY);
+        ORE_COLORS.put("minecraft:iron_ores",      ChatFormatting.WHITE);
+        ORE_COLORS.put("minecraft:copper_ores",    ChatFormatting.GOLD);
+        ORE_COLORS.put("minecraft:gold_ores",      ChatFormatting.YELLOW);
+        ORE_COLORS.put("minecraft:redstone_ores",  ChatFormatting.RED);
+        ORE_COLORS.put("minecraft:lapis_ores",     ChatFormatting.BLUE);
+        ORE_COLORS.put("minecraft:diamond_ores",   ChatFormatting.AQUA);
+        ORE_COLORS.put("minecraft:emerald_ores",   ChatFormatting.GREEN);
+        ORE_COLORS.put("minecraft:quartz_ores",    ChatFormatting.WHITE);
+        ORE_COLORS.put("minecraft:netherite_ores", ChatFormatting.DARK_RED);
+        ORE_COLORS.put("prospect:ruby_ores",       ChatFormatting.RED);
+        ORE_COLORS.put("prospect:sapphire_ores",   ChatFormatting.BLUE);
+        ORE_COLORS.put("prospect:topaz_ores",      ChatFormatting.GOLD);
+        ORE_COLORS.put("minecraft:ores",           ChatFormatting.GRAY);
     }
 
     private static final List<String> ORE_TAG_KEYS = new ArrayList<>(ORE_COLORS.keySet());
@@ -79,13 +77,18 @@ public class ProspectingPickaxeItem extends DiggerItem {
     };
 
     public ProspectingPickaxeItem(Properties properties) {
-        super(Tiers.NETHERITE, BlockTags.MINEABLE_WITH_PICKAXE, properties);
+        super(properties);
     }
 
     public static Properties defaultProperties() {
         return new Properties()
-                .durability(Tiers.NETHERITE.getUses())
-                .attributes(DiggerItem.createAttributes(Tiers.NETHERITE, 1.5f, -2.8f));
+                .durability(Tiers.IRON.getUses())
+                .attributes(DiggerItem.createAttributes(Tiers.IRON, 1.5f, -2.8f));
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return Tiers.IRON.getEnchantmentValue();
     }
 
     private static List<ProspectingGemEffect> activeGems(ItemStack stack) {

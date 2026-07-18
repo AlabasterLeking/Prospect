@@ -51,6 +51,12 @@ public class ProspectItemTags extends ItemTagsProvider {
                 .add(ProspectModItems.GOLDEN_PAN.get())
                 .add(ProspectModItems.NETHERITE_PAN.get());
 
+        tag(ProspectModTags.ENCHANTABLE_PANS)
+                .add(ProspectModItems.COPPER_PAN.get())
+                .add(ProspectModItems.IRON_PAN.get())
+                .add(ProspectModItems.GOLDEN_PAN.get())
+                .add(ProspectModItems.NETHERITE_PAN.get());
+
         tag(ItemTags.DYEABLE)
                 .add(ProspectModItems.MINING_HELMET.get());
 

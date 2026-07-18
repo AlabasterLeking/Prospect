@@ -22,6 +22,8 @@ public class ProspectModTags {
 
     public static final TagKey<Item> MINING_HELMET_LIGHT = modItemTag("mining_helmet_light");
 
+    public static final TagKey<Item> ENCHANTABLE_PANS = modItemTag("enchantable/pans");
+
     private static TagKey<Block> modBlockTag(String path) {
         return BlockTags.create(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, path));
     }

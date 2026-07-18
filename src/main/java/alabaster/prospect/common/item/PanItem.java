@@ -47,6 +47,11 @@ public class PanItem extends Item {
     }
 
     @Override
+    public int getEnchantmentValue() {
+        return 10;
+    }
+
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return USE_DURATION;
     }
