@@ -1,0 +1,78 @@
+{
+  "itemGroup.prospect": "Prospect",
+
+  "item.prospect.mining_helmet": "Шахтёрская каска",
+  "tooltip.prospect.mining_helmet.light_on": "Свет включен",
+  "tooltip.prospect.mining_helmet.light_off": "Свет выключен",
+
+  "key.prospect.toggle_mining_helmet_light": "Переключить освещение Шахтёрской каски",
+  "key.categories.prospect": "Геоизыскания", 
+
+  "item.prospect.copper_pan": "Медный лоток",
+  "item.prospect.iron_pan": "Железный лоток",
+  "item.prospect.golden_pan": "Золотой лоток",
+  "item.prospect.netherite_pan": "Незеритовый лоток",
+  "tooltip.prospect.pan.too_hot": "Этот лоток не выдержит такого жара!",
+
+  "item.prospect.prospecting_pickaxe": "Геологическая кирка",
+
+  "tooltip.prospect.prospecting_pickaxe.no_ore": "Руды поблизости не обнаружено.",
+  "tooltip.prospect.prospecting_pickaxe.found_it": "Нашлась! %s",
+  "tooltip.prospect.prospecting_pickaxe.detected": "Обнаружена %s – %s",
+  "tooltip.prospect.prospecting_pickaxe.strength.very_strong": "Крайне сильно",
+  "tooltip.prospect.prospecting_pickaxe.strength.strong": "Сильно",
+  "tooltip.prospect.prospecting_pickaxe.strength.moderate": "Умеренно",
+  "tooltip.prospect.prospecting_pickaxe.strength.faint": "Слабо",
+  "tooltip.prospect.prospecting_pickaxe.strength.very_faint": "Крайне слабо",
+  "tooltip.prospect.prospecting_pickaxe.gems_header": "Вставленные камни (%s/%s):",
+  "tooltip.prospect.prospecting_pickaxe.gem_entry": " - %s",
+  "tooltip.prospect.prospecting_pickaxe.quartz_set": "Зафиксирована на: %s",
+  "tooltip.prospect.prospecting_pickaxe.quartz_cleared": "Кварцевая фиксация очищена.",
+  "tooltip.prospect.prospecting_pickaxe.quartz_locked": "Зафиксирована на: %s",
+  "tooltip.prospect.prospecting_pickaxe.quartz_unlocked": "Не зафиксирована ни на одной руде",
+  "tooltip.prospect.prospecting_pickaxe.vein_size": "Обнаружена %s – размер жилы: %s руд(ы)",
+  "tooltip.prospect.prospecting_pickaxe.lapis_not_enough_xp": "Не достаточно опыта! Нужно %s уровней.",
+  "tooltip.prospect.prospecting_pickaxe.lapis_directions": "Иди %s блоков %s, %s блоков %s, %s блоков %s",
+  "tooltip.prospect.prospecting_pickaxe.ruby_distance": "Обнаружена %s – в %s блоках отсюда",
+
+  "gem.prospect.quartz": "Кварц",
+  "gem.prospect.diamond": "Алмаз",
+  "gem.prospect.emerald": "Изумруд",
+  "gem.prospect.lapis": "Лазурит",
+  "gem.prospect.amethyst": "Аметист",
+  "gem.prospect.topaz": "Топаз",
+  "gem.prospect.ruby": "Рубин",
+  "gem.prospect.sapphire": "Сапфир",
+
+  "jei.info.prospecting_pickaxe": "Может использоваться для поиска скрытых руд. На Столе кузнеца в него можно вставить драгоценные камни, чтобы улучшить его свойства. Вставленные драгоценные камни можно извлечь, щелкнув по Точилу.",
+  "jei.info.gem_quartz": "Когда вставлен в Геологическую кирку, фиксируется на поиске конкретной руды. Нажмите Shift+ЛКМ по руде, чтобы на ней зафиксироваться. Shift+ЛКМ по всему остальному, чтобы её снять.",
+  "jei.info.gem_diamond": "Когда вставлен в Геологическую кирку, в приоритете будет указывать более редкие руды, если в радиусе несколько разных руд", 
+  "jei.info.gem_emerald": "Когда вставлен в Геологическую кирку, раскрывает сколько соседних блоков руды находится в одной жиле.",
+  "jei.info.gem_lapis": "Когда вставлен в Геологическую кирку, можно потратить 5 уровней чтобы узнать точное направление к руде. Опыт не будет потрачен если поблизости не было руды.",
+  "jei.info.gem_amethyst": "Когда вставлен в Геологическую кирку, заставляет руду звенеть сквозь стены.",
+  "jei.info.gem_topaz": "Когда вставлен в Геологическую кирку, заставляет руду светиться сверкающим светом, видным сквозь стены.",
+  "jei.info.gem_ruby": "Когда вставлен в Геологическую кирку, раскрывает точную дистанцию от вас до руды, вместо расплывчатой подсказки.",
+  "jei.info.gem_sapphire": "Когда вставлен в Геологическую кирку, увеличивает радиус поиска на 8 блоков.",
+
+  "item.prospect.ruby": "Рубин",
+  "item.prospect.sapphire": "Сапфир",
+  "item.prospect.topaz": "Топаз",
+
+  "block.prospect.ruby_ore": "Рубиновая руда",
+  "block.prospect.sapphire_ore": "Сапфировая руда",
+  "block.prospect.topaz_ore": "Топазная руда",
+
+  "block.prospect.deepslate_ruby_ore": "Рубиноносный глубинный сланец",
+  "block.prospect.deepslate_sapphire_ore": "Сапфироносный глубинный сланец",
+  "block.prospect.deepslate_topaz_ore": "Топазоносный глубинный сланец",
+
+  "block.prospect.ruby_block": "Рубиновый блок",
+  "block.prospect.sapphire_block": "Сапфировый блок",
+  "block.prospect.topaz_block": "Топазный блок",
+
+  "trim_material.prospect.ruby": "Рубиновый",
+  "trim_material.prospect.sapphire": "Сапфировый",
+  "trim_material.prospect.topaz": "Топазный"
+
+  "enchantment.prospect.panning_luck": "Удача старателя"
+}
