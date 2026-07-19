@@ -48,6 +48,8 @@ public class MiningHelmetLightEvents {
         Entity raw = event.getEntity();
         if (!(raw instanceof LivingEntity entity)) return;
 
+        if (entity.isDeadOrDying()) return;
+
         Level level = entity.level();
         if (level.isClientSide()) return;
 
