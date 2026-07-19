@@ -169,7 +169,7 @@ public class SparkleNodeEntity extends Entity {
                     .withParameter(LootContextParams.ORIGIN, position())
                     .withParameter(LootContextParams.THIS_ENTITY, this)
                     .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
-                    .withParameter(LootContextParams.DAMAGE_SOURCE, null)
+                    .withParameter(LootContextParams.DAMAGE_SOURCE, server.damageSources().generic())
                     .create(LootContextParamSets.ENTITY);
 
             Holder<Enchantment> panningLuck = server.registryAccess()
