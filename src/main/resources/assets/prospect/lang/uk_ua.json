@@ -1,0 +1,78 @@
+{
+  "itemGroup.prospect": "Prospect",
+
+  "item.prospect.mining_helmet": "Шахтарський шолом",
+  "tooltip.prospect.mining_helmet.light_on": "Ліхтар увімкнено",
+  "tooltip.prospect.mining_helmet.light_off": "Ліхтар вимкнено",
+
+  "key.prospect.toggle_mining_helmet_light": "Перемкнути ліхтар шолома",
+  "key.categories.prospect": "Prospect",
+
+  "item.prospect.copper_pan": "Мідний лоток",
+  "item.prospect.iron_pan": "Залізний лоток",
+  "item.prospect.golden_pan": "Золотий лоток",
+  "item.prospect.netherite_pan": "Незеритовий лоток",
+  "tooltip.prospect.pan.too_hot": "Лоток не витримує такого жару!",
+
+  "item.prospect.prospecting_pickaxe": "Пошукове кайло",
+
+  "tooltip.prospect.prospecting_pickaxe.no_ore": "Руд поблизу не виявлено.",
+  "tooltip.prospect.prospecting_pickaxe.found_it": "Знайдено! %s",
+  "tooltip.prospect.prospecting_pickaxe.detected": "Виявлено %s – %s",
+  "tooltip.prospect.prospecting_pickaxe.strength.very_strong": "Дуже сильна",
+  "tooltip.prospect.prospecting_pickaxe.strength.strong": "Сильна",
+  "tooltip.prospect.prospecting_pickaxe.strength.moderate": "Помірна",
+  "tooltip.prospect.prospecting_pickaxe.strength.faint": "Слабка",
+  "tooltip.prospect.prospecting_pickaxe.strength.very_faint": "Дуже слабка",
+  "tooltip.prospect.prospecting_pickaxe.gems_header": "Вставлені самоцвіти (%s/%s):",
+  "tooltip.prospect.prospecting_pickaxe.gem_entry": " - %s",
+  "tooltip.prospect.prospecting_pickaxe.quartz_set": "Налаштовано на: %s",
+  "tooltip.prospect.prospecting_pickaxe.quartz_cleared": "Налаштовання кварцу знято.",
+  "tooltip.prospect.prospecting_pickaxe.quartz_locked": "Налаштовано на: %s",
+  "tooltip.prospect.prospecting_pickaxe.quartz_unlocked": "Не налаштовано на жодну руду",
+  "tooltip.prospect.prospecting_pickaxe.vein_size": "Виявлено %s – розмір жили: %s",
+  "tooltip.prospect.prospecting_pickaxe.lapis_not_enough_xp": "Бракує досвіду! Потрібно %s рівнів.",
+  "tooltip.prospect.prospecting_pickaxe.lapis_directions": "Пройдіть %s блоків %s, %s блоків %s, %s блоків %s",
+  "tooltip.prospect.prospecting_pickaxe.ruby_distance": "Виявлено %s – за %s блоків",
+
+  "gem.prospect.quartz": "Кварц",
+  "gem.prospect.diamond": "Діамант",
+  "gem.prospect.emerald": "Смарагд",
+  "gem.prospect.lapis": "Лазурит",
+  "gem.prospect.amethyst": "Аметист",
+  "gem.prospect.topaz": "Топаз",
+  "gem.prospect.ruby": "Рубін",
+  "gem.prospect.sapphire": "Сапфір",
+
+  "jei.info.prospecting_pickaxe": "Використовується для пошуку прихованих руд. Можна вставляти самоцвіти на ковальському столі, щоб покращити його можливості. Вставлені самоцвіти можна вийняти, натиснувши по точилі.",
+  "jei.info.gem_quartz": "Коли ставлений у пошукове кайло, обмежує пошук лише одним типом руди. Присядьте й клацніть на руду, щоб встановити налаштування, або на будь-що інше, щоб скасувати його.",
+  "jei.info.gem_diamond": "Коли ставлений у пошукове кайло, надає перевагу рідкісним рудам над найближчою, якщо в радіусі виявлено декілька.",
+  "jei.info.gem_emerald": "Коли ставлений у пошукове кайло, показує, скільки блоків руди міститься в тій самій жилі.",
+  "jei.info.gem_lapis": "Коли ставлений у пошукове кайло, витрачає 5 рівнів досвіду, щоб показати точний напрямок до руди. Досвід не витрачається, якщо нічого не знайдено.",
+  "jei.info.gem_amethyst": "Коли ставлений у пошукове кайло, дозволяє чути руду крізь стіни.",
+  "jei.info.gem_topaz": "Коли ставлений у пошукове кайло, змушує руду мерехтіти крізь стіни.",
+  "jei.info.gem_ruby": "Коли ставлений у пошукове кайло, показує точну відстань до руди замість приблизного.",
+  "jei.info.gem_sapphire": "Коли вставлений у пошукове кайло, збільшує радіус пошуку на 8 блоків.",
+
+  "item.prospect.ruby": "Рубін",
+  "item.prospect.sapphire": "Сапфір",
+  "item.prospect.topaz": "Топаз",
+
+  "block.prospect.ruby_ore": "Рубінова руда",
+  "block.prospect.sapphire_ore": "Сапфірова руда",
+  "block.prospect.topaz_ore": "Топазова руда",
+
+  "block.prospect.deepslate_ruby_ore": "Глибосланцева рубінова руда",
+  "block.prospect.deepslate_sapphire_ore": "Глибосланцева сапфірова руда",
+  "block.prospect.deepslate_topaz_ore": "Глибосланцева топазова руда",
+
+  "block.prospect.ruby_block": "Блок рубіну",
+  "block.prospect.sapphire_block": "Блок сапфіру",
+  "block.prospect.topaz_block": "Блок топазу",
+
+  "trim_material.prospect.ruby": "Рубіновий матеріал",
+  "trim_material.prospect.sapphire": "Сапфіровий матеріал",
+  "trim_material.prospect.topaz": "Топазовий матеріал",
+
+  "enchantment.prospect.panning_luck": "Промивна удача"
+}
