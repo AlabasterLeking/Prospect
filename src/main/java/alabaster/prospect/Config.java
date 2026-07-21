@@ -14,6 +14,7 @@ public class Config {
     private static final Map<String, ModConfigSpec.BooleanValue> ITEMS = new HashMap<>();
 
     public static ModConfigSpec.BooleanValue ENABLE_MINING_HELMET_OVERLAY;
+    public static ModConfigSpec.BooleanValue ENABLE_GUNPOWDER_FUSE_PLACEMENT;
 
     public Config() {
     }
@@ -29,6 +30,10 @@ public class Config {
         ENABLE_MINING_HELMET_OVERLAY = COMMON_BUILDER
                 .comment("Whether the vignette glow overlay is shown while wearing a lit mining helmet underground.")
                 .define("enableMiningHelmetOverlay", true);
+
+        ENABLE_GUNPOWDER_FUSE_PLACEMENT = COMMON_BUILDER
+                .comment("Whether right-clicking gunpowder against a block places a gunpowder fuse.")
+                .define("enableGunpowderFusePlacement", true);
 
         COMMON_CONFIG = COMMON_BUILDER.build();
     }

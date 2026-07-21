@@ -1,5 +1,6 @@
 package alabaster.prospect.common.event;
 
+import alabaster.prospect.Config;
 import alabaster.prospect.common.registry.ProspectModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,6 +19,7 @@ public class GunpowderPlacementHandler {
 
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (!Config.ENABLE_GUNPOWDER_FUSE_PLACEMENT.get()) return;
 
         Level level = event.getLevel();
         Player player = event.getEntity();
