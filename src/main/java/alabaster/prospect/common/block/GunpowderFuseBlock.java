@@ -45,15 +45,15 @@ public class GunpowderFuseBlock extends Block {
 
     public static final EnumProperty<RedstoneSide> NORTH = EnumProperty.create("north", RedstoneSide.class);
     public static final EnumProperty<RedstoneSide> SOUTH = EnumProperty.create("south", RedstoneSide.class);
-    public static final EnumProperty<RedstoneSide> EAST  = EnumProperty.create("east",  RedstoneSide.class);
-    public static final EnumProperty<RedstoneSide> WEST  = EnumProperty.create("west",  RedstoneSide.class);
+    public static final EnumProperty<RedstoneSide> EAST = EnumProperty.create("east",  RedstoneSide.class);
+    public static final EnumProperty<RedstoneSide> WEST = EnumProperty.create("west",  RedstoneSide.class);
 
     public static final Map<Direction, EnumProperty<RedstoneSide>> PROPERTY_BY_DIRECTION = Maps.newEnumMap(
             ImmutableMap.of(
                     Direction.NORTH, NORTH,
                     Direction.SOUTH, SOUTH,
-                    Direction.EAST,  EAST,
-                    Direction.WEST,  WEST
+                    Direction.EAST, EAST,
+                    Direction.WEST, WEST
             )
     );
 
@@ -64,16 +64,16 @@ public class GunpowderFuseBlock extends Block {
             ImmutableMap.of(
                     Direction.NORTH, Block.box(3, 0, 0, 13, 1, 13),
                     Direction.SOUTH, Block.box(3, 0, 3, 13, 1, 16),
-                    Direction.EAST,  Block.box(3, 0, 3, 16, 1, 13),
-                    Direction.WEST,  Block.box(0, 0, 3, 13, 1, 13)
+                    Direction.EAST, Block.box(3, 0, 3, 16, 1, 13),
+                    Direction.WEST, Block.box(0, 0, 3, 13, 1, 13)
             )
     );
     private static final Map<Direction, VoxelShape> SHAPES_UP = Maps.newEnumMap(
             ImmutableMap.of(
                     Direction.NORTH, Shapes.or(SHAPES_FLOOR.get(Direction.NORTH), Block.box(3, 0, 0, 13, 16, 1)),
                     Direction.SOUTH, Shapes.or(SHAPES_FLOOR.get(Direction.SOUTH), Block.box(3, 0, 15, 13, 16, 16)),
-                    Direction.EAST,  Shapes.or(SHAPES_FLOOR.get(Direction.EAST),  Block.box(15, 0, 3, 16, 16, 13)),
-                    Direction.WEST,  Shapes.or(SHAPES_FLOOR.get(Direction.WEST),  Block.box(0, 0, 3, 1, 16, 13))
+                    Direction.EAST, Shapes.or(SHAPES_FLOOR.get(Direction.EAST),  Block.box(15, 0, 3, 16, 16, 13)),
+                    Direction.WEST, Shapes.or(SHAPES_FLOOR.get(Direction.WEST),  Block.box(0, 0, 3, 1, 16, 13))
             )
     );
 
@@ -87,15 +87,15 @@ public class GunpowderFuseBlock extends Block {
                 .setValue(BURNING, 0)
                 .setValue(NORTH, RedstoneSide.NONE)
                 .setValue(SOUTH, RedstoneSide.NONE)
-                .setValue(EAST,  RedstoneSide.NONE)
-                .setValue(WEST,  RedstoneSide.NONE)
+                .setValue(EAST, RedstoneSide.NONE)
+                .setValue(WEST, RedstoneSide.NONE)
         );
 
         this.crossState = this.defaultBlockState()
                 .setValue(NORTH, RedstoneSide.SIDE)
                 .setValue(SOUTH, RedstoneSide.SIDE)
-                .setValue(EAST,  RedstoneSide.SIDE)
-                .setValue(WEST,  RedstoneSide.SIDE);
+                .setValue(EAST, RedstoneSide.SIDE)
+                .setValue(WEST, RedstoneSide.SIDE);
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
         for (BlockState state : this.getStateDefinition().getPossibleStates()) {
@@ -162,8 +162,7 @@ public class GunpowderFuseBlock extends Block {
         boolean canClimbUp = !level.getBlockState(pos.above()).isRedstoneConductor(level, pos);
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             if (!state.getValue(PROPERTY_BY_DIRECTION.get(dir)).isConnected()) {
-                state = state.setValue(PROPERTY_BY_DIRECTION.get(dir),
-                        getConnectingSide(level, pos, dir, canClimbUp));
+                state = state.setValue(PROPERTY_BY_DIRECTION.get(dir), getConnectingSide(level, pos, dir, canClimbUp));
             }
         }
         return state;
@@ -197,9 +196,12 @@ public class GunpowderFuseBlock extends Block {
         return getConnectionState(context.getLevel(), this.crossState, context.getClickedPos());
     }
 
+    public BlockState getConnectedStateForPlacement(BlockGetter level, BlockPos pos) {
+        return getConnectionState(level, this.crossState, pos);
+    }
+
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                  LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (direction == Direction.DOWN) {
             return canSurvive(state, level, pos) ? state : Blocks.AIR.defaultBlockState();
         }
@@ -215,25 +217,24 @@ public class GunpowderFuseBlock extends Block {
 
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             RedstoneSide side = state.getValue(PROPERTY_BY_DIRECTION.get(dir));
-            if (side == RedstoneSide.NONE
-                    || level.getBlockState(mutable.setWithOffset(pos, dir)).is(this)) continue;
+            if (side == RedstoneSide.NONE || level.getBlockState(mutable.setWithOffset(pos, dir)).is(this)) continue;
 
             // One step below the horizontal neighbour
             mutable.move(Direction.DOWN);
-            BlockPos downPos    = mutable.immutable();
+            BlockPos downPos = mutable.immutable();
             BlockState downState = level.getBlockState(downPos);
-            BlockState newDown  = downState.updateShape(
-                    dir.getOpposite(),
+            BlockState newDown =
+                    downState.updateShape(dir.getOpposite(),
                     level.getBlockState(downPos.relative(dir.getOpposite())),
                     level, downPos, downPos.relative(dir.getOpposite()));
             updateOrDestroy(downState, newDown, level, downPos, flags, recursion);
 
             // One step above the horizontal neighbour
             mutable.setWithOffset(pos, dir).move(Direction.UP);
-            BlockPos upPos    = mutable.immutable();
+            BlockPos upPos = mutable.immutable();
             BlockState upState = level.getBlockState(upPos);
-            BlockState newUp  = upState.updateShape(
-                    dir.getOpposite(),
+            BlockState newUp =
+                    upState.updateShape(dir.getOpposite(),
                     level.getBlockState(upPos.relative(dir.getOpposite())),
                     level, upPos, upPos.relative(dir.getOpposite()));
             updateOrDestroy(upState, newUp, level, upPos, flags, recursion);
@@ -312,7 +313,7 @@ public class GunpowderFuseBlock extends Block {
     public BlockState mirror(BlockState state, Mirror mirror) {
         return switch (mirror) {
             case LEFT_RIGHT -> state.setValue(NORTH, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(NORTH));
-            case FRONT_BACK -> state.setValue(EAST,  state.getValue(WEST)).setValue(WEST,  state.getValue(EAST));
+            case FRONT_BACK -> state.setValue(EAST, state.getValue(WEST)).setValue(WEST, state.getValue(EAST));
             default -> super.mirror(state, mirror);
         };
     }
@@ -322,8 +323,7 @@ public class GunpowderFuseBlock extends Block {
         if (!isLit(state) && stack.is(Items.FLINT_AND_STEEL)) {
             if (!level.isClientSide) {
                 ignite(level, pos, state);
-                EquipmentSlot slot = hand == InteractionHand.MAIN_HAND
-                        ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+                EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
                 stack.hurtAndBreak(1, player, slot);
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
@@ -352,8 +352,7 @@ public class GunpowderFuseBlock extends Block {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block,
-                                @NotNull BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @NotNull BlockPos fromPos, boolean isMoving) {
         if (!level.isClientSide && !isLit(state)) {
             if (canBlockIgniteFuse(level.getBlockState(fromPos))) {
                 ignite(level, pos, state);
@@ -382,7 +381,6 @@ public class GunpowderFuseBlock extends Block {
         if (burning >= 2) {
             spreadFire(pos, state, level);
         }
-
         if (burning >= 4) {
             level.removeBlock(pos, false);
             return;
@@ -396,7 +394,7 @@ public class GunpowderFuseBlock extends Block {
         boolean canClimbUp = !level.getBlockState(pos.above()).isRedstoneConductor(level, pos);
 
         for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BlockPos  sidePos   = pos.relative(dir);
+            BlockPos sidePos = pos.relative(dir);
             BlockState sideState = level.getBlockState(sidePos);
 
             if (sideState.is(this)) {
@@ -405,7 +403,7 @@ public class GunpowderFuseBlock extends Block {
             }
 
             if (canClimbUp && sideState.isFaceSturdy(level, sidePos, Direction.UP)) {
-                BlockPos  abovePos   = sidePos.above();
+                BlockPos abovePos = sidePos.above();
                 BlockState aboveState = level.getBlockState(abovePos);
                 if (aboveState.is(this)) {
                     lightUpByWire(aboveState, abovePos, level);
@@ -414,7 +412,7 @@ public class GunpowderFuseBlock extends Block {
             }
 
             if (!sideState.isRedstoneConductor(level, sidePos)) {
-                BlockPos  belowPos   = sidePos.below();
+                BlockPos belowPos = sidePos.below();
                 BlockState belowState = level.getBlockState(belowPos);
                 if (belowState.is(this)) {
                     lightUpByWire(belowState, belowPos, level);
@@ -439,9 +437,9 @@ public class GunpowderFuseBlock extends Block {
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             RedstoneSide side = state.getValue(PROPERTY_BY_DIRECTION.get(dir));
             switch (side) {
-                case UP   -> spawnParticlesAlongLine(level, random, pos, burning, dir,           Direction.UP, -0.5F, 0.5F);
-                case SIDE -> spawnParticlesAlongLine(level, random, pos, burning, Direction.DOWN, dir,          0.0F, 0.5F);
-                default   -> spawnParticlesAlongLine(level, random, pos, burning, Direction.DOWN, dir,          0.0F, 0.3F);
+                case UP -> spawnParticlesAlongLine(level, random, pos, burning, dir, Direction.UP, -0.5F, 0.5F);
+                case SIDE -> spawnParticlesAlongLine(level, random, pos, burning, Direction.DOWN, dir, 0.0F, 0.5F);
+                default -> spawnParticlesAlongLine(level, random, pos, burning, Direction.DOWN, dir, 0.0F, 0.3F);
             }
         }
     }
@@ -451,15 +449,15 @@ public class GunpowderFuseBlock extends Block {
         float density = (float) burning / 4.0F;
         if (random.nextFloat() >= range * density) return;
 
-        float  t  = from + range * random.nextFloat();
-        double x  = pos.getX() + 0.5 + 0.4375 * axis1.getStepX() + t * axis2.getStepX();
-        double y  = pos.getY() + 0.5 + 0.4375 * axis1.getStepY() + t * axis2.getStepY();
-        double z  = pos.getZ() + 0.5 + 0.4375 * axis1.getStepZ() + t * axis2.getStepZ();
+        float  t = from + range * random.nextFloat();
+        double x = pos.getX() + 0.5 + 0.4375 * axis1.getStepX() + t * axis2.getStepX();
+        double y = pos.getY() + 0.5 + 0.4375 * axis1.getStepY() + t * axis2.getStepY();
+        double z = pos.getZ() + 0.5 + 0.4375 * axis1.getStepZ() + t * axis2.getStepZ();
         float  vy = (burning / 4.0F) * 0.03F;
         float  vx = random.nextFloat() * 0.02F - 0.01F;
         float  vz = random.nextFloat() * 0.02F - 0.01F;
 
-        level.addParticle(ParticleTypes.FLAME,       x, y, z, vx, vy, vz);
+        level.addParticle(ParticleTypes.FLAME, x, y, z, vx, vy, vz);
         level.addParticle(ParticleTypes.LARGE_SMOKE, x, y, z, vx, vy, vz);
     }
 }

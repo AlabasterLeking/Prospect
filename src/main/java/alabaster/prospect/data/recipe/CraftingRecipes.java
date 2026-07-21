@@ -36,6 +36,21 @@ public class CraftingRecipes {
                 .define('#', ProspectModItems.TOPAZ.get())
                 .unlockedBy("has_topaz", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.TOPAZ.get()))
                 .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Items.CALCITE, 2)
+                .pattern("BS")
+                .pattern("SB")
+                .define('B', Items.BONE_MEAL)
+                .define('S', Items.STONE)
+                .unlockedBy("has_bone_meal", InventoryChangeTrigger.TriggerInstance.hasItems(Items.BONE_MEAL))
+                .unlockedBy("has_stone", InventoryChangeTrigger.TriggerInstance.hasItems(Items.STONE))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Items.TUFF, 2)
+                .pattern("CA")
+                .define('C', Items.COBBLESTONE)
+                .define('A', Items.CALCITE)
+                .unlockedBy("has_cobblestone", InventoryChangeTrigger.TriggerInstance.hasItems(Items.COBBLESTONE))
+                .unlockedBy("has_calcite", InventoryChangeTrigger.TriggerInstance.hasItems(Items.CALCITE))
+                .save(output);
     }
 
     private static void recipesTools(RecipeOutput output) {

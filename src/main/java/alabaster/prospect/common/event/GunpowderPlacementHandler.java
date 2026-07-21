@@ -1,6 +1,7 @@
 package alabaster.prospect.common.event;
 
 import alabaster.prospect.Config;
+import alabaster.prospect.common.block.GunpowderFuseBlock;
 import alabaster.prospect.common.registry.ProspectModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +27,6 @@ public class GunpowderPlacementHandler {
         ItemStack stack = event.getItemStack();
 
         if (level.isClientSide) return;
-
         if (!stack.is(Items.GUNPOWDER)) return;
 
         BlockPos clickedPos = event.getPos();
@@ -36,17 +36,13 @@ public class GunpowderPlacementHandler {
 
         BlockPos placePos = clickedPos.relative(face);
 
-        // Normal placement
         if (level.isEmptyBlock(placePos)) {
-
-            BlockState state = ProspectModBlocks.GUNPOWDER_FUSE.get().defaultBlockState();
+            GunpowderFuseBlock fuseBlock = (GunpowderFuseBlock) ProspectModBlocks.GUNPOWDER_FUSE.get();
+            BlockState state = fuseBlock.getConnectedStateForPlacement(level, placePos);
 
             if (state.canSurvive(level, placePos)) {
-
                 level.setBlock(placePos, state, 3);
-
                 consume(stack, player);
-
                 event.setCancellationResult(InteractionResult.SUCCESS);
                 event.setCanceled(true);
             }
