@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "PROSPECT_PANNING",
+      "constructor": "(ZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "alabaster/prospect/client/animation/PanningAnimation",
+        "field": "PANNING_ARM_POSE"
+      }
+    }
+  ]
+}

@@ -1,7 +1,9 @@
 package alabaster.prospect.client.event;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.client.renderer.DynamiteRenderer;
 import alabaster.prospect.client.renderer.SparkleNodeRenderer;
+import alabaster.prospect.client.renderer.WanderingProspectorRenderer;
 import alabaster.prospect.common.entity.sparklenode.SparkleNodeEntity;
 import alabaster.prospect.common.item.PanItem;
 import alabaster.prospect.common.registry.ProspectKeyBindings;
@@ -24,6 +26,14 @@ public class ClientSetupEvents {
         event.registerEntityRenderer(
                 ProspectModEntities.SPARKLE_NODE.get(),
                 SparkleNodeRenderer::new
+        );
+        event.registerEntityRenderer(
+                ProspectModEntities.WANDERING_PROSPECTOR.get(),
+                WanderingProspectorRenderer::new
+        );
+        event.registerEntityRenderer(
+                ProspectModEntities.DYNAMITE.get(),
+                DynamiteRenderer::new
         );
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -35,6 +36,8 @@ public class ItemModels extends ItemModelProvider
         items.remove(ProspectModItems.GOLDEN_PAN.get());
         items.remove(ProspectModItems.NETHERITE_PAN.get());
         items.remove(ProspectModItems.MINING_HELMET.get());
+        items.remove(ProspectModItems.DYNAMITE.get());
+        items.remove(ProspectModItems.LIT_DYNAMITE.get());
 
         // Blocks with special item sprites
         Set<Item> spriteBlockItems = Sets.newHashSet(
@@ -56,6 +59,9 @@ public class ItemModels extends ItemModelProvider
                 ProspectModItems.PROSPECTING_PICKAXE.get()
         );
         takeAll(items, handheldItems.toArray(new Item[0])).forEach(item -> itemHandheldModel(item, resourceItem(itemName(item))));
+
+        // Spawn eggs
+        takeAll(items, i -> i instanceof SpawnEggItem).forEach(item -> withExistingParent(itemName(item), mcLoc("item/template_spawn_egg")));
 
         // Generated items
         items.forEach(item -> itemGeneratedModel(item, resourceItem(itemName(item))));

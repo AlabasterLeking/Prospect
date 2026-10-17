@@ -1,6 +1,7 @@
 package alabaster.prospect.common.mixin;
 
 import alabaster.prospect.common.network.MinecartJumpingPayload;
+import alabaster.prospect.common.utilities.JumpingMinecart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -22,12 +23,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
-
 import static alabaster.prospect.common.utilities.MinecartJumpConstants.*;
 
 @Mixin(AbstractMinecart.class)
-public abstract class AbstractMinecartMixin extends Entity {
+public abstract class AbstractMinecartMixin extends Entity implements JumpingMinecart {
 
     protected AbstractMinecartMixin(EntityType<?> type, Level level) {
         super(type, level);
@@ -35,22 +34,16 @@ public abstract class AbstractMinecartMixin extends Entity {
     }
 
     @Unique private boolean prospect$airborne = false;
-    @Unique private int prospect$jumpCharge = 0;
-    @Unique private boolean prospect$wasJumping = false;
     @Unique private int prospect$airTicks = 0;
     @Unique private double prospect$lastX = Double.NaN;
     @Unique private double prospect$lastZ = Double.NaN;
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void handleCartTick(CallbackInfo ci) {
-        double observedVelX = Double.isNaN(prospect$lastX) ? 0 : getX() - prospect$lastX;
-        double observedVelZ = Double.isNaN(prospect$lastZ) ? 0 : getZ() - prospect$lastZ;
+        if (level().isClientSide()) return;
+
         prospect$lastX = getX();
         prospect$lastZ = getZ();
-
-        if (!level().isClientSide()) {
-            prospect$handleJumpInput(observedVelX, observedVelZ);
-        }
 
         if (!prospect$airborne) return;
 
@@ -61,37 +54,24 @@ public abstract class AbstractMinecartMixin extends Entity {
         }
     }
 
-    @Unique
-    private void prospect$handleJumpInput(double observedVelX, double observedVelZ) {
-        List<Entity> passengers = getPassengers();
+    @Override
+    public void prospect$startJump(int charge) {
+        if (prospect$airborne || charge <= 0) return;
+        if (!(getFirstPassenger() instanceof LivingEntity)) return;
 
-        if (passengers.isEmpty() || !(passengers.get(0) instanceof LivingEntity rider)) {
-            prospect$jumpCharge = 0;
-            prospect$wasJumping = false;
-            return;
-        }
+        double strength = MIN_JUMP + (Math.min(charge, 100) / 100.0) * (MAX_JUMP - MIN_JUMP);
+        double velX = Double.isNaN(prospect$lastX) ? 0 : getX() - prospect$lastX;
+        double velZ = Double.isNaN(prospect$lastZ) ? 0 : getZ() - prospect$lastZ;
 
-        if (prospect$airborne) return;
+        setOnGround(false);
+        setDeltaMovement(new Vec3(velX, strength, velZ));
+        prospect$airborne = true;
+        prospect$airTicks = 0;
+        prospect$sync();
 
-        boolean jumping = rider.jumping;
-
-        if (jumping) {
-            prospect$jumpCharge = Math.min(prospect$jumpCharge + CHARGE_RATE, 100);
-            prospect$wasJumping = true;
-        } else if (prospect$wasJumping) {
-            if (prospect$jumpCharge > 0) {
-                double strength = MIN_JUMP + (prospect$jumpCharge / 100.0) * (MAX_JUMP - MIN_JUMP);
-                setDeltaMovement(new Vec3(observedVelX, strength, observedVelZ));
-                prospect$setAirborne(true);
-                prospect$airTicks = 0;
-
-                level().playSound(null, getX(), getY(), getZ(), SoundEvents.HORSE_JUMP, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                if (level() instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(ParticleTypes.CLOUD, getX(), getY(), getZ(), 8, 0.3, 0.1, 0.3, 0.02);
-                }
-            }
-            prospect$jumpCharge = 0;
-            prospect$wasJumping = false;
+        level().playSound(null, getX(), getY(), getZ(), SoundEvents.HORSE_JUMP, SoundSource.NEUTRAL, 1.0F, 1.0F);
+        if (level() instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(ParticleTypes.CLOUD, getX(), getY(), getZ(), 8, 0.3, 0.1, 0.3, 0.02);
         }
     }
 
@@ -110,7 +90,7 @@ public abstract class AbstractMinecartMixin extends Entity {
         move(MoverType.SELF, motion);
 
         Vec3 afterMove = getDeltaMovement();
-        setDeltaMovement(new Vec3(afterMove.x * 0.997, afterMove.y, afterMove.z * 0.997));
+        setDeltaMovement(new Vec3(afterMove.x * AIR_DRAG, afterMove.y, afterMove.z * AIR_DRAG));
 
         if (onGround() && prospect$airTicks > MIN_AIR_TICKS) {
             prospect$tryReattach();
@@ -128,9 +108,10 @@ public abstract class AbstractMinecartMixin extends Entity {
                 for (Entity passenger : getPassengers()) {
                     positionRider(passenger, Entity::setPos);
                 }
-                prospect$setAirborne(false);
                 Vec3 landingVel = getDeltaMovement().multiply(1.0, 0.0, 1.0);
                 setDeltaMovement(prospect$applyLandingSpeedFloor(landingVel));
+                prospect$airborne = false;
+                prospect$sync();
 
                 level().playSound(null, getX(), getY(), getZ(), SoundEvents.ANVIL_LAND, SoundSource.NEUTRAL, 1.0F, 1.0F);
                 if (level() instanceof ServerLevel serverLevel) {
@@ -139,8 +120,9 @@ public abstract class AbstractMinecartMixin extends Entity {
                 return;
             }
         }
-        prospect$setAirborne(false);
         setDeltaMovement(getDeltaMovement().multiply(0.5, 0.0, 0.5));
+        prospect$airborne = false;
+        prospect$sync();
     }
 
     @Unique
@@ -154,10 +136,10 @@ public abstract class AbstractMinecartMixin extends Entity {
     }
 
     @Unique
-    private void prospect$setAirborne(boolean value) {
-        prospect$airborne = value;
+    private void prospect$sync() {
+        Vec3 vel = getDeltaMovement();
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(
-                this, new MinecartJumpingPayload(getId(), value)
+                this, new MinecartJumpingPayload(getId(), prospect$airborne, getX(), getY(), getZ(), vel.x, vel.y, vel.z)
         );
     }
 }

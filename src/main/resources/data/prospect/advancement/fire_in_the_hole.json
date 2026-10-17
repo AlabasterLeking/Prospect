@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "id": "prospect:dynamite"
+    },
+    "title": {
+      "translate": "advancements.prospect.fire_in_the_hole.title"
+    },
+    "description": {
+      "translate": "advancements.prospect.fire_in_the_hole.description"
+    },
+    "frame": "task"
+  },
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

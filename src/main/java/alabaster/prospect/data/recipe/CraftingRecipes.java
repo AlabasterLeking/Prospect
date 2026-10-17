@@ -105,6 +105,11 @@ public class CraftingRecipes {
                 .unlockedBy("has_stick", InventoryChangeTrigger.TriggerInstance.hasItems(Items.STICK))
                 .unlockedBy("has_iron_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
                 .save(output);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.DYNAMITE.get(), 4)
+                .requires(Items.TNT)
+                .unlockedBy("has_tnt", InventoryChangeTrigger.TriggerInstance.hasItems(Items.TNT))
+                .save(output);
     }
 
     private static void recipesMaterials(RecipeOutput output) {

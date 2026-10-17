@@ -1,5 +1,5 @@
 {
-  "parent": "item/handheld",
+  "parent": "prospect:item/pan",
   "textures": {
     "layer0": "prospect:item/golden_pan_water"
   }

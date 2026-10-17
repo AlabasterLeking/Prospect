@@ -3,29 +3,23 @@ package alabaster.prospect.common.network;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.tag.ProspectModTags;
+import alabaster.prospect.common.utilities.ClientJumpingMinecart;
+import alabaster.prospect.common.utilities.JumpingMinecart;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 @EventBusSubscriber(modid = Prospect.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ProspectModNetworking {
 
-    private static final Map<Integer, Boolean> REMOTE_JUMPING = new ConcurrentHashMap<>();
-
-    public static boolean isRemoteJumping(int entityId) {
-        return REMOTE_JUMPING.getOrDefault(entityId, false);
-    }
-
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar("1");
+        PayloadRegistrar registrar = event.registrar("2");
 
         registrar.playToServer(
                 ToggleMiningHelmetLightPayload.TYPE,
@@ -40,14 +34,25 @@ public class ProspectModNetworking {
                 })
         );
 
+        registrar.playToServer(
+                MinecartJumpRequestPayload.TYPE,
+                MinecartJumpRequestPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (!(context.player() instanceof ServerPlayer serverPlayer)) return;
+                    if (!(serverPlayer.getVehicle() instanceof AbstractMinecart cart)) return;
+                    if (cart.getFirstPassenger() != serverPlayer) return;
+                    if (!(cart instanceof JumpingMinecart jumpingCart)) return;
+
+                    jumpingCart.prospect$startJump(payload.charge());
+                })
+        );
+
         registrar.playToClient(
                 MinecartJumpingPayload.TYPE,
                 MinecartJumpingPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> {
-                    if (payload.jumping()) {
-                        REMOTE_JUMPING.put(payload.entityId(), true);
-                    } else {
-                        REMOTE_JUMPING.remove(payload.entityId());
+                    if (context.player().level().getEntity(payload.entityId()) instanceof ClientJumpingMinecart cart) {
+                        cart.prospect$applyJumpState(payload.airborne(), payload.pos(), payload.vel());
                     }
                 })
         );

@@ -1,25 +1,33 @@
 package alabaster.prospect.common.event;
 
+import alabaster.prospect.Config;
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.block.HelmetLightBlock;
 import alabaster.prospect.common.item.MiningHelmetItem;
+import alabaster.prospect.common.registry.ProspectModBlocks;
 import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -28,9 +36,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @EventBusSubscriber(modid = Prospect.MODID)
 public class MiningHelmetLightEvents {
 
-    private static final Map<UUID, BlockPos> ACTIVE_LIGHTS = new ConcurrentHashMap<>();
-    private static final Map<UUID, BlockPos> LAST_EYE_POS = new ConcurrentHashMap<>();
-    public static final int LIGHT_LEVEL = 15;
+    private static final String LAMB_DYNAMIC_LIGHTS = "lambdynlights";
+
+    private static final Map<UUID, GlobalPos> ACTIVE_LIGHTS = new ConcurrentHashMap<>();
+    private static final Map<UUID, GlobalPos> LAST_EYE_POS = new ConcurrentHashMap<>();
 
     private static final BlockPos[] SEARCH_OFFSETS = {
             new BlockPos(0, 0, 0),
@@ -43,93 +52,125 @@ public class MiningHelmetLightEvents {
             new BlockPos(0, 2, 0),
     };
 
+    public static boolean isClaimed(ServerLevel level, BlockPos pos) {
+        return ACTIVE_LIGHTS.containsValue(GlobalPos.of(level.dimension(), pos));
+    }
+
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Post event) {
-        Entity raw = event.getEntity();
-        if (!(raw instanceof LivingEntity entity)) return;
-
-        if (entity.isDeadOrDying()) return;
-
-        Level level = entity.level();
-        if (level.isClientSide()) return;
+        if (!(event.getEntity() instanceof LivingEntity entity)) return;
+        if (!(entity.level() instanceof ServerLevel level)) return;
 
         UUID id = entity.getUUID();
-        ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-        boolean wearing = helmet.is(ProspectModTags.MINING_HELMET_LIGHT) && MiningHelmetItem.isLightOn(helmet);
-
-        if (!wearing) {
-            BlockPos active = ACTIVE_LIGHTS.remove(id);
-            if (active != null) {
-                clearLight(level, active);
-            }
-            LAST_EYE_POS.remove(id);
+        if (!usesBlockLights() || entity.isDeadOrDying() || !isWearingLitHelmet(entity)) {
+            release(level.getServer(), id);
             return;
         }
 
-        BlockPos eyePos = BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ());
-        BlockPos lastEyePos = LAST_EYE_POS.get(id);
+        GlobalPos eye = GlobalPos.of(level.dimension(), BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ()));
+        GlobalPos previous = ACTIVE_LIGHTS.get(id);
+        if (eye.equals(LAST_EYE_POS.get(id)) && isStillPlaced(level, previous)) return;
+        LAST_EYE_POS.put(id, eye);
 
-        if (eyePos.equals(lastEyePos)) return;
-        LAST_EYE_POS.put(id, eyePos);
+        BlockPos ownPos = previous != null && previous.dimension().equals(level.dimension()) ? previous.pos() : null;
+        BlockPos placeAt = findPlaceablePosition(level, eye.pos(), ownPos);
+        if (placeAt != null && placeAt.equals(ownPos) && isStillPlaced(level, previous)) return;
 
-        BlockPos previousLight = ACTIVE_LIGHTS.remove(id);
-        if (previousLight != null) {
-            clearLight(level, previousLight);
+        if (placeAt == null) {
+            ACTIVE_LIGHTS.remove(id);
+        } else {
+            BlockState current = level.getBlockState(placeAt);
+            boolean water = current.is(Blocks.WATER) || current.is(ProspectModBlocks.HELMET_LIGHT.get()) && current.getValue(HelmetLightBlock.WATERLOGGED);
+            ACTIVE_LIGHTS.put(id, GlobalPos.of(level.dimension(), placeAt));
+            level.setBlock(placeAt, ProspectModBlocks.HELMET_LIGHT.get().defaultBlockState().setValue(HelmetLightBlock.WATERLOGGED, water), Block.UPDATE_CLIENTS);
         }
 
-        BlockPos placeAt = findPlaceablePosition(level, eyePos);
-        if (placeAt != null) {
-            BlockState toPlace = Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, LIGHT_LEVEL);
-            if (isWaterSource(level.getBlockState(placeAt))) {
-                toPlace = toPlace.setValue(BlockStateProperties.WATERLOGGED, true);
-            }
-            level.setBlock(placeAt, toPlace, 3);
-            ACTIVE_LIGHTS.put(id, placeAt);
+        if (previous != null && !previous.equals(ACTIVE_LIGHTS.get(id))) {
+            clearLight(level.getServer(), previous);
         }
     }
 
     @SubscribeEvent
     public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        Player player = event.getEntity();
-        UUID id = player.getUUID();
-        LAST_EYE_POS.remove(id);
-        BlockPos pos = ACTIVE_LIGHTS.remove(id);
-        if (pos != null) {
-            clearLight(player.level(), pos);
-        }
+        release(event.getEntity().getServer(), event.getEntity().getUUID());
     }
 
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
-        LivingEntity entity = event.getEntity();
-        UUID id = entity.getUUID();
-        LAST_EYE_POS.remove(id);
-        BlockPos pos = ACTIVE_LIGHTS.remove(id);
-        if (pos != null) {
-            clearLight(entity.level(), pos);
+        release(event.getEntity().getServer(), event.getEntity().getUUID());
+    }
+
+    @SubscribeEvent
+    public static void onLeaveLevel(EntityLeaveLevelEvent event) {
+        if (event.getLevel().isClientSide()) return;
+
+        Entity.RemovalReason reason = event.getEntity().getRemovalReason();
+        if (reason != null && reason.shouldDestroy()) {
+            release(event.getEntity().getServer(), event.getEntity().getUUID());
         }
     }
 
-    private static BlockPos findPlaceablePosition(Level level, BlockPos desired) {
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        ACTIVE_LIGHTS.clear();
+        LAST_EYE_POS.clear();
+    }
+
+    public static boolean usesBlockLights() {
+        return switch (Config.MINING_HELMET_LIGHT_MODE.get()) {
+            case BLOCKS -> true;
+            case DYNAMIC_LIGHTS -> false;
+            case AUTO -> !ModList.get().isLoaded(LAMB_DYNAMIC_LIGHTS);
+        };
+    }
+
+    private static boolean isWearingLitHelmet(LivingEntity entity) {
+        ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
+        return helmet.is(ProspectModTags.MINING_HELMET_LIGHT) && MiningHelmetItem.isLightOn(helmet);
+    }
+
+    private static void release(@Nullable MinecraftServer server, UUID id) {
+        LAST_EYE_POS.remove(id);
+        GlobalPos pos = ACTIVE_LIGHTS.remove(id);
+        if (pos != null && server != null) {
+            clearLight(server, pos);
+        }
+    }
+
+    private static boolean isStillPlaced(Level level, @Nullable GlobalPos light) {
+        return light != null
+                && light.dimension().equals(level.dimension())
+                && level.getBlockState(light.pos()).is(ProspectModBlocks.HELMET_LIGHT.get());
+    }
+
+    @Nullable
+    private static BlockPos findPlaceablePosition(Level level, BlockPos desired, @Nullable BlockPos ownPos) {
         for (BlockPos offset : SEARCH_OFFSETS) {
             BlockPos candidate = desired.offset(offset);
             BlockState state = level.getBlockState(candidate);
-            if (state.isAir() || isWaterSource(state)) {
+            if (state.is(ProspectModBlocks.HELMET_LIGHT.get())) {
+                if (candidate.equals(ownPos)) return candidate;
+                continue;
+            }
+            if (state.isAir() || isPlainWaterSource(state)) {
                 return candidate;
             }
         }
-
         return null;
     }
 
-    private static boolean isWaterSource(BlockState state) {
-        return state.getFluidState().is(Fluids.WATER) && state.getFluidState().isSource();
+    private static boolean isPlainWaterSource(BlockState state) {
+        return state.is(Blocks.WATER) && state.getFluidState().isSourceOfType(Fluids.WATER);
     }
 
-    private static void clearLight(Level level, BlockPos pos) {
-        BlockState state = level.getBlockState(pos);
-        if (!state.is(Blocks.LIGHT)) return;
-        boolean wasWaterlogged = state.getValue(BlockStateProperties.WATERLOGGED);
-        level.setBlock(pos, wasWaterlogged ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 3);
+    private static void clearLight(MinecraftServer server, GlobalPos light) {
+        ServerLevel level = server.getLevel(light.dimension());
+        if (level == null || !level.isLoaded(light.pos())) return;
+
+        BlockState state = level.getBlockState(light.pos());
+        if (!state.is(ProspectModBlocks.HELMET_LIGHT.get())) return;
+
+        BlockState replacement = HelmetLightBlock.emptyStateFor(state);
+        level.setBlock(light.pos(), replacement, replacement.isAir() ? Block.UPDATE_CLIENTS : Block.UPDATE_ALL);
     }
 }

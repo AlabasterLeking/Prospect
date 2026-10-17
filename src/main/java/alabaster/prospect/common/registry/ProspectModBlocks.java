@@ -2,9 +2,11 @@ package alabaster.prospect.common.registry;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.block.GunpowderFuseBlock;
+import alabaster.prospect.common.block.HelmetLightBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -41,4 +43,14 @@ public class ProspectModBlocks {
                     .noOcclusion()
                     .strength(0.1F)
                     .lightLevel(state -> GunpowderFuseBlock.isLit(state) ? 6 : 0)));
+
+    // Technical
+    public static final Supplier<Block> HELMET_LIGHT = BLOCKS.register("helmet_light",
+            () -> new HelmetLightBlock(BlockBehaviour.Properties.of()
+                    .replaceable()
+                    .noCollission()
+                    .noLootTable()
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+                    .lightLevel(state -> HelmetLightBlock.LIGHT_LEVEL)));
 }

@@ -1,4 +1,3 @@
-
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
@@ -8,6 +7,7 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 logoFile="prospectlogo.png"
+enumExtensions="META-INF/enumextensions.json"
 authors="${mod_authors}"
 description='''${mod_description}'''
 

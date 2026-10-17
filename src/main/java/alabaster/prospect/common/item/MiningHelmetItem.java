@@ -23,7 +23,13 @@ public class MiningHelmetItem extends Item implements Equipable {
     private static final String LIGHT_ON_KEY = "LightOn";
 
     public MiningHelmetItem(Properties properties) {
-        super(properties.durability(128).attributes(createIronHelmetAttributes()));
+        super(properties.durability(128).attributes(createIronHelmetAttributes()).component(DataComponents.CUSTOM_DATA, defaultLightData()));
+    }
+
+    private static CustomData defaultLightData() {
+        CompoundTag tag = new CompoundTag();
+        tag.putBoolean(LIGHT_ON_KEY, true);
+        return CustomData.of(tag);
     }
 
     private static ItemAttributeModifiers createIronHelmetAttributes() {

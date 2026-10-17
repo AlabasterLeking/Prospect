@@ -1,12 +1,15 @@
 package alabaster.prospect.common.registry;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.item.DynamiteItem;
+import alabaster.prospect.common.item.LitDynamiteItem;
 import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.item.PanItem;
 import alabaster.prospect.common.item.ProspectingPickaxeItem;
 import com.google.common.collect.Sets;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.*;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.LinkedHashSet;
@@ -30,6 +33,12 @@ public class ProspectModItems {
     // Misc Tools
     public static final Supplier<Item> MINING_HELMET = registerWithTab("mining_helmet",
             () -> new MiningHelmetItem(basicItem().stacksTo(1)));
+
+    // Explosives
+    public static final Supplier<Item> DYNAMITE = registerWithTab("dynamite",
+            () -> new DynamiteItem(basicItem().stacksTo(16)));
+    public static final Supplier<Item> LIT_DYNAMITE = ITEMS.register("lit_dynamite",
+            () -> new LitDynamiteItem(basicItem().stacksTo(1)));
 
     // Pans
     public static final Supplier<Item> COPPER_PAN = registerWithTab("copper_pan",
@@ -73,4 +82,8 @@ public class ProspectModItems {
             () -> new BlockItem(ProspectModBlocks.SAPPHIRE_BLOCK.get(), basicItem()));
     public static final Supplier<Item> TOPAZ_BLOCK = registerWithTab("topaz_block",
             () -> new BlockItem(ProspectModBlocks.TOPAZ_BLOCK.get(), basicItem()));
+
+    // Spawn Eggs
+    public static final Supplier<Item> WANDERING_PROSPECTOR_SPAWN_EGG = registerWithTab("wandering_prospector_spawn_egg",
+            () -> new DeferredSpawnEggItem(ProspectModEntities.WANDERING_PROSPECTOR, 0x5A3E2B, 0xE0A040, basicItem()));
 }

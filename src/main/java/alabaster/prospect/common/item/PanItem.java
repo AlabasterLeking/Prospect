@@ -1,5 +1,6 @@
 package alabaster.prospect.common.item;
 
+import alabaster.prospect.client.animation.PanningAnimation;
 import alabaster.prospect.common.entity.sparklenode.SparkleNodeEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -24,7 +25,7 @@ import java.util.function.Consumer;
 
 public class PanItem extends Item {
 
-    private static final int USE_DURATION = 40;
+    public static final int USE_DURATION = 40;
     private static final int PARTICLE_INTERVAL_TICKS = 3;
     private static final int PARTICLES_PER_BURST = 5;
 
@@ -134,7 +135,8 @@ public class PanItem extends Item {
                 if (!player.isUsingItem()) return false;
 
                 int remaining = player.getUseItemRemainingTicks();
-                float progress = (USE_DURATION - remaining + partialTick) / (float) USE_DURATION;
+                float progress = PanningAnimation.progress(USE_DURATION - remaining + partialTick);
+                float wave = PanningAnimation.wave(progress);
 
                 poseStack.translate(0f, -0.5f, -1f);
                 poseStack.mulPose(Axis.ZP.rotationDegrees(90f));
@@ -143,11 +145,8 @@ public class PanItem extends Item {
                 poseStack.mulPose(Axis.XP.rotationDegrees(30f));
                 poseStack.mulPose(Axis.ZP.rotationDegrees(20f));
 
-                float swishAngle = (float) Math.sin(progress * (float) (Math.PI * 6)) * 22f;
-                poseStack.mulPose(Axis.YP.rotationDegrees(swishAngle));
-
-                float bob = (float) Math.abs(Math.sin(progress * (float) (Math.PI * 6))) * 0.04f;
-                poseStack.translate(0f, bob, 0f);
+                poseStack.mulPose(Axis.YP.rotationDegrees(wave * PanningAnimation.SWISH_DEGREES));
+                poseStack.translate(0f, Math.abs(wave) * PanningAnimation.BOB_HEIGHT, 0f);
 
                 poseStack.scale(1.35f, 1.35f, 1.35f);
 
@@ -160,8 +159,8 @@ public class PanItem extends Item {
                     InteractionHand hand,
                     ItemStack stack
             ) {
-                return entity.isUsingItem()
-                        ? HumanoidModel.ArmPose.BOW_AND_ARROW
+                return entity.isUsingItem() && entity.getUseItem() == stack
+                        ? PanningAnimation.PANNING_ARM_POSE.getValue()
                         : HumanoidModel.ArmPose.ITEM;
             }
         });

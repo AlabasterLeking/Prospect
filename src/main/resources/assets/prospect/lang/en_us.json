@@ -74,5 +74,19 @@
   "trim_material.prospect.sapphire": "Sapphire Material",
   "trim_material.prospect.topaz": "Topaz Material",
 
-  "enchantment.prospect.panning_luck": "Panning Luck"
+  "enchantment.prospect.panning_luck": "Panning Luck",
+
+  "entity.prospect.wandering_prospector": "Wandering Prospector",
+  "item.prospect.wandering_prospector_spawn_egg": "Wandering Prospector Spawn Egg",
+  "filled_map.prospect.mineshaft": "Mineshaft Map",
+
+  "item.prospect.dynamite": "Dynamite",
+  "item.prospect.lit_dynamite": "Lit Dynamite",
+  "entity.prospect.dynamite": "Dynamite",
+  "tooltip.prospect.dynamite.light": "Hold Flint and Steel in your other hand, or use on an open flame, to light",
+
+  "advancements.prospect.fire_in_the_hole.title": "Fire in the Hole!",
+  "advancements.prospect.fire_in_the_hole.description": "Throw a stick of lit dynamite",
+  "advancements.prospect.hot_potato.title": "Hot Potato",
+  "advancements.prospect.hot_potato.description": "Hold on to a stick of lit dynamite for a little too long"
 }

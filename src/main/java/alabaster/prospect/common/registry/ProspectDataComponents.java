@@ -24,6 +24,14 @@ public final class ProspectDataComponents {
                     .build()
     );
 
+    public static final Supplier<DataComponentType<Integer>> FUSE = DATA_COMPONENTS.register(
+            "fuse",
+            () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build()
+    );
+
     public static final Supplier<DataComponentType<String>> QUARTZ_LOCK = DATA_COMPONENTS.register(
             "quartz_lock",
             () -> DataComponentType.<String>builder()

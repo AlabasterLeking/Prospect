@@ -1,0 +1,9 @@
+{
+  "match": {
+    "items": "#prospect:mining_helmet_light",
+    "predicates": {
+      "minecraft:custom_data": "{LightOn:1b}"
+    }
+  },
+  "luminance": 15
+}
