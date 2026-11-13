@@ -16,4 +16,7 @@ public final class ProspectParticleTypes {
 
     public static final Supplier<SimpleParticleType> TOPAZ_GLINT =
             PARTICLE_TYPES.register("topaz_glint", () -> new SimpleParticleType(true));
+
+    public static final Supplier<SimpleParticleType> SPARK =
+            PARTICLE_TYPES.register("spark", () -> new SimpleParticleType(false));
 }

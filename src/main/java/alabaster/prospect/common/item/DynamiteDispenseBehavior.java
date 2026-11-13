@@ -2,7 +2,6 @@ package alabaster.prospect.common.item;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.entity.dynamite.DynamiteEntity;
-import alabaster.prospect.common.registry.ProspectModItems;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
@@ -23,8 +22,10 @@ public class DynamiteDispenseBehavior extends DefaultDispenseItemBehavior {
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             DynamiteDispenseBehavior behavior = new DynamiteDispenseBehavior();
-            DispenserBlock.registerBehavior(ProspectModItems.DYNAMITE.get(), behavior);
-            DispenserBlock.registerBehavior(ProspectModItems.LIT_DYNAMITE.get(), behavior);
+            for (DynamiteType type : DynamiteType.values()) {
+                DispenserBlock.registerBehavior(type.unlitItem(), behavior);
+                DispenserBlock.registerBehavior(type.litItem(), behavior);
+            }
         });
     }
 
@@ -33,9 +34,11 @@ public class DynamiteDispenseBehavior extends DefaultDispenseItemBehavior {
         ServerLevel level = source.level();
         Direction direction = source.state().getValue(DispenserBlock.FACING);
         Position position = DispenserBlock.getDispensePosition(source);
-        int fuse = stack.is(ProspectModItems.LIT_DYNAMITE.get()) ? LitDynamiteItem.getFuse(stack) : LitDynamiteItem.FUSE_TICKS;
+        DynamiteType type = DynamiteType.fromStack(stack);
+        if (type == null) return stack;
+        int fuse = stack.getItem() instanceof LitDynamiteItem ? LitDynamiteItem.getFuse(stack) : type.fuseTicks;
 
-        DynamiteEntity dynamite = new DynamiteEntity(level, position.x(), position.y(), position.z(), fuse);
+        DynamiteEntity dynamite = new DynamiteEntity(level, position.x(), position.y(), position.z(), fuse, type);
         dynamite.shoot(direction.getStepX(), direction.getStepY() + 0.1F, direction.getStepZ(), 1.1F, 6.0F);
         level.addFreshEntity(dynamite);
         stack.shrink(1);

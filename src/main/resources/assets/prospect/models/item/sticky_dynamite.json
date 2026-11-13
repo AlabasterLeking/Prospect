@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/generated",
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "prospect:item/3d_sticky_dynamite"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "prospect:item/2d_sticky_dynamite"
+    },
+    "ground": {
+      "parent": "prospect:item/2d_sticky_dynamite"
+    },
+    "fixed": {
+      "parent": "prospect:item/2d_sticky_dynamite"
+    }
+  }
+}

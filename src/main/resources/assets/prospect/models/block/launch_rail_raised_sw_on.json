@@ -1,0 +1,9 @@
+{
+	"format_version": "26.3",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/template_rail_raised_sw",
+	"render_type": "minecraft:cutout",
+	"textures": {
+		"rail": "prospect:block/launch_rail_on"
+	}
+}

@@ -1,0 +1,241 @@
+{
+  "type": "prospect:hillside",
+  "biomes": "#prospect:has_structure/abandoned_mine_mangrove",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {},
+  "template": "prospect:abandoned_mine_mangrove",
+  "entrance": [
+    4,
+    6,
+    6
+  ],
+  "processors": "prospect:abandoned_mine_mangrove",
+  "min_rise": 3,
+  "depth": 10,
+  "tunnel_length": 13,
+  "tunnel_cover": 3,
+  "carve": [
+    0,
+    11,
+    0,
+    8,
+    15,
+    3
+  ],
+  "line": [
+    0,
+    0,
+    7,
+    8,
+    10,
+    35
+  ],
+  "lining": [
+    "minecraft:mud_bricks",
+    "minecraft:packed_mud",
+    "minecraft:mud",
+    "minecraft:stone"
+  ],
+  "cover": [
+    [
+      0,
+      11,
+      6,
+      8,
+      12,
+      7
+    ]
+  ],
+  "backfill": [
+    [
+      0,
+      7,
+      5,
+      0,
+      9,
+      5
+    ],
+    [
+      8,
+      7,
+      5,
+      8,
+      9,
+      5
+    ]
+  ],
+  "piles": [
+    [
+      -4,
+      7,
+      1,
+      -1,
+      9,
+      6
+    ],
+    [
+      9,
+      7,
+      1,
+      12,
+      9,
+      6
+    ]
+  ],
+  "overgrowth": 0.15,
+  "allow_water": true,
+  "paths": [
+    [
+      3,
+      0,
+      -12,
+      5,
+      0,
+      -1
+    ]
+  ],
+  "rubble_area": [
+    -1,
+    0,
+    -10,
+    9,
+    0,
+    -1
+  ],
+  "rubble_exclude": [
+    3,
+    0,
+    -12,
+    5,
+    0,
+    -1
+  ],
+  "rubble_density": 0.08,
+  "extensions": [
+    {
+      "chance": 0.75,
+      "processors": "prospect:abandoned_mine_mangrove_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_drift_ore",
+          "offset": [
+            6,
+            6,
+            9
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_drift_rest",
+          "offset": [
+            6,
+            6,
+            7
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_drift_unstable",
+          "offset": [
+            6,
+            6,
+            9
+          ]
+        }
+      ],
+      "group": "drift"
+    },
+    {
+      "chance": 0.6,
+      "processors": "prospect:abandoned_mine_mangrove_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_magazine",
+          "offset": [
+            8,
+            0,
+            23
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_loading_bay",
+          "offset": [
+            8,
+            0,
+            23
+          ]
+        }
+      ],
+      "group": "storeroom"
+    },
+    {
+      "chance": 0.65,
+      "processors": "prospect:abandoned_mine_mangrove_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_office",
+          "offset": [
+            -11,
+            0,
+            24
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_sump",
+          "offset": [
+            -11,
+            -1,
+            24
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_spider_nest",
+          "offset": [
+            -11,
+            0,
+            24
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_nether_portal",
+          "offset": [
+            -11,
+            0,
+            24
+          ]
+        }
+      ],
+      "group": "side_room"
+    },
+    {
+      "chance": 0.5,
+      "processors": "prospect:abandoned_mine_mangrove_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_lower_gallery",
+          "offset": [
+            -2,
+            -9,
+            28
+          ]
+        }
+      ],
+      "group": "lower_gallery"
+    },
+    {
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_collapse",
+          "offset": [
+            0,
+            0,
+            32
+          ]
+        }
+      ],
+      "chance": 0.5,
+      "processors": "prospect:abandoned_mine_mangrove_ext",
+      "group": "collapse"
+    }
+  ],
+  "variant": "mangrove"
+}

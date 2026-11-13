@@ -1,6 +1,7 @@
 package alabaster.prospect.data;
 
 import alabaster.prospect.data.loot.ProspectBlockLoot;
+import alabaster.prospect.data.loot.ProspectEntityLoot;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -32,10 +33,12 @@ public class DataGenerators {
         ProspectBlockTags blockTags = new ProspectBlockTags(output, lookupProvider, helper);
         generator.addProvider(event.includeServer(), blockTags);
         generator.addProvider(event.includeServer(), new ProspectItemTags(output, lookupProvider, blockTags.contentsGetter(), helper));
+        generator.addProvider(event.includeServer(), new ProspectBiomeTags(output, lookupProvider, helper));
         generator.addProvider(event.includeServer(), new Recipes(output, lookupProvider));
         //generator.addProvider(event.includeServer(), new Advancements(output, lookupProvider, helper));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Collections.emptySet(), List.of(
-                new LootTableProvider.SubProviderEntry(ProspectBlockLoot::new, LootContextParamSets.BLOCK)
+                new LootTableProvider.SubProviderEntry(ProspectBlockLoot::new, LootContextParamSets.BLOCK),
+                new LootTableProvider.SubProviderEntry(ProspectEntityLoot::new, LootContextParamSets.ENTITY)
         ), lookupProvider));
         BlockStates blockStates = new BlockStates(output, helper);
         generator.addProvider(event.includeClient(), blockStates);

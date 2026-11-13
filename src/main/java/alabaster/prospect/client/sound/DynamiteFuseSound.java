@@ -1,6 +1,6 @@
 package alabaster.prospect.client.sound;
 
-import alabaster.prospect.common.registry.ProspectModItems;
+import alabaster.prospect.common.item.LitDynamiteItem;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundEvents;
@@ -28,7 +28,7 @@ public class DynamiteFuseSound extends AbstractTickableSoundInstance {
 
     public static boolean isHoldingLit(Entity entity) {
         return entity instanceof LivingEntity living
-                && (living.getMainHandItem().is(ProspectModItems.LIT_DYNAMITE.get()) || living.getOffhandItem().is(ProspectModItems.LIT_DYNAMITE.get()));
+                && (living.getMainHandItem().getItem() instanceof LitDynamiteItem || living.getOffhandItem().getItem() instanceof LitDynamiteItem);
     }
 
     @Override

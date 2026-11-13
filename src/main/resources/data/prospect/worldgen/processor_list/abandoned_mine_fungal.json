@@ -1,0 +1,977 @@
+{
+  "processors": [
+    {
+      "processor_type": "prospect:scatter",
+      "marker": "minecraft:sponge",
+      "options": [
+        {
+          "data": {
+            "Name": "minecraft:air"
+          },
+          "weight": 6
+        },
+        {
+          "data": {
+            "Name": "minecraft:barrel",
+            "Properties": {
+              "facing": "up",
+              "open": "false"
+            }
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:spruce_log",
+            "Properties": {
+              "axis": "x"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:spruce_log",
+            "Properties": {
+              "axis": "z"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:cobblestone"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:gravel"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:hay_block",
+            "Properties": {
+              "axis": "y"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:campfire",
+            "Properties": {
+              "facing": "north",
+              "lit": "false",
+              "signal_fire": "false",
+              "waterlogged": "false"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:cauldron"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "processor_type": "prospect:scatter",
+      "marker": "minecraft:wet_sponge",
+      "options": [
+        {
+          "data": {
+            "Name": "minecraft:air"
+          },
+          "weight": 5
+        },
+        {
+          "data": {
+            "Name": "minecraft:cobweb"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:gravel"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:cobblestone"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:barrel",
+            "Properties": {
+              "facing": "up",
+              "open": "false"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:raw_iron_block"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:spruce_planks"
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "prospect:extinguished_lantern",
+            "Properties": {
+              "hanging": "false",
+              "waterlogged": "false"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "minecraft:tnt",
+            "Properties": {
+              "unstable": "false"
+            }
+          },
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "processor_type": "prospect:uniform_ore",
+      "targets": [
+        "minecraft:raw_copper_block",
+        "minecraft:raw_iron_block"
+      ],
+      "options": [
+        {
+          "data": "minecraft:raw_iron_block",
+          "weight": 40
+        },
+        {
+          "data": "minecraft:coal_block",
+          "weight": 30
+        },
+        {
+          "data": "minecraft:raw_copper_block",
+          "weight": 20
+        },
+        {
+          "data": "minecraft:raw_gold_block",
+          "weight": 10
+        }
+      ],
+      "loot_base": "prospect:chests/abandoned_mine",
+      "loot_by_ore": {
+        "minecraft:raw_copper_block": "prospect:chests/abandoned_mine_copper",
+        "minecraft:raw_iron_block": "prospect:chests/abandoned_mine_iron",
+        "minecraft:raw_gold_block": "prospect:chests/abandoned_mine_gold",
+        "minecraft:coal_block": "prospect:chests/abandoned_mine_coal"
+      }
+    },
+    {
+      "processor_type": "prospect:cave_in",
+      "area": [
+        3,
+        7,
+        11,
+        4,
+        9,
+        12
+      ],
+      "chance": 0.25,
+      "rubble": [
+        "minecraft:gravel",
+        "minecraft:cobblestone",
+        "minecraft:tuff",
+        "minecraft:gravel"
+      ]
+    },
+    {
+      "processor_type": "prospect:cave_in",
+      "area": [
+        4,
+        1,
+        23,
+        5,
+        2,
+        25
+      ],
+      "chance": 0.15,
+      "rubble": [
+        "minecraft:gravel",
+        "minecraft:cobblestone",
+        "minecraft:tuff",
+        "minecraft:gravel"
+      ],
+      "salt": 81234567
+    },
+    {
+      "processor_type": "prospect:cave_in",
+      "area": [
+        2,
+        7,
+        3,
+        3,
+        8,
+        3
+      ],
+      "chance": 0.3,
+      "rubble": [
+        "minecraft:air"
+      ],
+      "salt": 51234123
+    },
+    {
+      "processor_type": "prospect:cave_in",
+      "area": [
+        9,
+        7,
+        2,
+        9,
+        8,
+        3
+      ],
+      "chance": 0.3,
+      "rubble": [
+        "minecraft:air"
+      ],
+      "salt": 71239871
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "minecraft:lantern",
+              "Properties": {
+                "hanging": "false",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.33
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "prospect:extinguished_lantern",
+            "Properties": {
+              "hanging": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "minecraft:cobweb"
+            },
+            "probability": 0.4
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "prospect:extinguished_lantern",
+              "Properties": {
+                "hanging": "false",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.33
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:lantern",
+            "Properties": {
+              "hanging": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "prospect:wooden_rail",
+              "Properties": {
+                "shape": "east_west",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.08
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "prospect:wooden_rail",
+              "Properties": {
+                "shape": "north_south",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.08
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "minecraft:lantern",
+              "Properties": {
+                "hanging": "true",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.33
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "prospect:extinguished_lantern",
+            "Properties": {
+              "hanging": "true",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "prospect:extinguished_lantern",
+              "Properties": {
+                "hanging": "true",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.33
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:lantern",
+            "Properties": {
+              "hanging": "true",
+              "waterlogged": "false"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:tuff"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:mossy_cobblestone"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "north": "false",
+                "south": "false",
+                "east": "true",
+                "west": "false",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_fence",
+            "Properties": {
+              "north": "false",
+              "south": "false",
+              "east": "true",
+              "west": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_trapdoor",
+              "Properties": {
+                "facing": "north",
+                "half": "bottom",
+                "open": "false",
+                "powered": "false",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_trapdoor",
+            "Properties": {
+              "facing": "north",
+              "half": "bottom",
+              "open": "false",
+              "powered": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:cobblestone"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:mossy_cobblestone"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "north": "false",
+                "south": "false",
+                "east": "false",
+                "west": "true",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_fence",
+            "Properties": {
+              "north": "false",
+              "south": "false",
+              "east": "false",
+              "west": "true",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_log",
+              "Properties": {
+                "axis": "z"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_log",
+            "Properties": {
+              "axis": "z"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_trapdoor",
+              "Properties": {
+                "facing": "north",
+                "half": "top",
+                "open": "false",
+                "powered": "false",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_trapdoor",
+            "Properties": {
+              "facing": "north",
+              "half": "top",
+              "open": "false",
+              "powered": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_stairs",
+              "Properties": {
+                "facing": "east",
+                "half": "bottom",
+                "shape": "straight",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_stairs",
+            "Properties": {
+              "facing": "east",
+              "half": "bottom",
+              "shape": "straight",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "north": "false",
+                "south": "false",
+                "east": "false",
+                "west": "false",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_fence",
+            "Properties": {
+              "north": "false",
+              "south": "false",
+              "east": "false",
+              "west": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:polished_andesite"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:mossy_stone_bricks"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_log",
+              "Properties": {
+                "axis": "y"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_log",
+            "Properties": {
+              "axis": "y"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:spruce_planks"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_planks"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_log",
+              "Properties": {
+                "axis": "x"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_log",
+            "Properties": {
+              "axis": "x"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:dirt_path"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:coarse_dirt"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:stripped_spruce_log",
+              "Properties": {
+                "axis": "z"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:stripped_dark_oak_log",
+            "Properties": {
+              "axis": "z"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_stairs",
+              "Properties": {
+                "facing": "west",
+                "half": "top",
+                "shape": "straight",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_stairs",
+            "Properties": {
+              "facing": "west",
+              "half": "top",
+              "shape": "straight",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_slab",
+              "Properties": {
+                "type": "top",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_slab",
+            "Properties": {
+              "type": "top",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_slab",
+              "Properties": {
+                "type": "bottom",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_slab",
+            "Properties": {
+              "type": "bottom",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_stairs",
+              "Properties": {
+                "facing": "south",
+                "half": "top",
+                "shape": "straight",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_stairs",
+            "Properties": {
+              "facing": "south",
+              "half": "top",
+              "shape": "straight",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_stairs",
+              "Properties": {
+                "facing": "east",
+                "half": "top",
+                "shape": "straight",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_stairs",
+            "Properties": {
+              "facing": "east",
+              "half": "top",
+              "shape": "straight",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "north": "false",
+                "south": "true",
+                "east": "false",
+                "west": "false",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_fence",
+            "Properties": {
+              "north": "false",
+              "south": "true",
+              "east": "false",
+              "west": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "north": "true",
+                "south": "false",
+                "east": "false",
+                "west": "false",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_fence",
+            "Properties": {
+              "north": "true",
+              "south": "false",
+              "east": "false",
+              "west": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_stairs",
+              "Properties": {
+                "facing": "west",
+                "half": "bottom",
+                "shape": "straight",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:dark_oak_stairs",
+            "Properties": {
+              "facing": "west",
+              "half": "bottom",
+              "shape": "straight",
+              "waterlogged": "false"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:raw_copper_block",
+            "probability": 0.7
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:copper_ore"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:raw_iron_block",
+            "probability": 0.7
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:iron_ore"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:raw_gold_block",
+            "probability": 0.7
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:gold_ore"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:coal_block",
+            "probability": 0.7
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:coal_ore"
+          }
+        }
+      ]
+    }
+  ]
+}

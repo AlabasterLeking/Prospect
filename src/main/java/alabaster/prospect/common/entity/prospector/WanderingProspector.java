@@ -3,6 +3,7 @@ package alabaster.prospect.common.entity.prospector;
 import alabaster.prospect.common.entity.ai.AvoidDynamiteGoal;
 import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.registry.ProspectModItems;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.ai.goal.UseItemGoal;
 import net.minecraft.world.entity.animal.horse.Mule;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
@@ -23,12 +25,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class WanderingProspector extends WanderingTrader {
 
     public static final String PACK_MULE_TAG = "prospect_pack_mule";
 
     private static final float VOICE_PITCH = 0.8F;
+    private static final float CURE_DISCOUNT = 0.3F;
+    private static final long RESTOCK_INTERVAL = 24000L;
+
+    private long lastRestock = -1L;
+
+    @Nullable
+    private UUID curedBy;
 
     public WanderingProspector(EntityType<? extends WanderingProspector> type, Level level) {
         super(type, level);
@@ -74,6 +84,7 @@ public class WanderingProspector extends WanderingTrader {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
+        restockIfDue();
         if (tickCount % 20 != 0) return;
 
         ItemStack helmet = getItemBySlot(EquipmentSlot.HEAD);
@@ -93,5 +104,52 @@ public class WanderingProspector extends WanderingTrader {
             }
         }
         super.remove(reason);
+    }
+
+    public void markCured(@Nullable UUID curer) {
+        curedBy = curer;
+        setDespawnDelay(0);
+        setPersistenceRequired();
+    }
+
+    @Override
+    public void setTradingPlayer(@Nullable Player player) {
+        super.setTradingPlayer(player);
+        if (player == null) return;
+        boolean curer = curedBy != null && curedBy.equals(player.getUUID());
+        for (MerchantOffer offer : getOffers()) {
+            offer.setSpecialPriceDiff(curer ? -Math.max(1, Math.round(offer.getBaseCostA().getCount() * CURE_DISCOUNT)) : 0);
+        }
+    }
+
+    private void restockIfDue() {
+        long now = level().getGameTime();
+        if (lastRestock < 0) {
+            lastRestock = now;
+            return;
+        }
+        if (now - lastRestock < RESTOCK_INTERVAL || isTrading()) return;
+        lastRestock = now;
+        getOffers().forEach(MerchantOffer::resetUses);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putLong("LastRestock", lastRestock);
+        if (curedBy != null) {
+            tag.putUUID("CuredBy", curedBy);
+        }
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("LastRestock")) {
+            lastRestock = tag.getLong("LastRestock");
+        }
+        if (tag.hasUUID("CuredBy")) {
+            curedBy = tag.getUUID("CuredBy");
+        }
     }
 }

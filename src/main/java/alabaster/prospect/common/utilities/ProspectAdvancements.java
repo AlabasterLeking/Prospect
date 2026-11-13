@@ -10,6 +10,10 @@ public final class ProspectAdvancements {
 
     public static final String FIRE_IN_THE_HOLE = "fire_in_the_hole";
     public static final String HOT_POTATO = "hot_potato";
+    public static final String PAY_DIRT = "pay_dirt";
+    public static final String CATCHING_AIR = "catching_air";
+    public static final String LIFTOFF = "liftoff";
+    public static final String BACK_FROM_THE_DEAD = "back_from_the_dead";
 
     public static void award(ServerPlayer player, String name) {
         AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, name));

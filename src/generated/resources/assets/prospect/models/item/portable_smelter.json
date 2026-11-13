@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "prospect:item/portable_smelter_lit",
+      "predicate": {
+        "prospect:lit": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "prospect:item/portable_smelter"
+  }
+}

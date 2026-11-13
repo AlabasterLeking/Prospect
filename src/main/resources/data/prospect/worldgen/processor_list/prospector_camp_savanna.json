@@ -1,0 +1,521 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:white_wool",
+            "probability": 0.15
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:white_wool"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:white_wool"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:light_gray_wool"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:target"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:potted_acacia_sapling"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:brown_carpet"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:yellow_carpet"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:cobblestone_slab"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:smooth_sandstone_slab",
+            "Properties": {
+              "type": "bottom",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:gravel",
+            "probability": 0.6
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:coarse_dirt"
+          }
+        }
+      ]
+    },
+    {
+      "processor_type": "prospect:uniform_ore",
+      "targets": [
+        "minecraft:raw_copper_block",
+        "minecraft:raw_iron_block"
+      ],
+      "options": [
+        {
+          "data": "minecraft:raw_copper_block",
+          "weight": 45
+        },
+        {
+          "data": "minecraft:raw_iron_block",
+          "weight": 30
+        },
+        {
+          "data": "minecraft:raw_gold_block",
+          "weight": 15
+        },
+        {
+          "data": "minecraft:coal_block",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "false",
+                "south": "true",
+                "east": "true",
+                "west": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "false",
+              "south": "true",
+              "east": "true",
+              "west": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "true",
+                "south": "false",
+                "east": "false",
+                "west": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "true",
+              "south": "false",
+              "east": "false",
+              "west": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "false",
+                "south": "true",
+                "east": "true",
+                "west": "true"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "false",
+              "south": "true",
+              "east": "true",
+              "west": "true"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_slab",
+              "Properties": {
+                "type": "bottom",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_slab",
+            "Properties": {
+              "type": "bottom",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:rooted_dirt"
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:coarse_dirt"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "false",
+                "south": "false",
+                "east": "false",
+                "west": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "false",
+              "south": "false",
+              "east": "false",
+              "west": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "false",
+                "south": "true",
+                "east": "false",
+                "west": "true"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "false",
+              "south": "true",
+              "east": "false",
+              "west": "true"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "true",
+                "south": "true",
+                "east": "false",
+                "west": "true"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "true",
+              "south": "true",
+              "east": "false",
+              "west": "true"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "true",
+                "south": "false",
+                "east": "false",
+                "west": "true"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "true",
+              "south": "false",
+              "east": "false",
+              "west": "true"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "false",
+                "south": "false",
+                "east": "true",
+                "west": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "false",
+              "south": "false",
+              "east": "true",
+              "west": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:stripped_spruce_log",
+              "Properties": {
+                "axis": "x"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:stripped_acacia_log",
+            "Properties": {
+              "axis": "x"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "false",
+                "south": "true",
+                "east": "false",
+                "west": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "false",
+              "south": "true",
+              "east": "false",
+              "west": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "false",
+                "south": "false",
+                "east": "true",
+                "west": "true"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "false",
+              "south": "false",
+              "east": "true",
+              "west": "true"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_fence",
+              "Properties": {
+                "waterlogged": "false",
+                "north": "false",
+                "south": "false",
+                "east": "false",
+                "west": "true"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_fence",
+            "Properties": {
+              "waterlogged": "false",
+              "north": "false",
+              "south": "false",
+              "east": "false",
+              "west": "true"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:stripped_spruce_log",
+              "Properties": {
+                "axis": "z"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:stripped_acacia_log",
+            "Properties": {
+              "axis": "z"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:blockstate_match",
+            "block_state": {
+              "Name": "minecraft:spruce_slab",
+              "Properties": {
+                "type": "top",
+                "waterlogged": "false"
+              }
+            }
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:acacia_slab",
+            "Properties": {
+              "type": "top",
+              "waterlogged": "false"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

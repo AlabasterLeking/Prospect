@@ -1,0 +1,6 @@
+{
+  "parent": "prospect:item/altimeter_display",
+  "textures": {
+    "layer0": "prospect:item/altimeter_14"
+  }
+}

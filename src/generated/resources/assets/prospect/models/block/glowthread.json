@@ -1,0 +1,8 @@
+{
+  "parent": "prospect:block/template_split_glowing_cross",
+  "textures": {
+    "base": "prospect:block/glowthread_strands",
+    "glow": "prospect:block/glowthread_tip",
+    "particle": "prospect:block/glowthread"
+  }
+}

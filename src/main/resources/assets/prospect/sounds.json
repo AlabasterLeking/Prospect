@@ -1,0 +1,84 @@
+{
+  "ambient.glowshroom_grove.loop": {
+    "sounds": [
+      {
+        "name": "minecraft:ambient.warped_forest.loop",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.55
+      }
+    ]
+  },
+  "ambient.glowshroom_grove.additions": {
+    "subtitle": "subtitles.prospect.ambient.glowshroom_grove.additions",
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 0.5,
+        "volume": 0.35,
+        "weight": 3
+      },
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 0.62,
+        "volume": 0.3,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:block.pointed_dripstone.drip_water",
+        "type": "event",
+        "volume": 0.5,
+        "weight": 3
+      },
+      {
+        "name": "minecraft:block.bubble_column.bubble_pop",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.35,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:block.sculk_sensor.clicking_stop",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.15,
+        "weight": 1
+      }
+    ]
+  },
+  "block.wooden_rail.rattle": {
+    "subtitle": "subtitles.prospect.block.wooden_rail.rattle",
+    "sounds": [
+      {
+        "name": "minecraft:block.scaffolding.step",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.8,
+        "weight": 3
+      },
+      {
+        "name": "minecraft:block.bamboo_wood.step",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.7,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:block.wood.step",
+        "type": "event",
+        "pitch": 0.6,
+        "volume": 0.9,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:block.ladder.step",
+        "type": "event",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "weight": 1
+      }
+    ]
+  }
+}

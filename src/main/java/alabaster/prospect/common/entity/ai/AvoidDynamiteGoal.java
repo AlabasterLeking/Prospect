@@ -1,7 +1,7 @@
 package alabaster.prospect.common.entity.ai;
 
 import alabaster.prospect.common.entity.dynamite.DynamiteEntity;
-import alabaster.prospect.common.registry.ProspectModItems;
+import alabaster.prospect.common.item.LitDynamiteItem;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -69,6 +69,6 @@ public class AvoidDynamiteGoal extends Goal {
 
     private static boolean isLitDynamite(Entity entity) {
         return entity instanceof DynamiteEntity
-                || entity instanceof ItemEntity item && item.getItem().is(ProspectModItems.LIT_DYNAMITE.get());
+                || entity instanceof ItemEntity item && item.getItem().getItem() instanceof LitDynamiteItem;
     }
 }

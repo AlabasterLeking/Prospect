@@ -1,0 +1,293 @@
+{
+  "type": "prospect:quarry",
+  "biomes": "#prospect:has_structure/abandoned_mine_quarry",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {},
+  "template": "prospect:abandoned_mine_quarry",
+  "rim": [
+    19,
+    19,
+    12
+  ],
+  "processors": "prospect:abandoned_mine_quarry",
+  "footprint": 25,
+  "max_spread": 5,
+  "line": [
+    15,
+    0,
+    18,
+    23,
+    10,
+    46
+  ],
+  "lining": [
+    "minecraft:stone",
+    "minecraft:andesite",
+    "minecraft:cobblestone",
+    "minecraft:stone_bricks"
+  ],
+  "rubble_area": [
+    3,
+    0,
+    -4,
+    35,
+    0,
+    28
+  ],
+  "rubble_exclude": [
+    10,
+    0,
+    3,
+    28,
+    0,
+    21
+  ],
+  "rubble_density": 0.24,
+  "boulders": [
+    [
+      7,
+      0,
+      0
+    ],
+    [
+      33,
+      0,
+      8
+    ],
+    [
+      4,
+      0,
+      19
+    ],
+    [
+      32,
+      0,
+      21
+    ],
+    [
+      14,
+      0,
+      -3
+    ],
+    [
+      24,
+      0,
+      26
+    ],
+    [
+      9,
+      0,
+      25
+    ],
+    [
+      29,
+      0,
+      -2
+    ],
+    [
+      2,
+      0,
+      17
+    ],
+    [
+      33,
+      0,
+      15
+    ]
+  ],
+  "paths": [
+    [
+      13,
+      0,
+      -5,
+      15,
+      0,
+      -1
+    ],
+    [
+      32,
+      0,
+      1,
+      36,
+      0,
+      3
+    ],
+    [
+      9,
+      0,
+      0,
+      15,
+      0,
+      1
+    ]
+  ],
+  "piles": [
+    [
+      1,
+      19,
+      2,
+      4,
+      20,
+      5
+    ],
+    [
+      32,
+      19,
+      11,
+      35,
+      20,
+      14
+    ],
+    [
+      16,
+      19,
+      25,
+      19,
+      20,
+      28
+    ],
+    [
+      20,
+      19,
+      -4,
+      23,
+      20,
+      -1
+    ]
+  ],
+  "extensions": [
+    {
+      "chance": 0.75,
+      "processors": "prospect:abandoned_mine_quarry_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_drift_ore",
+          "offset": [
+            21,
+            6,
+            20
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_drift_rest",
+          "offset": [
+            21,
+            6,
+            18
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_drift_unstable",
+          "offset": [
+            21,
+            6,
+            20
+          ]
+        }
+      ],
+      "group": "drift"
+    },
+    {
+      "chance": 0.6,
+      "processors": "prospect:abandoned_mine_quarry_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_magazine",
+          "offset": [
+            23,
+            0,
+            34
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_loading_bay",
+          "offset": [
+            23,
+            0,
+            34
+          ]
+        }
+      ],
+      "group": "storeroom"
+    },
+    {
+      "chance": 0.65,
+      "processors": "prospect:abandoned_mine_quarry_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_office",
+          "offset": [
+            4,
+            0,
+            35
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_sump",
+          "offset": [
+            4,
+            -1,
+            35
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_spider_nest",
+          "offset": [
+            4,
+            0,
+            35
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_nether_portal",
+          "offset": [
+            4,
+            0,
+            35
+          ]
+        }
+      ],
+      "group": "side_room"
+    },
+    {
+      "chance": 0.5,
+      "processors": "prospect:abandoned_mine_quarry_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_lower_gallery",
+          "offset": [
+            13,
+            -9,
+            39
+          ]
+        }
+      ],
+      "group": "lower_gallery"
+    },
+    {
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_collapse",
+          "offset": [
+            15,
+            0,
+            43
+          ]
+        }
+      ],
+      "chance": 0.5,
+      "processors": "prospect:abandoned_mine_quarry_ext",
+      "group": "collapse"
+    }
+  ],
+  "bowl": [
+    0,
+    18,
+    0,
+    31,
+    18,
+    24
+  ],
+  "variant": "quarry"
+}

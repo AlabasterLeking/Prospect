@@ -14,20 +14,31 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TorchBlock;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
 public class DynamiteItem extends Item {
 
-    public DynamiteItem(Properties properties) {
+    private final DynamiteType type;
+
+    public DynamiteItem(Properties properties, DynamiteType type) {
         super(properties);
+        this.type = type;
+    }
+
+    public DynamiteType getType() {
+        return type;
     }
 
     @Override
@@ -37,11 +48,31 @@ public class DynamiteItem extends Item {
 
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
+        Block placed = type.placedBlock();
+        if (placed != null && (player.isSecondaryUseActive() || level.getBlockState(pos).is(placed))) {
+            return place(context, placed);
+        }
         if (!isOpenFlame(level.getBlockState(pos))) return InteractionResult.PASS;
 
         if (!level.isClientSide()) {
-            ignite(level, player, context.getHand(), context.getItemInHand());
+            ignite(level, player, context.getHand(), context.getItemInHand(), type);
         }
+        return InteractionResult.sidedSuccess(level.isClientSide());
+    }
+
+    private static InteractionResult place(UseOnContext context, Block block) {
+        BlockPlaceContext placeContext = new BlockPlaceContext(context);
+        if (!placeContext.canPlace()) return InteractionResult.FAIL;
+        Level level = placeContext.getLevel();
+        BlockPos pos = placeContext.getClickedPos();
+        BlockState state = block.getStateForPlacement(placeContext);
+        if (state == null || !state.canSurvive(level, pos)) return InteractionResult.FAIL;
+        if (!level.setBlock(pos, state, Block.UPDATE_ALL_IMMEDIATE)) return InteractionResult.FAIL;
+        Player player = placeContext.getPlayer();
+        SoundType sound = state.getSoundType(level, pos, player);
+        level.playSound(player, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+        level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(player, state));
+        placeContext.getItemInHand().consume(1, player);
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
@@ -56,7 +87,7 @@ public class DynamiteItem extends Item {
 
         if (!level.isClientSide()) {
             igniter.hurtAndBreak(1, player, LivingEntity.getSlotForHand(otherHand));
-            ignite(level, player, hand, stack);
+            ignite(level, player, hand, stack, type);
         }
 
         return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
@@ -65,6 +96,9 @@ public class DynamiteItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.prospect.dynamite.light").withStyle(ChatFormatting.GRAY));
+        if (type.placedBlock() != null) {
+            tooltip.add(Component.translatable("tooltip.prospect.dynamite.place").withStyle(ChatFormatting.GRAY));
+        }
     }
 
     private static boolean isOpenFlame(BlockState state) {
@@ -73,10 +107,10 @@ public class DynamiteItem extends Item {
         return state.getBlock() instanceof BaseFireBlock || state.getBlock() instanceof TorchBlock;
     }
 
-    private static void ignite(Level level, Player player, InteractionHand hand, ItemStack stack) {
+    private static void ignite(Level level, Player player, InteractionHand hand, ItemStack stack, DynamiteType type) {
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, 0.6F, 1.4F);
 
-        ItemStack lit = LitDynamiteItem.create();
+        ItemStack lit = LitDynamiteItem.create(type);
         if (stack.getCount() > 1) {
             ItemStack remainder = stack.copyWithCount(stack.getCount() - 1);
             player.setItemInHand(hand, lit);

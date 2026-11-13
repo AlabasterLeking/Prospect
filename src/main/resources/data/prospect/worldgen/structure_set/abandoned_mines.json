@@ -1,0 +1,50 @@
+{
+  "structures": [
+    {
+      "structure": "prospect:abandoned_mine",
+      "weight": 1
+    },
+    {
+      "structure": "prospect:abandoned_mine_badlands",
+      "weight": 1
+    },
+    {
+      "structure": "prospect:abandoned_mine_jungle",
+      "weight": 1
+    },
+    {
+      "structure": "prospect:abandoned_mine_snowy",
+      "weight": 1
+    },
+    {
+      "structure": "prospect:abandoned_mine_desert",
+      "weight": 1
+    },
+    {
+      "structure": "prospect:abandoned_mine_fungal",
+      "weight": 1
+    },
+    {
+      "structure": "prospect:abandoned_mine_savanna",
+      "weight": 1
+    },
+    {
+      "structure": "prospect:abandoned_mine_quarry",
+      "weight": 1
+    },
+    {
+      "structure": "prospect:abandoned_mine_mangrove",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 8,
+    "separation": 3,
+    "salt": 736104829,
+    "exclusion_zone": {
+      "other_set": "minecraft:villages",
+      "chunk_count": 5
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "targets": [
+    "prospect:glowing_mushroom_block_green"
+  ],
+  "colored_light": {
+    "color": "#6CFF7A",
+    "radius": 8,
+    "brightness": "0.55 + 0.1 * sin(g.time() * 0.157)"
+  }
+}

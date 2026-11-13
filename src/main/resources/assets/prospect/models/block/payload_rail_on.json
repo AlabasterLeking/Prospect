@@ -1,0 +1,9 @@
+{
+	"format_version": "26.3",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/rail_flat",
+	"render_type": "minecraft:cutout",
+	"textures": {
+		"rail": "prospect:block/payload_rail_on"
+	}
+}

@@ -1,0 +1,131 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_1",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_1_prospector",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_2",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_2_prospector",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_3",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_3_prospector",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_4",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_4_prospector",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_5",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_5_prospector",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 3,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_6",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_6_prospector",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_2_abandoned",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "prospect:prospector_camp/camp_5_abandoned",
+        "processors": "prospect:prospector_camp_snowy",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

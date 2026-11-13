@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 1,
+          "data": {
+            "Name": "prospect:glowing_mushroom_blue",
+            "Properties": {
+              "glow": "1"
+            }
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "prospect:glowing_mushroom_green",
+            "Properties": {
+              "glow": "1"
+            }
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "prospect:glowing_mushroom_purple",
+            "Properties": {
+              "glow": "1"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

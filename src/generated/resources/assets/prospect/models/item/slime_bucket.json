@@ -1,0 +1,44 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "prospect:item/slime_bucket_1",
+      "predicate": {
+        "prospect:dance": 0.05
+      }
+    },
+    {
+      "model": "prospect:item/slime_bucket_2",
+      "predicate": {
+        "prospect:dance": 0.15
+      }
+    },
+    {
+      "model": "prospect:item/slime_bucket_3",
+      "predicate": {
+        "prospect:dance": 0.25
+      }
+    },
+    {
+      "model": "prospect:item/slime_bucket_4",
+      "predicate": {
+        "prospect:dance": 0.35
+      }
+    },
+    {
+      "model": "prospect:item/slime_bucket_5",
+      "predicate": {
+        "prospect:dance": 0.45
+      }
+    },
+    {
+      "model": "prospect:item/slime_bucket_6",
+      "predicate": {
+        "prospect:dance": 0.55
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "prospect:item/slime_bucket_0"
+  }
+}

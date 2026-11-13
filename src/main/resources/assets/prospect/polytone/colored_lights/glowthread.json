@@ -1,0 +1,9 @@
+{
+  "targets": [
+    "prospect:glowthread"
+  ],
+  "colored_light": {
+    "color": "#7FE6FF",
+    "brightness": 0.8
+  }
+}

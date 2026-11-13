@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:adventure/root",
+  "parent": "prospect:root",
   "display": {
     "icon": {
       "id": "prospect:dynamite"

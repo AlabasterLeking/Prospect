@@ -17,7 +17,7 @@ public class ProspectModCreativeTabs
     public static final Supplier<CreativeModeTab> TAB_PROSPECT = CREATIVE_TABS.register(Prospect.MODID,
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.prospect"))
-                    .icon(() -> new ItemStack(Items.COBBLESTONE))
+                    .icon(() -> new ItemStack(ProspectModItems.PROSPECTING_PICKAXE.get()))
                     .displayItems((parameters, output) -> ProspectModItems.CREATIVE_TAB_ITEMS.forEach((item) -> output.accept(item.get())))
                     .build());
 }

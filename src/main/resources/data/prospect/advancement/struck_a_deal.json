@@ -1,0 +1,25 @@
+{
+  "parent": "prospect:root",
+  "display": {
+    "icon": {
+      "id": "prospect:wandering_prospector_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.prospect.struck_a_deal.title"
+    },
+    "description": {
+      "translate": "advancements.prospect.struck_a_deal.description"
+    },
+    "frame": "task"
+  },
+  "criteria": {
+    "traded": {
+      "trigger": "minecraft:villager_trade",
+      "conditions": {
+        "villager": {
+          "type": "prospect:wandering_prospector"
+        }
+      }
+    }
+  }
+}

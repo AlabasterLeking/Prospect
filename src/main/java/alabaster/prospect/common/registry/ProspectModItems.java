@@ -2,12 +2,22 @@ package alabaster.prospect.common.registry;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.item.DynamiteItem;
+import alabaster.prospect.common.item.DynamiteType;
 import alabaster.prospect.common.item.LitDynamiteItem;
+import alabaster.prospect.common.item.trinket.AltimeterItem;
+import alabaster.prospect.common.item.trinket.PortableSmelterItem;
 import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.item.PanItem;
+import alabaster.prospect.common.item.SlimeBucketItem;
 import alabaster.prospect.common.item.ProspectingPickaxeItem;
 import com.google.common.collect.Sets;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -36,9 +46,17 @@ public class ProspectModItems {
 
     // Explosives
     public static final Supplier<Item> DYNAMITE = registerWithTab("dynamite",
-            () -> new DynamiteItem(basicItem().stacksTo(16)));
+            () -> new DynamiteItem(basicItem().stacksTo(16), DynamiteType.STANDARD));
     public static final Supplier<Item> LIT_DYNAMITE = ITEMS.register("lit_dynamite",
-            () -> new LitDynamiteItem(basicItem().stacksTo(1)));
+            () -> new LitDynamiteItem(basicItem().stacksTo(1), DynamiteType.STANDARD));
+    public static final Supplier<Item> STICKY_DYNAMITE = registerWithTab("sticky_dynamite",
+            () -> new DynamiteItem(basicItem().stacksTo(16), DynamiteType.STICKY));
+    public static final Supplier<Item> LIT_STICKY_DYNAMITE = ITEMS.register("lit_sticky_dynamite",
+            () -> new LitDynamiteItem(basicItem().stacksTo(1), DynamiteType.STICKY));
+    public static final Supplier<Item> DYNAMITE_BUNDLE = registerWithTab("dynamite_bundle",
+            () -> new DynamiteItem(basicItem().stacksTo(8), DynamiteType.BUNDLE));
+    public static final Supplier<Item> LIT_DYNAMITE_BUNDLE = ITEMS.register("lit_dynamite_bundle",
+            () -> new LitDynamiteItem(basicItem().stacksTo(1), DynamiteType.BUNDLE));
 
     // Pans
     public static final Supplier<Item> COPPER_PAN = registerWithTab("copper_pan",
@@ -83,7 +101,70 @@ public class ProspectModItems {
     public static final Supplier<Item> TOPAZ_BLOCK = registerWithTab("topaz_block",
             () -> new BlockItem(ProspectModBlocks.TOPAZ_BLOCK.get(), basicItem()));
 
+    // Quartz Geodes
+    public static final Supplier<Item> CRYSTALLINE_QUARTZ = registerWithTab("crystalline_quartz",
+            () -> new BlockItem(ProspectModBlocks.CRYSTALLINE_QUARTZ.get(), basicItem()));
+    public static final Supplier<Item> BUDDING_QUARTZ = registerWithTab("budding_quartz",
+            () -> new BlockItem(ProspectModBlocks.BUDDING_QUARTZ.get(), basicItem()));
+    public static final Supplier<Item> SMALL_QUARTZ_BUD = registerWithTab("small_quartz_bud",
+            () -> new BlockItem(ProspectModBlocks.SMALL_QUARTZ_BUD.get(), basicItem()));
+    public static final Supplier<Item> MEDIUM_QUARTZ_BUD = registerWithTab("medium_quartz_bud",
+            () -> new BlockItem(ProspectModBlocks.MEDIUM_QUARTZ_BUD.get(), basicItem()));
+    public static final Supplier<Item> LARGE_QUARTZ_BUD = registerWithTab("large_quartz_bud",
+            () -> new BlockItem(ProspectModBlocks.LARGE_QUARTZ_BUD.get(), basicItem()));
+    public static final Supplier<Item> QUARTZ_CLUSTER = registerWithTab("quartz_cluster",
+            () -> new BlockItem(ProspectModBlocks.QUARTZ_CLUSTER.get(), basicItem()));
+
+    // Glowing Mushrooms
+    public static final Supplier<Item> GLOWING_MUSHROOM_BLUE = registerWithTab("glowing_mushroom_blue",
+            () -> new BlockItem(ProspectModBlocks.GLOWING_MUSHROOM_BLUE.get(), basicItem().food(glowingMushroomFood())));
+    public static final Supplier<Item> GLOWING_MUSHROOM_GREEN = registerWithTab("glowing_mushroom_green",
+            () -> new BlockItem(ProspectModBlocks.GLOWING_MUSHROOM_GREEN.get(), basicItem().food(glowingMushroomFood())));
+    public static final Supplier<Item> GLOWING_MUSHROOM_PURPLE = registerWithTab("glowing_mushroom_purple",
+            () -> new BlockItem(ProspectModBlocks.GLOWING_MUSHROOM_PURPLE.get(), basicItem().food(glowingMushroomFood())));
+    public static final Supplier<Item> GLOWING_MUSHROOM_BLOCK_BLUE = registerWithTab("glowing_mushroom_block_blue",
+            () -> new BlockItem(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_BLUE.get(), basicItem()));
+    public static final Supplier<Item> GLOWING_MUSHROOM_BLOCK_GREEN = registerWithTab("glowing_mushroom_block_green",
+            () -> new BlockItem(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_GREEN.get(), basicItem()));
+    public static final Supplier<Item> GLOWING_MUSHROOM_BLOCK_PURPLE = registerWithTab("glowing_mushroom_block_purple",
+            () -> new BlockItem(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_PURPLE.get(), basicItem()));
+    public static final Supplier<Item> GLOWTHREAD = registerWithTab("glowthread",
+            () -> new BlockItem(ProspectModBlocks.GLOWTHREAD.get(), basicItem()));
+
+    // Extinguished lights
+    public static final Supplier<Item> EXTINGUISHED_TORCH = registerWithTab("extinguished_torch",
+            () -> new StandingAndWallBlockItem(ProspectModBlocks.EXTINGUISHED_TORCH.get(), ProspectModBlocks.EXTINGUISHED_WALL_TORCH.get(), basicItem(), Direction.DOWN));
+    public static final Supplier<Item> EXTINGUISHED_LANTERN = registerWithTab("extinguished_lantern",
+            () -> new BlockItem(ProspectModBlocks.EXTINGUISHED_LANTERN.get(), basicItem()));
+
+    // Rails
+    public static final Supplier<Item> WOODEN_RAIL = registerWithTab("wooden_rail",
+            () -> new BlockItem(ProspectModBlocks.WOODEN_RAIL.get(), basicItem()));
+    public static final Supplier<Item> LAUNCH_RAIL = registerWithTab("launch_rail",
+            () -> new BlockItem(ProspectModBlocks.LAUNCH_RAIL.get(), basicItem()));
+    public static final Supplier<Item> PAYLOAD_RAIL = registerWithTab("payload_rail",
+            () -> new BlockItem(ProspectModBlocks.PAYLOAD_RAIL.get(), basicItem()));
+
     // Spawn Eggs
+    // Trinkets
+    public static final Supplier<Item> SLIME_BUCKET = registerWithTab("slime_bucket",
+            () -> new SlimeBucketItem(basicItem().stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY)));
+    public static final Supplier<Item> ALTIMETER = registerWithTab("altimeter",
+            () -> new AltimeterItem(basicItem().stacksTo(1)));
+    public static final Supplier<Item> PORTABLE_SMELTER = registerWithTab("portable_smelter",
+            () -> new PortableSmelterItem(basicItem().stacksTo(1)));
+
     public static final Supplier<Item> WANDERING_PROSPECTOR_SPAWN_EGG = registerWithTab("wandering_prospector_spawn_egg",
             () -> new DeferredSpawnEggItem(ProspectModEntities.WANDERING_PROSPECTOR, 0x5A3E2B, 0xE0A040, basicItem()));
+    public static final Supplier<Item> ZOMBIE_PROSPECTOR_SPAWN_EGG = registerWithTab("zombie_prospector_spawn_egg",
+            () -> new DeferredSpawnEggItem(ProspectModEntities.ZOMBIE_PROSPECTOR, 0x4E7A37, 0x6F5233, basicItem()));
+
+    private static FoodProperties glowingMushroomFood() {
+        return new FoodProperties.Builder()
+                .nutrition(2)
+                .saturationModifier(0.3F)
+                .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 200), 1.0F)
+                .build();
+    }
+
 }

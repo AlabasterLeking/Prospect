@@ -1,6 +1,7 @@
 package alabaster.prospect.common.entity.sparklenode;
 
 import alabaster.prospect.common.item.PanItem;
+import alabaster.prospect.common.utilities.ProspectAdvancements;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
@@ -157,6 +158,10 @@ public class SparkleNodeEntity extends Entity {
         panStack.hurtAndBreak(1, player, slot);
 
         if (!level().isClientSide && level() instanceof ServerLevel server) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                ProspectAdvancements.award(serverPlayer, ProspectAdvancements.PAY_DIRT);
+            }
+
             ResourceLocation tableId = getBiomeLootTable(server);
             ResourceKey<LootTable> lootKey =
                     ResourceKey.create(Registries.LOOT_TABLE, tableId);

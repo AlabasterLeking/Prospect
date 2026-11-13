@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "prospect:block/glowing_mushroom_green"
+  }
+}

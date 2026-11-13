@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "prospect:ruby"
+    }
+  },
+  "pattern": [
+    " R ",
+    "IFI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "prospect:portable_smelter"
+  }
+}

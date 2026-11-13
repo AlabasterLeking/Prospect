@@ -1,0 +1,247 @@
+{
+  "type": "prospect:hillside",
+  "biomes": "#prospect:has_structure/abandoned_mine_fungal",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {},
+  "template": "prospect:abandoned_mine_fungal",
+  "entrance": [
+    6,
+    6,
+    6
+  ],
+  "processors": "prospect:abandoned_mine_fungal",
+  "min_rise": 5,
+  "depth": 10,
+  "tunnel_length": 13,
+  "tunnel_cover": 4,
+  "fill": [
+    2,
+    6,
+    0,
+    10,
+    6,
+    5
+  ],
+  "carve": [
+    0,
+    11,
+    0,
+    12,
+    17,
+    3
+  ],
+  "grade": [
+    2,
+    6,
+    0,
+    10,
+    6,
+    5
+  ],
+  "line": [
+    2,
+    0,
+    7,
+    10,
+    10,
+    35
+  ],
+  "lining": [
+    "minecraft:mossy_cobblestone",
+    "minecraft:stone",
+    "minecraft:andesite",
+    "minecraft:cobblestone"
+  ],
+  "cover": [],
+  "backfill": [
+    [
+      2,
+      7,
+      4,
+      3,
+      9,
+      5
+    ],
+    [
+      9,
+      7,
+      4,
+      10,
+      9,
+      5
+    ]
+  ],
+  "piles": [
+    [
+      -2,
+      7,
+      1,
+      1,
+      9,
+      6
+    ],
+    [
+      11,
+      7,
+      1,
+      14,
+      9,
+      6
+    ]
+  ],
+  "overgrowth": 0.06,
+  "paths": [
+    [
+      5,
+      0,
+      -12,
+      7,
+      0,
+      -1
+    ]
+  ],
+  "rubble_area": [
+    1,
+    0,
+    -10,
+    11,
+    0,
+    -1
+  ],
+  "rubble_exclude": [
+    5,
+    0,
+    -12,
+    7,
+    0,
+    -1
+  ],
+  "rubble_density": 0.08,
+  "extensions": [
+    {
+      "chance": 0.75,
+      "processors": "prospect:abandoned_mine_fungal_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_drift_ore",
+          "offset": [
+            8,
+            6,
+            9
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_drift_rest",
+          "offset": [
+            8,
+            6,
+            7
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_drift_unstable",
+          "offset": [
+            8,
+            6,
+            9
+          ]
+        }
+      ],
+      "group": "drift"
+    },
+    {
+      "chance": 0.6,
+      "processors": "prospect:abandoned_mine_fungal_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_magazine",
+          "offset": [
+            10,
+            0,
+            23
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_loading_bay",
+          "offset": [
+            10,
+            0,
+            23
+          ]
+        }
+      ],
+      "group": "storeroom"
+    },
+    {
+      "chance": 0.65,
+      "processors": "prospect:abandoned_mine_fungal_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_office",
+          "offset": [
+            -9,
+            0,
+            24
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_sump",
+          "offset": [
+            -9,
+            -1,
+            24
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_spider_nest",
+          "offset": [
+            -9,
+            0,
+            24
+          ]
+        },
+        {
+          "template": "prospect:abandoned_mine_ext_nether_portal",
+          "offset": [
+            -9,
+            0,
+            24
+          ]
+        }
+      ],
+      "group": "side_room"
+    },
+    {
+      "chance": 0.5,
+      "processors": "prospect:abandoned_mine_fungal_ext",
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_lower_gallery",
+          "offset": [
+            0,
+            -9,
+            28
+          ]
+        }
+      ],
+      "group": "lower_gallery"
+    },
+    {
+      "options": [
+        {
+          "template": "prospect:abandoned_mine_ext_collapse",
+          "offset": [
+            2,
+            0,
+            32
+          ]
+        }
+      ],
+      "chance": 0.5,
+      "processors": "prospect:abandoned_mine_fungal_ext",
+      "group": "collapse"
+    }
+  ],
+  "variant": "fungal"
+}

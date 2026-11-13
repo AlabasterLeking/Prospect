@@ -4,6 +4,7 @@ import alabaster.prospect.common.registry.ProspectModItems;
 import alabaster.prospect.data.loot.ProspectBlockLoot;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.recipes.*;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
 
@@ -106,13 +107,81 @@ public class CraftingRecipes {
                 .unlockedBy("has_iron_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
                 .save(output);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ProspectModItems.LAUNCH_RAIL.get(), 6)
+                .pattern("I I")
+                .pattern("IPI")
+                .pattern("IRI")
+                .define('I', Items.IRON_INGOT)
+                .define('P', Items.PISTON)
+                .define('R', Items.REDSTONE)
+                .unlockedBy("has_rail", InventoryChangeTrigger.TriggerInstance.hasItems(Items.RAIL))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ProspectModItems.PAYLOAD_RAIL.get(), 6)
+                .pattern("I I")
+                .pattern("IPI")
+                .pattern("IRI")
+                .define('I', Items.IRON_INGOT)
+                .define('P', Items.HEAVY_WEIGHTED_PRESSURE_PLATE)
+                .define('R', Items.REDSTONE)
+                .unlockedBy("has_rail", InventoryChangeTrigger.TriggerInstance.hasItems(Items.RAIL))
+                .save(output);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.DYNAMITE.get(), 4)
                 .requires(Items.TNT)
                 .unlockedBy("has_tnt", InventoryChangeTrigger.TriggerInstance.hasItems(Items.TNT))
                 .save(output);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.STICKY_DYNAMITE.get(), 1)
+                .requires(ProspectModItems.DYNAMITE.get())
+                .requires(Items.SLIME_BALL)
+                .unlockedBy("has_dynamite", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE.get()))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.ALTIMETER.get(), 1)
+                .pattern(" C ")
+                .pattern("CRC")
+                .pattern(" C ")
+                .define('C', Items.COPPER_INGOT)
+                .define('R', Items.REDSTONE)
+                .unlockedBy("has_copper_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.COPPER_INGOT))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.PORTABLE_SMELTER.get(), 1)
+                .pattern(" R ")
+                .pattern("IFI")
+                .pattern("III")
+                .define('R', ProspectModItems.RUBY.get())
+                .define('I', Items.IRON_INGOT)
+                .define('F', Items.FURNACE)
+                .unlockedBy("has_ruby", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.RUBY.get()))
+                .save(output);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.DYNAMITE_BUNDLE.get(), 1)
+                .requires(ProspectModItems.DYNAMITE.get(), 3)
+                .requires(Items.STRING)
+                .unlockedBy("has_dynamite", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE.get()))
+                .save(output);
     }
 
     private static void recipesMaterials(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ProspectModItems.WOODEN_RAIL.get(), 12)
+                .pattern("S S")
+                .pattern("SPS")
+                .pattern("S S")
+                .define('S', Items.STICK)
+                .define('P', ItemTags.PLANKS)
+                .unlockedBy("has_stick", InventoryChangeTrigger.TriggerInstance.hasItems(Items.STICK))
+                .save(output);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.CYAN_DYE, 1)
+                .requires(ProspectModItems.GLOWTHREAD.get())
+                .group("cyan_dye")
+                .unlockedBy("has_glowthread", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.GLOWTHREAD.get()))
+                .save(output, "prospect:cyan_dye_from_glowthread");
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STRING, 1)
+                .requires(ProspectModItems.GLOWTHREAD.get(), 2)
+                .unlockedBy("has_glowthread", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.GLOWTHREAD.get()))
+                .save(output, "prospect:string_from_glowthread");
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ProspectModItems.RUBY.get(), 9)
                 .requires(ProspectModItems.RUBY_BLOCK.get())
                 .unlockedBy("has_ruby_block", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.RUBY_BLOCK.get()))

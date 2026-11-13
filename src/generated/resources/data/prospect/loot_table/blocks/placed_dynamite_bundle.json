@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "conditions": [
+                {
+                  "block": "prospect:placed_dynamite_bundle",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "bundles": "2"
+                  }
+                }
+              ],
+              "count": 2.0,
+              "function": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "conditions": [
+                {
+                  "block": "prospect:placed_dynamite_bundle",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "bundles": "3"
+                  }
+                }
+              ],
+              "count": 3.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "prospect:dynamite_bundle"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "prospect:blocks/placed_dynamite_bundle"
+}

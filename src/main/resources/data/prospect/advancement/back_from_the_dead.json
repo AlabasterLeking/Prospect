@@ -1,0 +1,21 @@
+{
+  "parent": "prospect:struck_a_deal",
+  "display": {
+    "icon": {
+      "id": "minecraft:golden_apple"
+    },
+    "title": {
+      "translate": "advancements.prospect.back_from_the_dead.title"
+    },
+    "description": {
+      "translate": "advancements.prospect.back_from_the_dead.description"
+    },
+    "frame": "goal",
+    "hidden": true
+  },
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

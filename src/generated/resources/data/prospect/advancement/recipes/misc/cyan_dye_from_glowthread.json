@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_glowthread": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:glowthread"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "prospect:cyan_dye_from_glowthread"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_glowthread"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "prospect:cyan_dye_from_glowthread"
+    ]
+  }
+}

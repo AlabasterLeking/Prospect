@@ -27,6 +27,11 @@ public class Prospect {
         ProspectModBlocks.BLOCKS.register(modEventBus);
         ProspectModItems.ITEMS.register(modEventBus);
         ProspectModEntities.ENTITIES.register(modEventBus);
+        ProspectFeatures.FEATURES.register(modEventBus);
+        ProspectStructureTypes.STRUCTURE_TYPES.register(modEventBus);
+        ProspectStructureTypes.PROCESSORS.register(modEventBus);
+        ProspectStructureTypes.PIECES.register(modEventBus);
+        ProspectStructureTypes.PLACEMENTS.register(modEventBus);
         ProspectModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         ProspectParticleTypes.PARTICLE_TYPES.register(modEventBus);
         ProspectRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);

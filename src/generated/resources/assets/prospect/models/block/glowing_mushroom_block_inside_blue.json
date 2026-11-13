@@ -1,0 +1,6 @@
+{
+  "parent": "prospect:block/template_glowing_single_face",
+  "textures": {
+    "texture": "prospect:block/glowing_mushroom_block_inside_blue"
+  }
+}

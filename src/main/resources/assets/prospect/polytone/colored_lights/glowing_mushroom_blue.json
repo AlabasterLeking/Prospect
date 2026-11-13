@@ -1,0 +1,9 @@
+{
+  "targets": [
+    "prospect:glowing_mushroom_blue"
+  ],
+  "colored_light": {
+    "color": "#4FC3FF",
+    "brightness": "0.8 + 0.2 * sin(g.time() * 0.26)"
+  }
+}

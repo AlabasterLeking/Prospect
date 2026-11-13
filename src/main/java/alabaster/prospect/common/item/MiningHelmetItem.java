@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -26,7 +27,7 @@ public class MiningHelmetItem extends Item implements Equipable {
         super(properties.durability(128).attributes(createIronHelmetAttributes()).component(DataComponents.CUSTOM_DATA, defaultLightData()));
     }
 
-    private static CustomData defaultLightData() {
+    public static CustomData defaultLightData() {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean(LIGHT_ON_KEY, true);
         return CustomData.of(tag);
@@ -70,6 +71,14 @@ public class MiningHelmetItem extends Item implements Equipable {
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         return this.swapWithEquipmentSlot(this, level, player, hand);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, level, entity, slot, selected);
+        if (!level.isClientSide() && !stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).contains(LIGHT_ON_KEY)) {
+            setLightOn(stack, true);
+        }
     }
 
     public static boolean isLightOn(ItemStack stack) {

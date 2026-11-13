@@ -1,5 +1,6 @@
 package alabaster.prospect.common.network;
 
+import alabaster.prospect.common.item.SlimeBucketItem;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.item.MiningHelmetItem;
 import alabaster.prospect.common.tag.ProspectModTags;
@@ -55,6 +56,12 @@ public class ProspectModNetworking {
                         cart.prospect$applyJumpState(payload.airborne(), payload.pos(), payload.vel());
                     }
                 })
+        );
+
+        registrar.playToClient(
+                SlimeChunkPayload.TYPE,
+                SlimeChunkPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> SlimeBucketItem.setDancing(payload.inSlimeChunk()))
         );
 
         registrar.playToClient(

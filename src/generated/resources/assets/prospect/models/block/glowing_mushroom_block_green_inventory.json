@@ -1,0 +1,6 @@
+{
+  "parent": "prospect:block/template_glowing_cube_all",
+  "textures": {
+    "all": "prospect:block/glowing_mushroom_block_green"
+  }
+}

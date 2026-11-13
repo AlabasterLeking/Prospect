@@ -1,0 +1,70 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "tries": 20,
+    "xz_spread": 4,
+    "y_spread": 2,
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:weighted_state_provider",
+            "entries": [
+              {
+                "weight": 1,
+                "data": {
+                  "Name": "prospect:glowing_mushroom_blue",
+                  "Properties": {
+                    "glow": "1"
+                  }
+                }
+              },
+              {
+                "weight": 1,
+                "data": {
+                  "Name": "prospect:glowing_mushroom_green",
+                  "Properties": {
+                    "glow": "1"
+                  }
+                }
+              },
+              {
+                "weight": 1,
+                "data": {
+                  "Name": "prospect:glowing_mushroom_purple",
+                  "Properties": {
+                    "glow": "1"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:air"
+              },
+              {
+                "type": "minecraft:would_survive",
+                "state": {
+                  "Name": "prospect:glowing_mushroom_blue",
+                  "Properties": {
+                    "glow": "1"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

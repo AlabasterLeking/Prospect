@@ -422,9 +422,12 @@ public class GunpowderFuseBlock extends Block {
 
         for (Direction dir : Direction.values()) {
             BlockPos offset = pos.relative(dir);
-            if (level.getBlockState(offset).is(Blocks.TNT)) {
+            BlockState target = level.getBlockState(offset);
+            if (target.is(Blocks.TNT)) {
                 TntBlock.explode(level, offset);
                 level.removeBlock(offset, false);
+            } else if (target.getBlock() instanceof AbstractPlacedDynamiteBlock dynamite) {
+                dynamite.prime(level, offset, target, null);
             }
         }
     }

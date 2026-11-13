@@ -3,15 +3,19 @@ package alabaster.prospect.common.registry;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.entity.dynamite.DynamiteEntity;
 import alabaster.prospect.common.entity.prospector.WanderingProspector;
+import alabaster.prospect.common.entity.prospector.ZombieProspector;
 import alabaster.prospect.common.entity.sparklenode.SparkleNodeEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -40,6 +44,17 @@ public class ProspectModEntities {
                             .clientTrackingRange(10)
                             .build(ResourceLocation.fromNamespaceAndPath("prospect", "wandering_prospector").toString()));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<ZombieProspector>> ZOMBIE_PROSPECTOR =
+            ENTITIES.register("zombie_prospector",
+                    () -> EntityType.Builder
+                            .<ZombieProspector>of(ZombieProspector::new, MobCategory.MONSTER)
+                            .sized(0.6f, 1.95f)
+                            .eyeHeight(1.74f)
+                            .passengerAttachments(2.125f)
+                            .ridingOffset(-0.7f)
+                            .clientTrackingRange(8)
+                            .build(ResourceLocation.fromNamespaceAndPath("prospect", "zombie_prospector").toString()));
+
     public static final DeferredHolder<EntityType<?>, EntityType<DynamiteEntity>> DYNAMITE =
             ENTITIES.register("dynamite",
                     () -> EntityType.Builder
@@ -52,5 +67,12 @@ public class ProspectModEntities {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(WANDERING_PROSPECTOR.get(), Mob.createMobAttributes().build());
+        event.put(ZOMBIE_PROSPECTOR.get(), ZombieProspector.createAttributes().build());
+    }
+
+    @SubscribeEvent
+    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(ZOMBIE_PROSPECTOR.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                ZombieProspector::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 }

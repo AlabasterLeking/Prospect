@@ -1,0 +1,104 @@
+{
+  "parent": "prospect:item/altimeter_display",
+  "textures": {
+    "layer0": "prospect:item/altimeter_07"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "prospect:elevation": 0.0
+      },
+      "model": "prospect:item/altimeter_00"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.0333
+      },
+      "model": "prospect:item/altimeter_01"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.1
+      },
+      "model": "prospect:item/altimeter_02"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.1667
+      },
+      "model": "prospect:item/altimeter_03"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.2333
+      },
+      "model": "prospect:item/altimeter_04"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.3
+      },
+      "model": "prospect:item/altimeter_05"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.3667
+      },
+      "model": "prospect:item/altimeter_06"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.4333
+      },
+      "model": "prospect:item/altimeter_07"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.5
+      },
+      "model": "prospect:item/altimeter_08"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.5667
+      },
+      "model": "prospect:item/altimeter_09"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.6333
+      },
+      "model": "prospect:item/altimeter_10"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.7
+      },
+      "model": "prospect:item/altimeter_11"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.7667
+      },
+      "model": "prospect:item/altimeter_12"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.8333
+      },
+      "model": "prospect:item/altimeter_13"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.9
+      },
+      "model": "prospect:item/altimeter_14"
+    },
+    {
+      "predicate": {
+        "prospect:elevation": 0.9667
+      },
+      "model": "prospect:item/altimeter_15"
+    }
+  ]
+}

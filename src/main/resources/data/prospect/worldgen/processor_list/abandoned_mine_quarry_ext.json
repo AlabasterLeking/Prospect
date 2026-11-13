@@ -1,0 +1,243 @@
+{
+  "processors": [
+    {
+      "processor_type": "prospect:uniform_ore",
+      "targets": [
+        "minecraft:raw_copper_block",
+        "minecraft:raw_iron_block"
+      ],
+      "options": [
+        {
+          "data": "minecraft:raw_iron_block",
+          "weight": 45
+        },
+        {
+          "data": "minecraft:coal_block",
+          "weight": 25
+        },
+        {
+          "data": "minecraft:raw_copper_block",
+          "weight": 20
+        },
+        {
+          "data": "minecraft:raw_gold_block",
+          "weight": 10
+        }
+      ],
+      "loot_base": "prospect:chests/abandoned_mine",
+      "loot_by_ore": {
+        "minecraft:raw_copper_block": "prospect:chests/abandoned_mine_copper",
+        "minecraft:raw_iron_block": "prospect:chests/abandoned_mine_iron",
+        "minecraft:raw_gold_block": "prospect:chests/abandoned_mine_gold",
+        "minecraft:coal_block": "prospect:chests/abandoned_mine_coal"
+      }
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "minecraft:lantern",
+              "Properties": {
+                "hanging": "false",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.33
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "prospect:extinguished_lantern",
+            "Properties": {
+              "hanging": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "minecraft:cobweb"
+            },
+            "probability": 0.4
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "prospect:extinguished_lantern",
+              "Properties": {
+                "hanging": "false",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.33
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:lantern",
+            "Properties": {
+              "hanging": "false",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "prospect:wooden_rail",
+              "Properties": {
+                "shape": "east_west",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.08
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "prospect:wooden_rail",
+              "Properties": {
+                "shape": "north_south",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.08
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:air"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "minecraft:lantern",
+              "Properties": {
+                "hanging": "true",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.33
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "prospect:extinguished_lantern",
+            "Properties": {
+              "hanging": "true",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_blockstate_match",
+            "block_state": {
+              "Name": "prospect:extinguished_lantern",
+              "Properties": {
+                "hanging": "true",
+                "waterlogged": "false"
+              }
+            },
+            "probability": 0.33
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:lantern",
+            "Properties": {
+              "hanging": "true",
+              "waterlogged": "false"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:raw_copper_block",
+            "probability": 0.7
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:copper_ore"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:raw_iron_block",
+            "probability": 0.7
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:iron_ore"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:raw_gold_block",
+            "probability": 0.7
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:gold_ore"
+          }
+        },
+        {
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:coal_block",
+            "probability": 0.7
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "output_state": {
+            "Name": "minecraft:coal_ore"
+          }
+        }
+      ]
+    }
+  ]
+}

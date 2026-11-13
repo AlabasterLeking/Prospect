@@ -1,0 +1,20 @@
+{
+  "parent": "prospect:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "advancements.prospect.catching_air.title"
+    },
+    "description": {
+      "translate": "advancements.prospect.catching_air.description"
+    },
+    "frame": "task"
+  },
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

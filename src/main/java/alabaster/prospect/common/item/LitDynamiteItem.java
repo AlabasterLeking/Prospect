@@ -2,7 +2,6 @@ package alabaster.prospect.common.item;
 
 import alabaster.prospect.common.entity.dynamite.DynamiteEntity;
 import alabaster.prospect.common.registry.ProspectDataComponents;
-import alabaster.prospect.common.registry.ProspectModItems;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -27,30 +26,35 @@ import org.jetbrains.annotations.Nullable;
 
 public class LitDynamiteItem extends Item {
 
-    public static final int FUSE_TICKS = 80;
-    public static final float EXPLOSION_POWER = 2.0F;
-
     private static final int FUSE_BAR_COLOR = 0xFF8A1E;
     private static final int FULL_CHARGE_TICKS = 20;
     private static final float MIN_THROW_VELOCITY = 0.5F;
     private static final float MAX_THROW_VELOCITY = 1.5F;
 
-    public LitDynamiteItem(Properties properties) {
+    private final DynamiteType type;
+
+    public LitDynamiteItem(Properties properties, DynamiteType type) {
         super(properties);
+        this.type = type;
     }
 
-    public static ItemStack create() {
-        ItemStack stack = new ItemStack(ProspectModItems.LIT_DYNAMITE.get());
-        stack.set(ProspectDataComponents.FUSE.get(), FUSE_TICKS);
+    public DynamiteType getType() {
+        return type;
+    }
+
+    public static ItemStack create(DynamiteType type) {
+        ItemStack stack = new ItemStack(type.litItem());
+        stack.set(ProspectDataComponents.FUSE.get(), type.fuseTicks);
         return stack;
     }
 
     public static int getFuse(ItemStack stack) {
-        return stack.getOrDefault(ProspectDataComponents.FUSE.get(), FUSE_TICKS);
+        int defaultFuse = stack.getItem() instanceof LitDynamiteItem lit ? lit.type.fuseTicks : DynamiteType.STANDARD.fuseTicks;
+        return stack.getOrDefault(ProspectDataComponents.FUSE.get(), defaultFuse);
     }
 
-    public static void explode(Level level, @Nullable Entity source, double x, double y, double z) {
-        level.explode(source, x, y, z, EXPLOSION_POWER, Level.ExplosionInteraction.TNT);
+    public static void explode(Level level, @Nullable Entity source, double x, double y, double z, DynamiteType type) {
+        level.explode(source, x, y, z, type.explosionPower, Level.ExplosionInteraction.TNT);
     }
 
     public static void playDouse(Level level, double x, double y, double z) {
@@ -81,12 +85,12 @@ public class LitDynamiteItem extends Item {
         if (!(entity instanceof Player player)) return;
 
         float charge = Mth.clamp((float) (getUseDuration(stack, entity) - timeLeft) / FULL_CHARGE_TICKS, 0.0F, 1.0F);
-        float velocity = Mth.lerp(charge, MIN_THROW_VELOCITY, MAX_THROW_VELOCITY);
+        float velocity = Mth.lerp(charge, MIN_THROW_VELOCITY, MAX_THROW_VELOCITY) * type.throwStrength;
 
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
 
         if (!level.isClientSide()) {
-            DynamiteEntity dynamite = new DynamiteEntity(level, player, getFuse(stack));
+            DynamiteEntity dynamite = new DynamiteEntity(level, player, getFuse(stack), type);
             dynamite.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, velocity, 1.0F);
             level.addFreshEntity(dynamite);
             if (player instanceof ServerPlayer serverPlayer) {
@@ -108,14 +112,14 @@ public class LitDynamiteItem extends Item {
         }
 
         if (entity.isUnderWater()) {
-            douseInInventory(stack, level, entity);
+            douseInInventory(stack, level, entity, type);
             return;
         }
 
         int fuse = getFuse(stack) - 1;
         if (fuse <= 0) {
             stack.shrink(1);
-            explode(level, null, entity.getX(), entity.getY(0.5), entity.getZ());
+            explode(level, null, entity.getX(), entity.getY(0.5), entity.getZ(), type);
             if (entity instanceof ServerPlayer serverPlayer) {
                 ProspectAdvancements.award(serverPlayer, ProspectAdvancements.HOT_POTATO);
             }
@@ -135,7 +139,7 @@ public class LitDynamiteItem extends Item {
         }
 
         if (entity.isInWater()) {
-            entity.setItem(new ItemStack(ProspectModItems.DYNAMITE.get(), stack.getCount()));
+            entity.setItem(new ItemStack(type.unlitItem(), stack.getCount()));
             playDouse(level, entity.getX(), entity.getY(), entity.getZ());
             return false;
         }
@@ -143,7 +147,7 @@ public class LitDynamiteItem extends Item {
         int fuse = getFuse(stack) - 1;
         if (fuse <= 0) {
             entity.discard();
-            explode(level, null, entity.getX(), entity.getY(), entity.getZ());
+            explode(level, null, entity.getX(), entity.getY(), entity.getZ(), type);
             return true;
         }
         stack.set(ProspectDataComponents.FUSE.get(), fuse);
@@ -157,7 +161,7 @@ public class LitDynamiteItem extends Item {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return Math.round(13.0F * getFuse(stack) / FUSE_TICKS);
+        return Math.round(13.0F * getFuse(stack) / type.fuseTicks);
     }
 
     @Override
@@ -170,8 +174,8 @@ public class LitDynamiteItem extends Item {
         return slotChanged || !ItemStack.isSameItem(oldStack, newStack);
     }
 
-    private static void douseInInventory(ItemStack stack, Level level, Entity entity) {
-        ItemStack unlit = new ItemStack(ProspectModItems.DYNAMITE.get());
+    private static void douseInInventory(ItemStack stack, Level level, Entity entity, DynamiteType type) {
+        ItemStack unlit = new ItemStack(type.unlitItem());
         playDouse(level, entity.getX(), entity.getEyeY() - 0.4, entity.getZ());
 
         if (entity instanceof LivingEntity living) {

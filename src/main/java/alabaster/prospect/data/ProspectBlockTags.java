@@ -149,6 +149,7 @@ public class ProspectBlockTags extends BlockTagsProvider {
 
     protected void registerBlockMineables() {
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                ProspectModBlocks.EXTINGUISHED_LANTERN.get(),
                 ProspectModBlocks.RUBY_ORE.get(),
                 ProspectModBlocks.SAPPHIRE_ORE.get(),
                 ProspectModBlocks.TOPAZ_ORE.get(),
@@ -157,7 +158,32 @@ public class ProspectBlockTags extends BlockTagsProvider {
                 ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get(),
                 ProspectModBlocks.RUBY_BLOCK.get(),
                 ProspectModBlocks.SAPPHIRE_BLOCK.get(),
-                ProspectModBlocks.TOPAZ_BLOCK.get()
+                ProspectModBlocks.TOPAZ_BLOCK.get(),
+                ProspectModBlocks.CRYSTALLINE_QUARTZ.get(),
+                ProspectModBlocks.BUDDING_QUARTZ.get(),
+                ProspectModBlocks.SMALL_QUARTZ_BUD.get(),
+                ProspectModBlocks.MEDIUM_QUARTZ_BUD.get(),
+                ProspectModBlocks.LARGE_QUARTZ_BUD.get(),
+                ProspectModBlocks.QUARTZ_CLUSTER.get(),
+                ProspectModBlocks.LAUNCH_RAIL.get(),
+                ProspectModBlocks.PAYLOAD_RAIL.get()
+        );
+
+        tag(BlockTags.MINEABLE_WITH_AXE).add(
+                ProspectModBlocks.WOODEN_RAIL.get(),
+                ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_BLUE.get(),
+                ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_GREEN.get(),
+                ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_PURPLE.get()
+        );
+
+        tag(BlockTags.CRYSTAL_SOUND_BLOCKS).add(ProspectModBlocks.CRYSTALLINE_QUARTZ.get(), ProspectModBlocks.BUDDING_QUARTZ.get());
+
+        tag(BlockTags.CLIMBABLE).add(ProspectModBlocks.GLOWTHREAD.get(), ProspectModBlocks.GLOWTHREAD_PLANT.get());
+
+        tag(BlockTags.RAILS).add(
+                ProspectModBlocks.WOODEN_RAIL.get(),
+                ProspectModBlocks.LAUNCH_RAIL.get(),
+                ProspectModBlocks.PAYLOAD_RAIL.get()
         );
     }
 }

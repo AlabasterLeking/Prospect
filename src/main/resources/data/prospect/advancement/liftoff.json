@@ -1,0 +1,20 @@
+{
+  "parent": "prospect:catching_air",
+  "display": {
+    "icon": {
+      "id": "prospect:launch_rail"
+    },
+    "title": {
+      "translate": "advancements.prospect.liftoff.title"
+    },
+    "description": {
+      "translate": "advancements.prospect.liftoff.description"
+    },
+    "frame": "task"
+  },
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

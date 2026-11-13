@@ -29,6 +29,15 @@ public class ProspectItemTags extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
+        // Rails
+        tag(ItemTags.RAILS).add(ProspectModItems.WOODEN_RAIL.get(), ProspectModItems.LAUNCH_RAIL.get(), ProspectModItems.PAYLOAD_RAIL.get());
+
+        // Mushrooms
+        tag(Tags.Items.MUSHROOMS).add(
+                ProspectModItems.GLOWING_MUSHROOM_BLUE.get(),
+                ProspectModItems.GLOWING_MUSHROOM_GREEN.get(),
+                ProspectModItems.GLOWING_MUSHROOM_PURPLE.get());
+
         // Trim Materials
         tag(Tags.Items.GEMS)
                 .add(ProspectModItems.RUBY.get())

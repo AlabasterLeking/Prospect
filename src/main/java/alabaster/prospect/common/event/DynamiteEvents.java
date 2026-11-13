@@ -2,7 +2,7 @@ package alabaster.prospect.common.event;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.entity.dynamite.DynamiteEntity;
-import alabaster.prospect.common.registry.ProspectModItems;
+import alabaster.prospect.common.item.DynamiteType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -41,11 +41,12 @@ public class DynamiteEvents {
 
             if (!(entity instanceof ItemEntity item)) continue;
             ItemStack stack = item.getItem();
-            if (!stack.is(ProspectModItems.DYNAMITE.get()) && !stack.is(ProspectModItems.LIT_DYNAMITE.get())) continue;
+            DynamiteType type = DynamiteType.fromStack(stack);
+            if (type == null) continue;
 
             iterator.remove();
             for (int i = 0; i < stack.getCount(); i++) {
-                DynamiteEntity dynamite = new DynamiteEntity(level, item.getX(), item.getY(), item.getZ(), chainFuse(random));
+                DynamiteEntity dynamite = new DynamiteEntity(level, item.getX(), item.getY(), item.getZ(), chainFuse(random), type);
                 dynamite.setDeltaMovement(random.nextGaussian() * 0.15, 0.2 + random.nextDouble() * 0.2, random.nextGaussian() * 0.15);
                 chained.add(dynamite);
             }

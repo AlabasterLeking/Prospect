@@ -1,0 +1,25 @@
+{
+  "type": "prospect:huge_bell_mushroom",
+  "config": {
+    "cap_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "prospect:glowing_mushroom_block_green",
+        "Properties": {
+          "down": "false"
+        }
+      }
+    },
+    "stem_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:mushroom_stem",
+        "Properties": {
+          "up": "false",
+          "down": "false"
+        }
+      }
+    },
+    "foliage_radius": 2
+  }
+}

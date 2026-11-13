@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "tries": 40,
+    "xz_spread": 6,
+    "y_spread": 3,
+    "feature": {
+      "feature": "prospect:glowshroom_vegetation",
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:air"
+              },
+              {
+                "type": "minecraft:would_survive",
+                "state": {
+                  "Name": "prospect:glowing_mushroom_blue",
+                  "Properties": {
+                    "glow": "1"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

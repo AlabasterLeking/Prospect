@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "bundles=1,facing=east": {
+      "model": "prospect:block/placed_dynamite_bundle_1",
+      "y": 90
+    },
+    "bundles=1,facing=north": {
+      "model": "prospect:block/placed_dynamite_bundle_1"
+    },
+    "bundles=1,facing=south": {
+      "model": "prospect:block/placed_dynamite_bundle_1",
+      "y": 180
+    },
+    "bundles=1,facing=west": {
+      "model": "prospect:block/placed_dynamite_bundle_1",
+      "y": 270
+    },
+    "bundles=2,facing=east": {
+      "model": "prospect:block/placed_dynamite_bundle_2",
+      "y": 90
+    },
+    "bundles=2,facing=north": {
+      "model": "prospect:block/placed_dynamite_bundle_2"
+    },
+    "bundles=2,facing=south": {
+      "model": "prospect:block/placed_dynamite_bundle_2",
+      "y": 180
+    },
+    "bundles=2,facing=west": {
+      "model": "prospect:block/placed_dynamite_bundle_2",
+      "y": 270
+    },
+    "bundles=3,facing=east": {
+      "model": "prospect:block/placed_dynamite_bundle_3",
+      "y": 90
+    },
+    "bundles=3,facing=north": {
+      "model": "prospect:block/placed_dynamite_bundle_3"
+    },
+    "bundles=3,facing=south": {
+      "model": "prospect:block/placed_dynamite_bundle_3",
+      "y": 180
+    },
+    "bundles=3,facing=west": {
+      "model": "prospect:block/placed_dynamite_bundle_3",
+      "y": 270
+    }
+  }
+}

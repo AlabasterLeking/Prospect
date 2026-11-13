@@ -1,5 +1,6 @@
 {
   "values": [
+    "prospect:extinguished_lantern",
     "prospect:ruby_ore",
     "prospect:sapphire_ore",
     "prospect:topaz_ore",
@@ -8,6 +9,14 @@
     "prospect:deepslate_topaz_ore",
     "prospect:ruby_block",
     "prospect:sapphire_block",
-    "prospect:topaz_block"
+    "prospect:topaz_block",
+    "prospect:crystalline_quartz",
+    "prospect:budding_quartz",
+    "prospect:small_quartz_bud",
+    "prospect:medium_quartz_bud",
+    "prospect:large_quartz_bud",
+    "prospect:quartz_cluster",
+    "prospect:launch_rail",
+    "prospect:payload_rail"
   ]
 }

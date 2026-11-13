@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AbstractMinecartMixin",
-    "AbstractMinecartLerpAccessor"
+    "AbstractMinecartLerpAccessor",
+    "TorchBlockMixin",
+    "MultiNoiseBiomeSourceMixin"
   ],
   "client": [
     "AbstractMinecartClientMixin",

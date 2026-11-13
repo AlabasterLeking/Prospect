@@ -1,0 +1,8 @@
+{
+  "parent": "prospect:block/template_split_glowing_cross",
+  "textures": {
+    "base": "prospect:block/glowing_mushroom_green_stem",
+    "glow": "prospect:block/glowing_mushroom_green_cap",
+    "particle": "prospect:block/glowing_mushroom_green"
+  }
+}

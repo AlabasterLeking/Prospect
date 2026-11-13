@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "prospect:block/extinguished_lantern"
+    },
+    "hanging=true": {
+      "model": "prospect:block/extinguished_lantern_hanging"
+    }
+  }
+}

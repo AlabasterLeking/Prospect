@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "features": [
+      {
+        "chance": 0.34,
+        "feature": {
+          "feature": "prospect:huge_glowing_mushroom_blue",
+          "placement": []
+        }
+      },
+      {
+        "chance": 0.5,
+        "feature": {
+          "feature": "prospect:huge_glowing_mushroom_green",
+          "placement": []
+        }
+      }
+    ],
+    "default": {
+      "feature": "prospect:huge_glowing_mushroom_purple",
+      "placement": []
+    }
+  }
+}
