@@ -444,9 +444,9 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
     private static BlockState worn(BlockState state, BlockPos pos, int edge) {
         Block[] mix;
         if (state.is(Blocks.SAND) || state.is(Blocks.SANDSTONE)) {
-            mix = new Block[]{Blocks.SAND, Blocks.COARSE_DIRT, Blocks.SAND, Blocks.GRAVEL, Blocks.SMOOTH_SANDSTONE};
+            mix = new Block[]{Blocks.SAND, Blocks.SMOOTH_SANDSTONE, Blocks.SAND, Blocks.SANDSTONE, Blocks.COARSE_DIRT};
         } else if (state.is(Blocks.RED_SAND) || state.is(BlockTags.TERRACOTTA) || state.is(Blocks.RED_SANDSTONE)) {
-            mix = new Block[]{Blocks.RED_SAND, Blocks.COARSE_DIRT, Blocks.RED_SAND, Blocks.GRAVEL, Blocks.TERRACOTTA};
+            mix = new Block[]{Blocks.RED_SAND, Blocks.COARSE_DIRT, Blocks.RED_SAND, Blocks.RED_SANDSTONE, Blocks.TERRACOTTA};
         } else if (state.is(BlockTags.DIRT)) {
             mix = edge == 0
                     ? new Block[]{Blocks.DIRT_PATH, Blocks.DIRT_PATH, Blocks.COARSE_DIRT, Blocks.DIRT_PATH, Blocks.GRAVEL, Blocks.ROOTED_DIRT, Blocks.COARSE_DIRT, Blocks.PACKED_MUD}
@@ -470,6 +470,16 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
                 BlockPos top = surface(level, column);
                 if (!isGround(level.getBlockState(top)) || !openAbove(level, top)) continue;
                 int pick = hash(column.getX(), column.getZ(), 5) % 20;
+                BlockState ground = level.getBlockState(top);
+                if (ground.is(BlockTags.SAND)) {
+                    boolean red = ground.is(Blocks.RED_SAND);
+                    if (pick < 13) continue;
+                    BlockState piece = pick < 16 ? (red ? Blocks.RED_SANDSTONE_SLAB : Blocks.SANDSTONE_SLAB).defaultBlockState()
+                            : pick < 18 ? (red ? Blocks.RED_SANDSTONE : Blocks.SANDSTONE).defaultBlockState()
+                              : (red ? Blocks.CUT_RED_SANDSTONE : Blocks.SMOOTH_SANDSTONE).defaultBlockState();
+                    level.setBlock(top.above(), piece, Block.UPDATE_CLIENTS);
+                    continue;
+                }
                 if (pick < 6) {
                     level.setBlock(top, Blocks.GRAVEL.defaultBlockState(), Block.UPDATE_CLIENTS);
                 } else if (pick < 9) {
@@ -488,7 +498,9 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
     }
 
     private void boulders(WorldGenLevel level, BoundingBox chunk, Function<BlockPos, BlockPos> toWorld) {
-        BlockState[] rocks = {Blocks.STONE.defaultBlockState(), Blocks.ANDESITE.defaultBlockState(), Blocks.COBBLESTONE.defaultBlockState(), Blocks.TUFF.defaultBlockState(), Blocks.MOSSY_COBBLESTONE.defaultBlockState()};
+        BlockState[] rocks = lining.isEmpty()
+                ? new BlockState[]{Blocks.STONE.defaultBlockState(), Blocks.ANDESITE.defaultBlockState(), Blocks.COBBLESTONE.defaultBlockState(), Blocks.TUFF.defaultBlockState(), Blocks.MOSSY_COBBLESTONE.defaultBlockState()}
+                : lining.stream().map(Block::defaultBlockState).toArray(BlockState[]::new);
         for (BlockPos local : boulders) {
             BlockPos center = toWorld.apply(new BlockPos(local.getX(), 0, local.getZ()));
             int size = 1 + hash(center.getX(), center.getZ(), 11) % 2;
