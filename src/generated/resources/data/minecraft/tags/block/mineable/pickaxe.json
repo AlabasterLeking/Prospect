@@ -17,6 +17,8 @@
     "prospect:large_quartz_bud",
     "prospect:quartz_cluster",
     "prospect:launch_rail",
-    "prospect:payload_rail"
+    "prospect:payload_rail",
+    "prospect:sapphire_glass",
+    "prospect:sapphire_glass_pane"
   ]
 }

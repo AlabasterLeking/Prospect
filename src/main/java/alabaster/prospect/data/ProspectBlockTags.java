@@ -59,6 +59,8 @@ public class ProspectBlockTags extends BlockTagsProvider {
     }
 
     protected void registerMinecraftTags() {
+        tag(BlockTags.IMPERMEABLE).add(ProspectModBlocks.SAPPHIRE_GLASS.get());
+
         tag(BlockTags.INCORRECT_FOR_GOLD_TOOL).add(
                 ProspectModBlocks.RUBY_ORE.get(),
                 ProspectModBlocks.SAPPHIRE_ORE.get(),
@@ -97,6 +99,9 @@ public class ProspectBlockTags extends BlockTagsProvider {
     }
 
     protected void registerCommonTags() {
+        tag(Tags.Blocks.GLASS_BLOCKS).add(ProspectModBlocks.SAPPHIRE_GLASS.get());
+        tag(Tags.Blocks.GLASS_PANES).add(ProspectModBlocks.TINTED_GLASS_PANE.get(), ProspectModBlocks.SAPPHIRE_GLASS_PANE.get());
+
         tag(Tags.Blocks.ORES).add(
                 ProspectModBlocks.RUBY_ORE.get(),
                 ProspectModBlocks.SAPPHIRE_ORE.get(),
@@ -141,6 +146,22 @@ public class ProspectBlockTags extends BlockTagsProvider {
                 ProspectModBlocks.TOPAZ_ORE.get(),
                 ProspectModBlocks.DEEPSLATE_TOPAZ_ORE.get()
         );
+
+        tag(ProspectCommonTags.RUBY_STORAGE_BLOCKS).add(ProspectModBlocks.RUBY_BLOCK.get());
+        tag(ProspectCommonTags.SAPPHIRE_STORAGE_BLOCKS).add(ProspectModBlocks.SAPPHIRE_BLOCK.get());
+        tag(ProspectCommonTags.TOPAZ_STORAGE_BLOCKS).add(ProspectModBlocks.TOPAZ_BLOCK.get());
+
+        tag(Tags.Blocks.STORAGE_BLOCKS).addTags(
+                ProspectCommonTags.RUBY_STORAGE_BLOCKS,
+                ProspectCommonTags.SAPPHIRE_STORAGE_BLOCKS,
+                ProspectCommonTags.TOPAZ_STORAGE_BLOCKS
+        );
+
+        tag(BlockTags.BEACON_BASE_BLOCKS).add(
+                ProspectModBlocks.RUBY_BLOCK.get(),
+                ProspectModBlocks.SAPPHIRE_BLOCK.get(),
+                ProspectModBlocks.TOPAZ_BLOCK.get()
+        );
     }
 
     protected void registerCompatTags() {
@@ -166,7 +187,9 @@ public class ProspectBlockTags extends BlockTagsProvider {
                 ProspectModBlocks.LARGE_QUARTZ_BUD.get(),
                 ProspectModBlocks.QUARTZ_CLUSTER.get(),
                 ProspectModBlocks.LAUNCH_RAIL.get(),
-                ProspectModBlocks.PAYLOAD_RAIL.get()
+                ProspectModBlocks.PAYLOAD_RAIL.get(),
+                ProspectModBlocks.SAPPHIRE_GLASS.get(),
+                ProspectModBlocks.SAPPHIRE_GLASS_PANE.get()
         );
 
         tag(BlockTags.MINEABLE_WITH_AXE).add(
@@ -179,6 +202,12 @@ public class ProspectBlockTags extends BlockTagsProvider {
         tag(BlockTags.CRYSTAL_SOUND_BLOCKS).add(ProspectModBlocks.CRYSTALLINE_QUARTZ.get(), ProspectModBlocks.BUDDING_QUARTZ.get());
 
         tag(BlockTags.CLIMBABLE).add(ProspectModBlocks.GLOWTHREAD.get(), ProspectModBlocks.GLOWTHREAD_PLANT.get());
+
+        tag(BlockTags.FLOWER_POTS).add(
+                ProspectModBlocks.POTTED_GLOWING_MUSHROOM_BLUE.get(),
+                ProspectModBlocks.POTTED_GLOWING_MUSHROOM_GREEN.get(),
+                ProspectModBlocks.POTTED_GLOWING_MUSHROOM_PURPLE.get()
+        );
 
         tag(BlockTags.RAILS).add(
                 ProspectModBlocks.WOODEN_RAIL.get(),

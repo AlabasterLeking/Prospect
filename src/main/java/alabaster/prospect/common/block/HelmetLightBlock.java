@@ -29,6 +29,7 @@ public class HelmetLightBlock extends Block implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final int LIGHT_LEVEL = 15;
+    public static final int QUIET_UPDATE = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
     private static final int CHECK_INTERVAL = 20;
 
     public HelmetLightBlock(Properties properties) {
@@ -93,7 +94,8 @@ public class HelmetLightBlock extends Block implements SimpleWaterloggedBlock {
             level.scheduleTick(pos, this, CHECK_INTERVAL);
             return;
         }
-        level.setBlock(pos, emptyStateFor(state), Block.UPDATE_ALL);
+        BlockState empty = emptyStateFor(state);
+        level.setBlock(pos, empty, empty.isAir() ? QUIET_UPDATE : Block.UPDATE_ALL);
     }
 
     @Override

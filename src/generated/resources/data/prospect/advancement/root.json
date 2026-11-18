@@ -1,0 +1,40 @@
+{
+  "criteria": {
+    "has_pan": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "prospect:copper_pan",
+              "prospect:iron_pan",
+              "prospect:golden_pan",
+              "prospect:netherite_pan"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/block/tuff.png",
+    "description": {
+      "translate": "advancements.prospect.root.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:iron_pan"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.prospect.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_pan"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

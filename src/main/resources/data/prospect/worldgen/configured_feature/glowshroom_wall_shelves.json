@@ -1,0 +1,40 @@
+{
+  "type": "prospect:wall_shelf_patch",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "prospect:glowing_shelf_mushroom_blue",
+            "Properties": {
+              "facing": "north"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "prospect:glowing_shelf_mushroom_green",
+            "Properties": {
+              "facing": "north"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "data": {
+            "Name": "prospect:glowing_shelf_mushroom_purple",
+            "Properties": {
+              "facing": "north"
+            }
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "tries": 20,
+    "xz_spread": 3,
+    "y_spread": 3
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_glass_pane_noside",
+  "ambientocclusion": false,
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "pane": "minecraft:block/tinted_glass"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "prospect:root",
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.hooked_on_a_feeling.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:grappling_hook"
+    },
+    "title": {
+      "translate": "advancements.prospect.hooked_on_a_feeling.title"
+    }
+  },
+  "requirements": [
+    [
+      "triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

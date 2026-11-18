@@ -1,0 +1,26 @@
+{
+  "parent": "prospect:root",
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.fire_in_the_hole.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:dynamite"
+    },
+    "title": {
+      "translate": "advancements.prospect.fire_in_the_hole.title"
+    }
+  },
+  "requirements": [
+    [
+      "triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

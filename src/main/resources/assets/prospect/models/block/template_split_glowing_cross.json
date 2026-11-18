@@ -4,7 +4,7 @@
 	"ambientocclusion": false,
 	"render_type": "minecraft:cutout",
 	"textures": {
-		"particle": ""
+		"particle": "#base"
 	},
 	"elements": [
 		{
@@ -31,6 +31,7 @@
 			"from": [0.8, 0, 8],
 			"to": [15.2, 16, 8],
 			"shade_direction_override": "up",
+			"neoforge_data": {"block_light": 15, "sky_light": 15},
 			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8], "rescale": true},
 			"faces": {
 				"north": {"uv": [0, 0, 16, 16], "texture": "#glow"},
@@ -41,6 +42,7 @@
 			"from": [8, 0, 0.8],
 			"to": [8, 16, 15.2],
 			"shade_direction_override": "up",
+			"neoforge_data": {"block_light": 15, "sky_light": 15},
 			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8], "rescale": true},
 			"faces": {
 				"east": {"uv": [0, 0, 16, 16], "texture": "#glow"},

@@ -51,6 +51,9 @@ public class ProspectBlockLoot extends BlockLootSubProvider {
         dropSelf(ProspectModBlocks.RUBY_BLOCK.get());
         dropSelf(ProspectModBlocks.SAPPHIRE_BLOCK.get());
         dropSelf(ProspectModBlocks.TOPAZ_BLOCK.get());
+        dropSelf(ProspectModBlocks.TINTED_GLASS_PANE.get());
+        dropSelf(ProspectModBlocks.SAPPHIRE_GLASS.get());
+        dropSelf(ProspectModBlocks.SAPPHIRE_GLASS_PANE.get());
         dropSelf(ProspectModBlocks.LAUNCH_RAIL.get());
         dropSelf(ProspectModBlocks.PAYLOAD_RAIL.get());
         dropSelf(ProspectModBlocks.WOODEN_RAIL.get());
@@ -74,6 +77,12 @@ public class ProspectBlockLoot extends BlockLootSubProvider {
         dropSelf(ProspectModBlocks.GLOWING_MUSHROOM_BLUE.get());
         dropSelf(ProspectModBlocks.GLOWING_MUSHROOM_GREEN.get());
         dropSelf(ProspectModBlocks.GLOWING_MUSHROOM_PURPLE.get());
+        dropOther(ProspectModBlocks.GLOWING_SHELF_MUSHROOM_BLUE.get(), ProspectModItems.GLOWING_MUSHROOM_BLUE.get());
+        dropOther(ProspectModBlocks.GLOWING_SHELF_MUSHROOM_GREEN.get(), ProspectModItems.GLOWING_MUSHROOM_GREEN.get());
+        dropOther(ProspectModBlocks.GLOWING_SHELF_MUSHROOM_PURPLE.get(), ProspectModItems.GLOWING_MUSHROOM_PURPLE.get());
+        dropPottedContents(ProspectModBlocks.POTTED_GLOWING_MUSHROOM_BLUE.get());
+        dropPottedContents(ProspectModBlocks.POTTED_GLOWING_MUSHROOM_GREEN.get());
+        dropPottedContents(ProspectModBlocks.POTTED_GLOWING_MUSHROOM_PURPLE.get());
         add(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_BLUE.get(), block -> createMushroomBlockDrop(block, ProspectModItems.GLOWING_MUSHROOM_BLUE.get()));
         add(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_GREEN.get(), block -> createMushroomBlockDrop(block, ProspectModItems.GLOWING_MUSHROOM_GREEN.get()));
         add(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_PURPLE.get(), block -> createMushroomBlockDrop(block, ProspectModItems.GLOWING_MUSHROOM_PURPLE.get()));

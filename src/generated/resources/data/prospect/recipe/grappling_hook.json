@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "tag": "prospect:ropes"
+    }
+  },
+  "pattern": [
+    " II",
+    " RI",
+    "R  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "prospect:grappling_hook"
+  }
+}

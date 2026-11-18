@@ -1,7 +1,7 @@
 {
   "values": [
-    "prospect:ruby",
-    "prospect:sapphire",
-    "prospect:topaz"
+    "#c:gems/ruby",
+    "#c:gems/sapphire",
+    "#c:gems/topaz"
   ]
 }

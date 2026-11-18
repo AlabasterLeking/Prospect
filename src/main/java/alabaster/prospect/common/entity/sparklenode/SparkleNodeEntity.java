@@ -1,6 +1,7 @@
 package alabaster.prospect.common.entity.sparklenode;
 
 import alabaster.prospect.common.item.PanItem;
+import alabaster.prospect.common.registry.ProspectSounds;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -15,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -43,6 +45,7 @@ public class SparkleNodeEntity extends Entity {
             SynchedEntityData.defineId(SparkleNodeEntity.class, EntityDataSerializers.BOOLEAN);
 
     private static final Map<Integer, Boolean> CLIENT_HARVEST_LAVA = new HashMap<>();
+    private static final int SHIMMER_CHANCE = 80;
 
     private int lifetime = 1200; // 1 minutes default
 
@@ -64,6 +67,10 @@ public class SparkleNodeEntity extends Entity {
 
             var particle = isInLava() ? ParticleTypes.SMALL_FLAME : ParticleTypes.WAX_OFF;
             level().addParticle(particle, x, y, z, 0, 0.01, 0);
+        }
+
+        if (level().isClientSide() && random.nextInt(SHIMMER_CHANCE) == 0) {
+            level().playLocalSound(getX(), getY(), getZ(), ProspectSounds.SPARKLE_NODE_SHIMMER.get(), SoundSource.AMBIENT, 0.5F, 0.9F + random.nextFloat() * 0.3F, false);
         }
 
         if (getAge() >= lifetime) {

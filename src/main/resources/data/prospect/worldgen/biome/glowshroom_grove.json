@@ -28,9 +28,9 @@
     },
     "particle": {
       "options": {
-        "type": "minecraft:glow"
+        "type": "prospect:glow_spore"
       },
-      "probability": 0.0015
+      "probability": 0.004
     },
     "ambient_sound": {
       "sound_id": "prospect:ambient.glowshroom_grove.loop"
@@ -92,12 +92,15 @@
       "minecraft:spring_lava"
     ],
     [
+      "prospect:glowshroom_pool",
       "minecraft:glow_lichen",
       "prospect:glowthread",
       "prospect:glowshroom_mycelium",
       "prospect:glowshroom_floor",
       "prospect:glowshroom_huge_mushrooms",
-      "prospect:glowshroom_medium_mushrooms"
+      "prospect:glowshroom_medium_mushrooms",
+      "prospect:glowshroom_huge_shelves",
+      "prospect:glowshroom_wall_shelves"
     ],
     [
       "minecraft:freeze_top_layer"
@@ -117,7 +120,14 @@
     "creature": [],
     "misc": [],
     "monster": [],
-    "underground_water_creature": [],
+    "underground_water_creature": [
+      {
+        "type": "minecraft:glow_squid",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ],
     "water_ambient": [],
     "water_creature": []
   }

@@ -1,0 +1,26 @@
+{
+  "parent": "prospect:root",
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.pay_dirt.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:copper_pan"
+    },
+    "title": {
+      "translate": "advancements.prospect.pay_dirt.title"
+    }
+  },
+  "requirements": [
+    [
+      "triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

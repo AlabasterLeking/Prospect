@@ -23,11 +23,20 @@
 		},
 		{
 			"from": [14, 0, 6.5],
-			"to": [19, 3, 6.5],
+			"to": [18, 3, 6.5],
 			"shade_direction_override": "up",
 			"faces": {
-				"north": {"uv": [6, 0, 9, 5], "rotation": 90, "texture": "#0"},
-				"south": {"uv": [9, 0, 6, 5], "rotation": 270, "texture": "#0"}
+				"north": {"uv": [6, 1, 9, 5], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [9, 1, 6, 5], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"from": [14, 1.5, 5],
+			"to": [18, 1.5, 8],
+			"shade_direction_override": "up",
+			"faces": {
+				"up": {"uv": [6, 1, 9, 5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [6, 1, 9, 5], "rotation": 90, "texture": "#0"}
 			}
 		}
 	]

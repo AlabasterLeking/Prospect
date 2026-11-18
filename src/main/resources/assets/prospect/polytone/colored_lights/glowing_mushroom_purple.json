@@ -1,6 +1,8 @@
 {
   "targets": [
-    "prospect:glowing_mushroom_purple"
+    "prospect:glowing_mushroom_purple",
+    "prospect:potted_glowing_mushroom_purple",
+    "prospect:glowing_shelf_mushroom_purple"
   ],
   "colored_light": {
     "color": "#B57BFF",

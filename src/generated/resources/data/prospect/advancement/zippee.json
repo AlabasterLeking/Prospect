@@ -1,0 +1,26 @@
+{
+  "parent": "prospect:hooked_on_a_feeling",
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.zippee.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:lead"
+    },
+    "title": {
+      "translate": "advancements.prospect.zippee.title"
+    }
+  },
+  "requirements": [
+    [
+      "triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

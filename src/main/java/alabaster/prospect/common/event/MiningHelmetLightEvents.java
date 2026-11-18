@@ -82,7 +82,7 @@ public class MiningHelmetLightEvents {
             BlockState current = level.getBlockState(placeAt);
             boolean water = current.is(Blocks.WATER) || current.is(ProspectModBlocks.HELMET_LIGHT.get()) && current.getValue(HelmetLightBlock.WATERLOGGED);
             ACTIVE_LIGHTS.put(id, GlobalPos.of(level.dimension(), placeAt));
-            level.setBlock(placeAt, ProspectModBlocks.HELMET_LIGHT.get().defaultBlockState().setValue(HelmetLightBlock.WATERLOGGED, water), Block.UPDATE_CLIENTS);
+            level.setBlock(placeAt, ProspectModBlocks.HELMET_LIGHT.get().defaultBlockState().setValue(HelmetLightBlock.WATERLOGGED, water), HelmetLightBlock.QUIET_UPDATE);
         }
 
         if (previous != null && !previous.equals(ACTIVE_LIGHTS.get(id))) {
@@ -171,6 +171,6 @@ public class MiningHelmetLightEvents {
         if (!state.is(ProspectModBlocks.HELMET_LIGHT.get())) return;
 
         BlockState replacement = HelmetLightBlock.emptyStateFor(state);
-        level.setBlock(light.pos(), replacement, replacement.isAir() ? Block.UPDATE_CLIENTS : Block.UPDATE_ALL);
+        level.setBlock(light.pos(), replacement, replacement.isAir() ? HelmetLightBlock.QUIET_UPDATE : Block.UPDATE_ALL);
     }
 }

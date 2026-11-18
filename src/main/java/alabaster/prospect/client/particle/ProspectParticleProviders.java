@@ -14,5 +14,6 @@ public class ProspectParticleProviders {
     public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ProspectParticleTypes.TOPAZ_GLINT.get(), TopazGlintParticleProvider::new);
         event.registerSpriteSet(ProspectParticleTypes.SPARK.get(), SparkParticleProvider::new);
+        event.registerSpriteSet(ProspectParticleTypes.GLOW_SPORE.get(), GlowSporeParticleProvider::new);
     }
 }

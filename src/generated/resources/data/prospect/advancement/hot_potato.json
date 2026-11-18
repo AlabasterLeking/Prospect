@@ -1,0 +1,27 @@
+{
+  "parent": "prospect:fire_in_the_hole",
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.hot_potato.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "prospect:lit_dynamite"
+    },
+    "title": {
+      "translate": "advancements.prospect.hot_potato.title"
+    }
+  },
+  "requirements": [
+    [
+      "triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,37 @@
+{
+  "parent": "prospect:root",
+  "criteria": {
+    "traded": {
+      "conditions": {
+        "villager": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "prospect:wandering_prospector"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:villager_trade"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.struck_a_deal.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:wandering_prospector_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.prospect.struck_a_deal.title"
+    }
+  },
+  "requirements": [
+    [
+      "traded"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

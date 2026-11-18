@@ -1,0 +1,33 @@
+{
+  "parent": "prospect:root",
+  "criteria": {
+    "has_mining_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:mining_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.bright_idea.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:mining_helmet"
+    },
+    "title": {
+      "translate": "advancements.prospect.bright_idea.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_mining_helmet"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,60 @@
+{
+  "parent": "prospect:rockhound",
+  "criteria": {
+    "ruby": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:ruby"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "sapphire": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:sapphire"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "topaz": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:topaz"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.gem_collector.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "prospect:ruby"
+    },
+    "title": {
+      "translate": "advancements.prospect.gem_collector.title"
+    }
+  },
+  "requirements": [
+    [
+      "ruby"
+    ],
+    [
+      "sapphire"
+    ],
+    [
+      "topaz"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

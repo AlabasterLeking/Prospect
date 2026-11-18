@@ -1,0 +1,34 @@
+{
+  "parent": "prospect:pay_dirt",
+  "criteria": {
+    "has_netherite_pan": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:netherite_pan"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.trial_by_fire.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "prospect:netherite_pan"
+    },
+    "title": {
+      "translate": "advancements.prospect.trial_by_fire.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_netherite_pan"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

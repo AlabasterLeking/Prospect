@@ -1,5 +1,7 @@
 package alabaster.prospect.common.network;
 
+import alabaster.prospect.common.entity.grapple.GrapplingHookEntity;
+import alabaster.prospect.common.event.GrappleEvents;
 import alabaster.prospect.common.item.SlimeBucketItem;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.item.MiningHelmetItem;
@@ -48,6 +50,37 @@ public class ProspectModNetworking {
                 })
         );
 
+        registrar.playToServer(
+                ZiplineRidePayload.TYPE,
+                ZiplineRidePayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        GrappleEvents.setRiding(serverPlayer, payload.ziplineId());
+                    }
+                })
+        );
+
+        registrar.playToServer(
+                GrappleReelPayload.TYPE,
+                GrappleReelPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        GrapplingHookEntity hook = GrapplingHookEntity.active(serverPlayer);
+                        if (hook != null) hook.setReel(payload.direction());
+                    }
+                })
+        );
+
+        registrar.playToServer(
+                ZiplineBreakPayload.TYPE,
+                ZiplineBreakPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        GrappleEvents.breakLine(serverPlayer, payload.ziplineId());
+                    }
+                })
+        );
+
         registrar.playToClient(
                 MinecartJumpingPayload.TYPE,
                 MinecartJumpingPayload.STREAM_CODEC,
@@ -56,6 +89,20 @@ public class ProspectModNetworking {
                         cart.prospect$applyJumpState(payload.airborne(), payload.pos(), payload.vel());
                     }
                 })
+        );
+
+        registrar.playToClient(
+                RopePendingPayload.TYPE,
+                RopePendingPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() ->
+                        alabaster.prospect.common.event.GrappleClientEvents.setPending(payload.fence(), payload.maxLength()))
+        );
+
+        registrar.playToClient(
+                ZiplineRidingPayload.TYPE,
+                ZiplineRidingPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() ->
+                        alabaster.prospect.common.event.GrappleClientEvents.setRiding(payload.playerId(), payload.riding()))
         );
 
         registrar.playToClient(

@@ -7,6 +7,8 @@ import alabaster.prospect.common.block.ExtinguishedTorchBlock;
 import alabaster.prospect.common.block.ExtinguishedWallTorchBlock;
 import alabaster.prospect.common.block.GlowColor;
 import alabaster.prospect.common.block.GlowingMushroomBlock;
+import alabaster.prospect.common.block.GlowingMushroomCapBlock;
+import alabaster.prospect.common.block.GlowingShelfMushroomBlock;
 import alabaster.prospect.common.block.GlowthreadBlock;
 import alabaster.prospect.common.block.GlowthreadPlantBlock;
 import alabaster.prospect.common.block.GunpowderFuseBlock;
@@ -16,6 +18,8 @@ import alabaster.prospect.common.block.WoodenRailBlock;
 import alabaster.prospect.common.block.PayloadRailBlock;
 import alabaster.prospect.common.block.PlacedDynamiteBlock;
 import alabaster.prospect.common.block.PlacedDynamiteBundleBlock;
+import alabaster.prospect.common.block.TintedGlassPaneBlock;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -50,6 +54,14 @@ public class ProspectModBlocks {
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)));
     public static final Supplier<Block> TOPAZ_BLOCK = BLOCKS.register("topaz_block",
             () -> new Block(Block.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)));
+
+    // Glass
+    public static final Supplier<Block> TINTED_GLASS_PANE = BLOCKS.register("tinted_glass_pane",
+            () -> new TintedGlassPaneBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS_PANE).mapColor(MapColor.COLOR_GRAY)));
+    public static final Supplier<Block> SAPPHIRE_GLASS = BLOCKS.register("sapphire_glass",
+            () -> new TransparentBlock(sapphireGlassProperties(Blocks.GLASS)));
+    public static final Supplier<Block> SAPPHIRE_GLASS_PANE = BLOCKS.register("sapphire_glass_pane",
+            () -> new IronBarsBlock(sapphireGlassProperties(Blocks.GLASS_PANE)));
 
     // Quartz Geodes
     public static final Supplier<Block> CRYSTALLINE_QUARTZ = BLOCKS.register("crystalline_quartz",
@@ -94,9 +106,15 @@ public class ProspectModBlocks {
     public static final Supplier<Block> GLOWING_MUSHROOM_BLOCK_BLUE = glowingMushroomBlock(GlowColor.BLUE);
     public static final Supplier<Block> GLOWING_MUSHROOM_BLOCK_GREEN = glowingMushroomBlock(GlowColor.GREEN);
     public static final Supplier<Block> GLOWING_MUSHROOM_BLOCK_PURPLE = glowingMushroomBlock(GlowColor.PURPLE);
+    public static final Supplier<Block> GLOWING_SHELF_MUSHROOM_BLUE = glowingShelfMushroom(GlowColor.BLUE);
+    public static final Supplier<Block> GLOWING_SHELF_MUSHROOM_GREEN = glowingShelfMushroom(GlowColor.GREEN);
+    public static final Supplier<Block> GLOWING_SHELF_MUSHROOM_PURPLE = glowingShelfMushroom(GlowColor.PURPLE);
+    public static final Supplier<Block> POTTED_GLOWING_MUSHROOM_BLUE = pottedGlowingMushroom(GlowColor.BLUE, GLOWING_MUSHROOM_BLUE);
+    public static final Supplier<Block> POTTED_GLOWING_MUSHROOM_GREEN = pottedGlowingMushroom(GlowColor.GREEN, GLOWING_MUSHROOM_GREEN);
+    public static final Supplier<Block> POTTED_GLOWING_MUSHROOM_PURPLE = pottedGlowingMushroom(GlowColor.PURPLE, GLOWING_MUSHROOM_PURPLE);
 
     public static final Supplier<Block> GLOWTHREAD = BLOCKS.register("glowthread",
-            () -> new GlowthreadBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WEEPING_VINES).mapColor(MapColor.COLOR_LIGHT_BLUE).sound(SoundType.CAVE_VINES).lightLevel(state -> 6)));
+            () -> new GlowthreadBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WEEPING_VINES).mapColor(MapColor.COLOR_LIGHT_BLUE).sound(SoundType.CAVE_VINES).lightLevel(state -> 10)));
     public static final Supplier<Block> GLOWTHREAD_PLANT = BLOCKS.register("glowthread_plant",
             () -> new GlowthreadPlantBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WEEPING_VINES_PLANT).mapColor(MapColor.COLOR_LIGHT_BLUE).sound(SoundType.CAVE_VINES).lightLevel(state -> 1)));
 
@@ -109,6 +127,10 @@ public class ProspectModBlocks {
                     .noOcclusion()
                     .pushReaction(PushReaction.DESTROY)
                     .lightLevel(state -> HelmetLightBlock.LIGHT_LEVEL)));
+
+    private static BlockBehaviour.Properties sapphireGlassProperties(Block template) {
+        return BlockBehaviour.Properties.ofFullCopy(template).mapColor(MapColor.COLOR_BLUE).strength(1.5F, 1200.0F).requiresCorrectToolForDrops();
+    }
 
     private static BlockBehaviour.Properties placedDynamiteProperties() {
         return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).instabreak().sound(SoundType.GRASS).noOcclusion().pushReaction(PushReaction.DESTROY);
@@ -124,8 +146,38 @@ public class ProspectModBlocks {
                         .lightLevel(state -> GlowingMushroomBlock.BASE_LIGHT + state.getValue(GlowingMushroomBlock.GLOW))));
     }
 
+    private static Supplier<Block> glowingShelfMushroom(GlowColor color) {
+        MapColor mapColor = switch (color) {
+            case BLUE -> MapColor.COLOR_LIGHT_BLUE;
+            case GREEN -> MapColor.COLOR_LIGHT_GREEN;
+            case PURPLE -> MapColor.COLOR_PURPLE;
+        };
+        return BLOCKS.register("glowing_shelf_mushroom_" + color.getSerializedName(),
+                () -> new GlowingShelfMushroomBlock(color, ProspectFeatures.hugeGlowingShelf(color), BlockBehaviour.Properties.of()
+                        .mapColor(mapColor)
+                        .noCollission()
+                        .instabreak()
+                        .noOcclusion()
+                        .sound(SoundType.FUNGUS)
+                        .pushReaction(PushReaction.DESTROY)
+                        .lightLevel(state -> GlowingMushroomBlock.BASE_LIGHT + 1)));
+    }
+
+    private static Supplier<Block> pottedGlowingMushroom(GlowColor color, Supplier<Block> mushroom) {
+        return BLOCKS.register("potted_glowing_mushroom_" + color.getSerializedName(),
+                () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, mushroom, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_BROWN_MUSHROOM)
+                        .lightLevel(state -> GlowingMushroomBlock.BASE_LIGHT + 1)));
+    }
+
+    public static void registerPottedPlants() {
+        FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
+        pot.addPlant(BuiltInRegistries.BLOCK.getKey(GLOWING_MUSHROOM_BLUE.get()), POTTED_GLOWING_MUSHROOM_BLUE);
+        pot.addPlant(BuiltInRegistries.BLOCK.getKey(GLOWING_MUSHROOM_GREEN.get()), POTTED_GLOWING_MUSHROOM_GREEN);
+        pot.addPlant(BuiltInRegistries.BLOCK.getKey(GLOWING_MUSHROOM_PURPLE.get()), POTTED_GLOWING_MUSHROOM_PURPLE);
+    }
+
     private static Supplier<Block> glowingMushroomBlock(GlowColor color) {
         return BLOCKS.register("glowing_mushroom_block_" + color.getSerializedName(),
-                () -> new HugeMushroomBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK).lightLevel(state -> 10)));
+                () -> new GlowingMushroomCapBlock(color, BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK).lightLevel(state -> 10)));
     }
 }

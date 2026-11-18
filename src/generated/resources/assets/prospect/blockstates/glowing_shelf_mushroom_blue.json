@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "prospect:block/glowing_shelf_mushroom_blue",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "prospect:block/glowing_shelf_mushroom_blue",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "prospect:block/glowing_shelf_mushroom_blue"
+    },
+    "facing=west": {
+      "model": "prospect:block/glowing_shelf_mushroom_blue",
+      "y": 90
+    }
+  }
+}

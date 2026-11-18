@@ -35,7 +35,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new ProspectItemTags(output, lookupProvider, blockTags.contentsGetter(), helper));
         generator.addProvider(event.includeServer(), new ProspectBiomeTags(output, lookupProvider, helper));
         generator.addProvider(event.includeServer(), new Recipes(output, lookupProvider));
-        //generator.addProvider(event.includeServer(), new Advancements(output, lookupProvider, helper));
+        generator.addProvider(event.includeServer(), new Advancements(output, lookupProvider, helper));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Collections.emptySet(), List.of(
                 new LootTableProvider.SubProviderEntry(ProspectBlockLoot::new, LootContextParamSets.BLOCK),
                 new LootTableProvider.SubProviderEntry(ProspectEntityLoot::new, LootContextParamSets.ENTITY)

@@ -22,6 +22,8 @@ public class Config {
     public static ModConfigSpec.BooleanValue ENABLE_ABANDONED_MINES;
     public static ModConfigSpec.DoubleValue ABANDONED_MINE_CHANCE;
     public static ModConfigSpec.BooleanValue TORCHES_EXTINGUISH_IN_RAIN;
+    public static ModConfigSpec.BooleanValue DYNAMITE_DESTROYS_BLOCKS;
+    public static ModConfigSpec.BooleanValue DYNAMITE_FOLLOWS_MOB_GRIEFING;
     public static final Map<String, ModConfigSpec.BooleanValue> CAMP_VARIANTS = new HashMap<>();
     public static final Map<String, ModConfigSpec.BooleanValue> MINE_VARIANTS = new HashMap<>();
     public static final Map<String, ModConfigSpec.DoubleValue> MINE_EXTENSION_CHANCES = new HashMap<>();
@@ -31,6 +33,10 @@ public class Config {
     public static ModConfigSpec.BooleanValue MINE_THEMED_LOOT;
     public static final Map<String, Feature> FEATURES = new HashMap<>();
     public static ModConfigSpec.BooleanValue ZOMBIE_PROSPECTOR_SPAWNS;
+    public static ModConfigSpec.BooleanValue GRAPPLE_PULL_PLAYERS;
+    public static ModConfigSpec.DoubleValue GRAPPLE_MAX_LENGTH;
+    public static ModConfigSpec.DoubleValue GRAPPLE_THROWN_MAX_LENGTH;
+    public static ModConfigSpec.DoubleValue ZIPLINE_MAX_LENGTH;
 
     public record Feature(ModConfigSpec.BooleanValue enabled, ModConfigSpec.IntValue rarity) {
     }
@@ -95,6 +101,15 @@ public class Config {
         TORCHES_EXTINGUISH_IN_RAIN = COMMON_BUILDER
                 .comment("Whether torches left out in the rain slowly go out, leaving Extinguished Torches that can be relit with flint and steel.")
                 .define("torchesExtinguishInRain", false);
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.push("dynamite");
+        DYNAMITE_DESTROYS_BLOCKS = COMMON_BUILDER
+                .comment("Whether dynamite explosions break blocks. When disabled, dynamite still damages and knocks back entities.")
+                .define("destroysBlocks", true);
+        DYNAMITE_FOLLOWS_MOB_GRIEFING = COMMON_BUILDER
+                .comment("Whether dynamite only breaks blocks while the mobGriefing game rule is on.")
+                .define("followsMobGriefing", false);
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.push("structures");
@@ -177,6 +192,21 @@ public class Config {
         ZOMBIE_PROSPECTOR_SPAWNS = COMMON_BUILDER
                 .comment("Whether Zombie Prospectors spawn naturally underground. The ones trapped in mines are set under structures.mineDetails.")
                 .define("zombieProspectorSpawns", true);
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.push("grappling");
+        GRAPPLE_PULL_PLAYERS = COMMON_BUILDER
+                .comment("Whether a grappling hook can latch onto other players and pull them. Mobs can always be pulled.")
+                .define("pullPlayers", true);
+        GRAPPLE_MAX_LENGTH = COMMON_BUILDER
+                .comment("How much rope a crossbow-fired hook can let out. A hook that lands farther away can always let out to where it landed.")
+                .defineInRange("maxLength", 48.0, 8.0, 128.0);
+        GRAPPLE_THROWN_MAX_LENGTH = COMMON_BUILDER
+                .comment("How much rope a hand-thrown hook can let out. A hook that lands farther away can always let out to where it landed.")
+                .defineInRange("thrownMaxLength", 16.0, 4.0, 128.0);
+        ZIPLINE_MAX_LENGTH = COMMON_BUILDER
+                .comment("The longest zipline or fence-to-fence rope that can be tied.")
+                .defineInRange("ziplineMaxLength", 64.0, 4.0, 256.0);
         COMMON_BUILDER.pop();
 
         COMMON_CONFIG = COMMON_BUILDER.build();

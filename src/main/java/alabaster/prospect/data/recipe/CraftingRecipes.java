@@ -1,8 +1,10 @@
 package alabaster.prospect.data.recipe;
 
 import alabaster.prospect.common.registry.ProspectModItems;
+import alabaster.prospect.common.tag.ProspectModTags;
 import alabaster.prospect.data.loot.ProspectBlockLoot;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
@@ -36,6 +38,26 @@ public class CraftingRecipes {
                 .pattern("###")
                 .define('#', ProspectModItems.TOPAZ.get())
                 .unlockedBy("has_topaz", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.TOPAZ.get()))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ProspectModItems.TINTED_GLASS_PANE.get(), 16)
+                .pattern("###")
+                .pattern("###")
+                .define('#', Items.TINTED_GLASS)
+                .unlockedBy("has_tinted_glass", InventoryChangeTrigger.TriggerInstance.hasItems(Items.TINTED_GLASS))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ProspectModItems.SAPPHIRE_GLASS.get(), 8)
+                .pattern("GGG")
+                .pattern("GSG")
+                .pattern("GGG")
+                .define('G', Items.GLASS)
+                .define('S', ProspectModItems.SAPPHIRE.get())
+                .unlockedBy("has_sapphire", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.SAPPHIRE.get()))
+                .save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ProspectModItems.SAPPHIRE_GLASS_PANE.get(), 16)
+                .pattern("###")
+                .pattern("###")
+                .define('#', ProspectModItems.SAPPHIRE_GLASS.get())
+                .unlockedBy("has_sapphire_glass", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.SAPPHIRE_GLASS.get()))
                 .save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Items.CALCITE, 2)
                 .pattern("BS")
@@ -138,6 +160,23 @@ public class CraftingRecipes {
                 .unlockedBy("has_dynamite", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE.get()))
                 .save(output);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.GRAPPLING_HOOK.get(), 1)
+                .pattern(" II")
+                .pattern(" RI")
+                .pattern("R  ")
+                .define('I', Items.IRON_INGOT)
+                .define('R', ProspectModTags.ROPES)
+                .unlockedBy("has_rope", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ProspectModTags.ROPES)))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ProspectModItems.CRYSTALLINE_QUARTZ.get(), 1)
+                .pattern(" Q ")
+                .pattern("Q Q")
+                .pattern(" Q ")
+                .define('Q', Items.QUARTZ)
+                .unlockedBy("has_quartz", InventoryChangeTrigger.TriggerInstance.hasItems(Items.QUARTZ))
+                .save(output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.ALTIMETER.get(), 1)
                 .pattern(" C ")
                 .pattern("CRC")
@@ -165,6 +204,14 @@ public class CraftingRecipes {
     }
 
     private static void recipesMaterials(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.FOOD, ProspectModItems.ROCK_CANDY.get(), 1)
+                .pattern("  G")
+                .pattern(" G ")
+                .pattern("S  ")
+                .define('G', Tags.Items.GEMS)
+                .define('S', Items.STICK)
+                .unlockedBy("has_gem", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(Tags.Items.GEMS)))
+                .save(output);
         ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ProspectModItems.WOODEN_RAIL.get(), 12)
                 .pattern("S S")
                 .pattern("SPS")

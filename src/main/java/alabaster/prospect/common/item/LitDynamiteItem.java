@@ -1,5 +1,6 @@
 package alabaster.prospect.common.item;
 
+import alabaster.prospect.Config;
 import alabaster.prospect.common.entity.dynamite.DynamiteEntity;
 import alabaster.prospect.common.registry.ProspectDataComponents;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +56,12 @@ public class LitDynamiteItem extends Item {
     }
 
     public static void explode(Level level, @Nullable Entity source, double x, double y, double z, DynamiteType type) {
-        level.explode(source, x, y, z, type.explosionPower, Level.ExplosionInteraction.TNT);
+        level.explode(source, x, y, z, type.explosionPower, destroysBlocks(level) ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
+    }
+
+    public static boolean destroysBlocks(Level level) {
+        if (!Config.DYNAMITE_DESTROYS_BLOCKS.get()) return false;
+        return !Config.DYNAMITE_FOLLOWS_MOB_GRIEFING.get() || level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
     }
 
     public static void playDouse(Level level, double x, double y, double z) {

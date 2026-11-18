@@ -48,6 +48,9 @@ public class BlockStates extends BlockStateProvider
         this.simpleBlock(ProspectModBlocks.RUBY_BLOCK.get());
         this.simpleBlock(ProspectModBlocks.SAPPHIRE_BLOCK.get());
         this.simpleBlock(ProspectModBlocks.TOPAZ_BLOCK.get());
+        this.simpleBlock(ProspectModBlocks.SAPPHIRE_GLASS.get(), models().cubeAll("sapphire_glass", resourceBlock("sapphire_glass")).renderType("translucent"));
+        tintedPane((IronBarsBlock) ProspectModBlocks.TINTED_GLASS_PANE.get());
+        paneBlockWithRenderType((IronBarsBlock) ProspectModBlocks.SAPPHIRE_GLASS_PANE.get(), resourceBlock("sapphire_glass"), resourceBlock("sapphire_glass_pane_top"), "translucent");
         this.simpleBlock(ProspectModBlocks.CRYSTALLINE_QUARTZ.get());
         this.simpleBlock(ProspectModBlocks.BUDDING_QUARTZ.get());
         crystalBud(ProspectModBlocks.SMALL_QUARTZ_BUD.get());
@@ -58,6 +61,12 @@ public class BlockStates extends BlockStateProvider
         glowingMushroom(ProspectModBlocks.GLOWING_MUSHROOM_BLUE.get());
         glowingMushroom(ProspectModBlocks.GLOWING_MUSHROOM_GREEN.get());
         glowingMushroom(ProspectModBlocks.GLOWING_MUSHROOM_PURPLE.get());
+        glowingShelf(ProspectModBlocks.GLOWING_SHELF_MUSHROOM_BLUE.get());
+        glowingShelf(ProspectModBlocks.GLOWING_SHELF_MUSHROOM_GREEN.get());
+        glowingShelf(ProspectModBlocks.GLOWING_SHELF_MUSHROOM_PURPLE.get());
+        pottedPlant(ProspectModBlocks.POTTED_GLOWING_MUSHROOM_BLUE.get(), "glowing_mushroom_blue");
+        pottedPlant(ProspectModBlocks.POTTED_GLOWING_MUSHROOM_GREEN.get(), "glowing_mushroom_green");
+        pottedPlant(ProspectModBlocks.POTTED_GLOWING_MUSHROOM_PURPLE.get(), "glowing_mushroom_purple");
         glowingCap(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_BLUE.get());
         glowingCap(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_GREEN.get());
         glowingCap(ProspectModBlocks.GLOWING_MUSHROOM_BLOCK_PURPLE.get());
@@ -67,6 +76,17 @@ public class BlockStates extends BlockStateProvider
         extinguishedLantern(ProspectModBlocks.EXTINGUISHED_LANTERN.get());
         placedDynamite(ProspectModBlocks.PLACED_DYNAMITE.get(), PlacedDynamiteBlock.STICKS);
         placedDynamite(ProspectModBlocks.PLACED_DYNAMITE_BUNDLE.get(), PlacedDynamiteBundleBlock.BUNDLES);
+    }
+
+    private void tintedPane(IronBarsBlock block) {
+        String name = blockName(block);
+        ResourceLocation glass = mcLoc("block/tinted_glass");
+        paneBlock(block,
+                models().panePost(name + "_post", glass, glass).renderType("translucent").ao(false),
+                models().paneSide(name + "_side", glass, glass).renderType("translucent").ao(false),
+                models().paneSideAlt(name + "_side_alt", glass, glass).renderType("translucent").ao(false),
+                models().paneNoSide(name + "_noside", glass).renderType("translucent").ao(false),
+                models().paneNoSideAlt(name + "_noside_alt", glass).renderType("translucent").ao(false));
     }
 
     private void crystalBud(Block block) {
@@ -97,12 +117,27 @@ public class BlockStates extends BlockStateProvider
                 .build());
     }
 
+    private void pottedPlant(Block block, String plant) {
+        simpleBlock(block, models().withExistingParent(blockName(block), mcLoc("block/flower_pot_cross"))
+                .texture("plant", resourceBlock(plant))
+                .renderType("cutout"));
+    }
+
     private void glowingMushroom(Block block) {
         String name = blockName(block);
         simpleBlock(block, models().withExistingParent(name, resourceBlock("template_split_glowing_cross"))
                 .texture("base", resourceBlock(name + "_stem"))
                 .texture("glow", resourceBlock(name + "_cap"))
                 .texture("particle", resourceBlock(name)));
+    }
+
+    private void glowingShelf(Block block) {
+        String name = blockName(block);
+        String mushroom = name.replace("glowing_shelf_mushroom_", "glowing_mushroom_");
+        horizontalBlock(block, models().withExistingParent(name, resourceBlock("template_glowing_shelf"))
+                .texture("base", resourceBlock(name + "_stem"))
+                .texture("glow", resourceBlock(mushroom + "_cap"))
+                .texture("particle", resourceBlock(mushroom)), 0);
     }
 
     private void glowingCap(Block block) {

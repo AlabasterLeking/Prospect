@@ -6,12 +6,18 @@
   "mixins": [
     "AbstractMinecartMixin",
     "AbstractMinecartLerpAccessor",
+    "CrossbowItemMixin",
+    "LightEngineMixin",
+    "ServerGamePacketListenerImplAccessor",
     "TorchBlockMixin",
     "MultiNoiseBiomeSourceMixin"
   ],
   "client": [
     "AbstractMinecartClientMixin",
-    "ItemInHandLayerMixin"
+    "ItemInHandLayerMixin",
+    "AmbientOcclusionFaceMixin",
+    "ModelBlockRendererMixin",
+    "PlayerModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,0 +1,26 @@
+{
+  "parent": "prospect:root",
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.catching_air.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "advancements.prospect.catching_air.title"
+    }
+  },
+  "requirements": [
+    [
+      "triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

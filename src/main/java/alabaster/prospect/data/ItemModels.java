@@ -49,7 +49,10 @@ public class ItemModels extends ItemModelProvider
 
         // Blocks with special item sprites
         Set<Item> spriteBlockItems = Sets.newHashSet(
-                ProspectModItems.EXTINGUISHED_LANTERN.get()
+                ProspectModItems.EXTINGUISHED_LANTERN.get(),
+                ProspectModItems.GLOWING_MUSHROOM_BLUE.get(),
+                ProspectModItems.GLOWING_MUSHROOM_GREEN.get(),
+                ProspectModItems.GLOWING_MUSHROOM_PURPLE.get()
         );
         takeAll(items, spriteBlockItems.toArray(new Item[0])).forEach(item -> withExistingParent(itemName(item), GENERATED).texture("layer0", resourceItem(itemName(item))));
 
@@ -59,9 +62,6 @@ public class ItemModels extends ItemModelProvider
                 ProspectModItems.WOODEN_RAIL.get(),
                 ProspectModItems.LAUNCH_RAIL.get(),
                 ProspectModItems.PAYLOAD_RAIL.get(),
-                ProspectModItems.GLOWING_MUSHROOM_BLUE.get(),
-                ProspectModItems.GLOWING_MUSHROOM_GREEN.get(),
-                ProspectModItems.GLOWING_MUSHROOM_PURPLE.get(),
                 ProspectModItems.GLOWTHREAD.get(),
                 ProspectModItems.SMALL_QUARTZ_BUD.get(),
                 ProspectModItems.MEDIUM_QUARTZ_BUD.get(),
@@ -73,6 +73,9 @@ public class ItemModels extends ItemModelProvider
         // Blocks with dedicated inventory models
         takeAll(items, ProspectModItems.GLOWING_MUSHROOM_BLOCK_BLUE.get(), ProspectModItems.GLOWING_MUSHROOM_BLOCK_GREEN.get(), ProspectModItems.GLOWING_MUSHROOM_BLOCK_PURPLE.get())
                 .forEach(item -> blockBasedModel(item, "_inventory"));
+
+        takeAll(items, ProspectModItems.TINTED_GLASS_PANE.get()).forEach(item -> itemGeneratedModel(item, mcLoc("block/tinted_glass")).renderType("translucent"));
+        takeAll(items, ProspectModItems.SAPPHIRE_GLASS_PANE.get()).forEach(item -> itemGeneratedModel(item, resourceBlock("sapphire_glass")).renderType("translucent"));
 
         items.remove(ProspectModItems.ALTIMETER.get());
 
@@ -119,8 +122,8 @@ public class ItemModels extends ItemModelProvider
         withExistingParent(itemName(item), HANDHELD).texture("layer0", texture);
     }
 
-    public void itemGeneratedModel(Item item, ResourceLocation texture) {
-        withExistingParent(itemName(item), GENERATED).texture("layer0", texture);
+    public ItemModelBuilder itemGeneratedModel(Item item, ResourceLocation texture) {
+        return withExistingParent(itemName(item), GENERATED).texture("layer0", texture);
     }
 
     private String itemName(Item item) {

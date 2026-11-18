@@ -1,0 +1,33 @@
+{
+  "parent": "prospect:root",
+  "criteria": {
+    "has_prospecting_pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:prospecting_pickaxe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.rockhound.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:prospecting_pickaxe"
+    },
+    "title": {
+      "translate": "advancements.prospect.rockhound.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_prospecting_pickaxe"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

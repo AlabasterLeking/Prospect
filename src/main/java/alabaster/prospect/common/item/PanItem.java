@@ -2,11 +2,13 @@ package alabaster.prospect.common.item;
 
 import alabaster.prospect.client.animation.PanningAnimation;
 import alabaster.prospect.common.entity.sparklenode.SparkleNodeEntity;
+import alabaster.prospect.common.registry.ProspectSounds;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -28,6 +30,7 @@ public class PanItem extends Item {
     public static final int USE_DURATION = 40;
     private static final int PARTICLE_INTERVAL_TICKS = 3;
     private static final int PARTICLES_PER_BURST = 5;
+    private static final int SIFT_INTERVAL_TICKS = 8;
 
     private final boolean canHarvestLava;
     private final ItemLike repairMaterial;
@@ -72,6 +75,11 @@ public class PanItem extends Item {
         if (!(livingEntity instanceof Player player)) return;
 
         if (!level.isClientSide) {
+            int siftElapsed = USE_DURATION - remainingUseDuration;
+            if (siftElapsed % SIFT_INTERVAL_TICKS == 0 && player.level().getEntity(player.getPersistentData().getInt("HarvestingNode")) instanceof SparkleNodeEntity siftNode) {
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), siftNode.isInLava() ? ProspectSounds.PAN_SIFT_LAVA.get() : ProspectSounds.PAN_SIFT.get(),
+                        SoundSource.PLAYERS, 0.7F, 0.9F + level.random.nextFloat() * 0.2F);
+            }
             if (remainingUseDuration <= 1) {
                 int nodeId = player.getPersistentData().getInt("HarvestingNode");
                 String handStr = player.getPersistentData().getString("HarvestingHand");

@@ -1,0 +1,8 @@
+{
+  "parent": "prospect:block/template_glowing_shelf",
+  "textures": {
+    "base": "prospect:block/glowing_shelf_mushroom_purple_stem",
+    "glow": "prospect:block/glowing_mushroom_purple_cap",
+    "particle": "prospect:block/glowing_mushroom_purple"
+  }
+}

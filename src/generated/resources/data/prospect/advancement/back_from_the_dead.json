@@ -1,0 +1,28 @@
+{
+  "parent": "prospect:struck_a_deal",
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.back_from_the_dead.description"
+    },
+    "frame": "goal",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:golden_apple"
+    },
+    "title": {
+      "translate": "advancements.prospect.back_from_the_dead.title"
+    }
+  },
+  "requirements": [
+    [
+      "triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

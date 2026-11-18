@@ -1,0 +1,60 @@
+{
+  "type": "prospect:grove_pool",
+  "config": {
+    "radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 4
+    },
+    "depth": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 4
+    },
+    "bed": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "data": {
+            "Name": "minecraft:mud"
+          },
+          "weight": 3
+        },
+        {
+          "data": {
+            "Name": "minecraft:clay"
+          },
+          "weight": 2
+        },
+        {
+          "data": {
+            "Name": "minecraft:gravel"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    "replaceable": "#minecraft:moss_replaceable",
+    "vegetation": {
+      "type": "minecraft:randomized_int_state_provider",
+      "property": "pickles",
+      "values": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 1,
+        "max_inclusive": 3
+      },
+      "source": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sea_pickle",
+          "Properties": {
+            "pickles": "1",
+            "waterlogged": "true"
+          }
+        }
+      }
+    },
+    "vegetation_chance": 0.1,
+    "shore_chance": 0.5
+  }
+}

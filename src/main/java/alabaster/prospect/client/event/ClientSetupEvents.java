@@ -4,7 +4,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.client.Minecraft;
 import alabaster.prospect.common.item.SlimeBucketItem;
 import alabaster.prospect.Prospect;
+import alabaster.prospect.client.model.ChainKnotModel;
 import alabaster.prospect.client.renderer.DynamiteRenderer;
+import alabaster.prospect.client.renderer.GrapplingHookRenderer;
+import alabaster.prospect.client.renderer.ZiplineRenderer;
 import alabaster.prospect.client.renderer.SparkleNodeRenderer;
 import alabaster.prospect.client.renderer.WanderingProspectorRenderer;
 import alabaster.prospect.client.renderer.ZombieProspectorRenderer;
@@ -48,6 +51,19 @@ public class ClientSetupEvents {
                 ProspectModEntities.DYNAMITE.get(),
                 DynamiteRenderer::new
         );
+        event.registerEntityRenderer(
+                ProspectModEntities.GRAPPLING_HOOK.get(),
+                GrapplingHookRenderer::new
+        );
+        event.registerEntityRenderer(
+                ProspectModEntities.ZIPLINE.get(),
+                ZiplineRenderer::new
+        );
+    }
+
+    @SubscribeEvent
+    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(ChainKnotModel.LAYER, ChainKnotModel::createBodyLayer);
     }
 
     // Custom Item Rendering for Pans
@@ -106,5 +122,7 @@ public class ClientSetupEvents {
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(ProspectKeyBindings.TOGGLE_MINING_HELMET_LIGHT);
+        event.register(ProspectKeyBindings.GRAPPLE_REEL_IN);
+        event.register(ProspectKeyBindings.GRAPPLE_LET_OUT);
     }
 }

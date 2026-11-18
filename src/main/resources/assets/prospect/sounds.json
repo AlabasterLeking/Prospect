@@ -80,5 +80,90 @@
         "weight": 1
       }
     ]
+  },
+  "item.grappling_hook.reel": {
+    "subtitle": "subtitles.prospect.item.grappling_hook.reel",
+    "sounds": [
+      {
+        "name": "minecraft:item.crossbow.loading_middle",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.5
+      }
+    ]
+  },
+  "entity.zipline.ride": {
+    "subtitle": "subtitles.prospect.entity.zipline.ride",
+    "sounds": [
+      {
+        "name": "minecraft:entity.minecart.riding",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.sparkle_node.shimmer": {
+    "subtitle": "subtitles.prospect.entity.sparkle_node.shimmer",
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.5,
+        "weight": 3
+      },
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.4,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:block.amethyst_cluster.hit",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.3,
+        "weight": 1
+      }
+    ]
+  },
+  "item.pan.sift": {
+    "subtitle": "subtitles.prospect.item.pan.sift",
+    "sounds": [
+      {
+        "name": "minecraft:item.brush.brushing.gravel",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.6,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:entity.generic.swim",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.25,
+        "weight": 1
+      }
+    ]
+  },
+  "item.pan.sift_lava": {
+    "subtitle": "subtitles.prospect.item.pan.sift_lava",
+    "sounds": [
+      {
+        "name": "minecraft:block.lava.pop",
+        "type": "event",
+        "volume": 0.6,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:item.brush.brushing.gravel",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.5,
+        "weight": 1
+      }
+    ]
   }
 }

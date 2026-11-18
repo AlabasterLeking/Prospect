@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "c:gems"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "  G",
+    " G ",
+    "S  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "prospect:rock_candy"
+  }
+}

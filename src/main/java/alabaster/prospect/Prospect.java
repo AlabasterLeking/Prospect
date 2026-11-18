@@ -36,6 +36,8 @@ public class Prospect {
         ProspectParticleTypes.PARTICLE_TYPES.register(modEventBus);
         ProspectRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         ProspectDataComponents.DATA_COMPONENTS.register(modEventBus);
+        ProspectSounds.SOUNDS.register(modEventBus);
+        ProspectMobEffects.MOB_EFFECTS.register(modEventBus);
         ProspectingGems.bootstrap();
 
         modEventBus.addListener(this::commonSetup);
@@ -49,5 +51,6 @@ public class Prospect {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(MiningHelmetCleaning::register);
+        event.enqueueWork(ProspectModBlocks::registerPottedPlants);
     }
 }
