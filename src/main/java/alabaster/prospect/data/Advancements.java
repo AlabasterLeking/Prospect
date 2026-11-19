@@ -3,6 +3,7 @@ package alabaster.prospect.data;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.registry.ProspectModEntities;
 import alabaster.prospect.common.registry.ProspectModItems;
+import alabaster.prospect.common.tag.ProspectModTags;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
@@ -23,8 +24,8 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -37,7 +38,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class Advancements extends AdvancementProvider {
-    private static final List<String> ABANDONED_MINES = List.of("abandoned_mine", "abandoned_mine_badlands", "abandoned_mine_desert", "abandoned_mine_fungal", "abandoned_mine_jungle", "abandoned_mine_mangrove", "abandoned_mine_quarry", "abandoned_mine_savanna", "abandoned_mine_snowy");
     private static final ResourceLocation BACKGROUND = ResourceLocation.withDefaultNamespace("textures/block/tuff.png");
 
     public Advancements(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper helper) {
@@ -50,8 +50,7 @@ public class Advancements extends AdvancementProvider {
                 .addCriterion("has_pan", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ProspectModItems.COPPER_PAN.get(), ProspectModItems.IRON_PAN.get(), ProspectModItems.GOLDEN_PAN.get(), ProspectModItems.NETHERITE_PAN.get())))
                 .save(saver, id(ProspectAdvancements.ROOT));
 
-        HolderLookup.RegistryLookup<Structure> structures = registries.lookupOrThrow(Registries.STRUCTURE);
-        HolderSet<Structure> mines = HolderSet.direct(ABANDONED_MINES.stream().map(name -> external(structures, ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(Prospect.MODID, name)))).toList());
+        HolderSet<Structure> mines = externalTag(registries.lookupOrThrow(Registries.STRUCTURE), ProspectModTags.ABANDONED_MINES);
         child(root, ProspectAdvancements.DEAD_END, ProspectModItems.WOODEN_RAIL.get(), AdvancementType.TASK, false)
                 .addCriterion("found_mine", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.location().setStructures(mines)))
                 .save(saver, id(ProspectAdvancements.DEAD_END));
@@ -90,8 +89,8 @@ public class Advancements extends AdvancementProvider {
         triggered(fireInTheHole, ProspectAdvancements.HOT_POTATO, ProspectModItems.LIT_DYNAMITE.get(), AdvancementType.TASK, true, saver);
     }
 
-    private static <T> Holder<T> external(HolderLookup.RegistryLookup<T> lookup, ResourceKey<T> key) {
-        Optional<Holder.Reference<T>> existing = lookup.get(key);
+    private static <T> HolderSet<T> externalTag(HolderLookup.RegistryLookup<T> lookup, TagKey<T> tag) {
+        Optional<HolderSet.Named<T>> existing = lookup.get(tag);
         if (existing.isPresent()) return existing.get();
         Holder.Reference<T> sibling = lookup.listElements().findFirst().orElseThrow();
         HolderOwner<T> owner = new HolderOwner<>() {
@@ -100,7 +99,7 @@ public class Advancements extends AdvancementProvider {
                 return sibling.canSerializeIn(other);
             }
         };
-        return Holder.Reference.createStandAlone(owner, key);
+        return HolderSet.emptyNamed(owner, tag);
     }
 
     private static Advancement.Builder child(AdvancementHolder parent, String name, ItemLike icon, AdvancementType type, boolean hidden) {
