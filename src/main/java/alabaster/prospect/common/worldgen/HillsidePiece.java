@@ -82,7 +82,7 @@ public class HillsidePiece extends TemplateStructurePiece {
     }
 
     private static StructurePlaceSettings settings(Rotation rotation, Mirror mirror, Optional<Holder<StructureProcessorList>> processors, long theme) {
-        StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(rotation).setMirror(mirror).addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
+        StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(rotation).setMirror(mirror).addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK).addProcessor(ZiplineProcessor.INSTANCE);
         processors.ifPresent(list -> list.value().list().forEach(processor -> settings.addProcessor(processor instanceof UniformOreProcessor ore ? ore.seeded(theme) : processor)));
         return settings;
     }

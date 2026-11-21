@@ -165,5 +165,154 @@
         "weight": 1
       }
     ]
+  },
+  "item.grappling_hook.throw": {
+    "subtitle": "subtitles.prospect.item.grappling_hook.throw",
+    "sounds": [
+      {
+        "name": "minecraft:entity.fishing_bobber.throw",
+        "type": "event",
+        "pitch": 0.6,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:item.trident.throw",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.3
+      }
+    ]
+  },
+  "item.grappling_hook.taut": {
+    "subtitle": "subtitles.prospect.item.grappling_hook.taut",
+    "sounds": [
+      {
+        "name": "minecraft:item.crossbow.loading_end",
+        "type": "event",
+        "pitch": 0.6,
+        "volume": 0.5,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:item.crossbow.loading_end",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.45,
+        "weight": 1
+      }
+    ]
+  },
+  "entity.grappling_hook.hit_block": {
+    "subtitle": "subtitles.prospect.entity.grappling_hook.hit_block",
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.place",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:item.trident.hit_ground",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.5
+      }
+    ]
+  },
+  "entity.grappling_hook.hit_entity": {
+    "subtitle": "subtitles.prospect.entity.grappling_hook.hit_entity",
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.hit",
+        "type": "event",
+        "pitch": 1.1,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:item.trident.hit",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.4
+      }
+    ]
+  },
+  "entity.grappling_hook.retract": {
+    "subtitle": "subtitles.prospect.entity.grappling_hook.retract",
+    "sounds": [
+      {
+        "name": "minecraft:entity.fishing_bobber.retrieve",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block.chain.step",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.4
+      }
+    ]
+  },
+  "entity.grappling_hook.snap": {
+    "subtitle": "subtitles.prospect.entity.grappling_hook.snap",
+    "sounds": [
+      {
+        "name": "minecraft:entity.leash_knot.break",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:block.chain.break",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.5
+      }
+    ]
+  },
+  "entity.zipline.attach": {
+    "subtitle": "subtitles.prospect.entity.zipline.attach",
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_chain",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block.chain.hit",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.4
+      }
+    ]
+  },
+  "entity.zipline.detach": {
+    "subtitle": "subtitles.prospect.entity.zipline.detach",
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_chain",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.6
+      }
+    ]
+  },
+  "entity.zipline.bump": {
+    "subtitle": "subtitles.prospect.entity.zipline.bump",
+    "sounds": [
+      {
+        "name": "minecraft:block.wood.hit",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:block.chain.hit",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.5
+      }
+    ]
   }
 }

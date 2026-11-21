@@ -1,12 +1,14 @@
 package alabaster.prospect.common.tag;
 
 import alabaster.prospect.Prospect;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class ProspectModTags {
 
@@ -27,11 +29,18 @@ public class ProspectModTags {
 
     public static final TagKey<Item> ENCHANTABLE_PANS = modItemTag("enchantable/pans");
 
+    public static final TagKey<Structure> ABANDONED_MINES = modStructureTag("abandoned_mines");
+    public static final TagKey<Structure> PROSPECTOR_CAMPS = modStructureTag("prospector_camps");
+
     private static TagKey<Block> modBlockTag(String path) {
         return BlockTags.create(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, path));
     }
 
     private static TagKey<Item> modItemTag(String path) {
         return ItemTags.create(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, path));
+    }
+
+    private static TagKey<Structure> modStructureTag(String path) {
+        return TagKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(Prospect.MODID, path));
     }
 }

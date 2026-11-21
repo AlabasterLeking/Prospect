@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,6 +157,29 @@ public class SparkleNodeEntity extends Entity {
         return ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + biomeId.getPath());
     }
 
+    private static boolean isGem(ItemStack stack) {
+        return stack.is(Tags.Items.GEMS) && !stack.is(Tags.Items.GEMS_QUARTZ);
+    }
+
+    private void playHarvestEffects(ServerLevel server, boolean gem) {
+        boolean lava = isInLava();
+        double x = getX();
+        double y = getY() + 0.1;
+        double z = getZ();
+        if (lava) {
+            server.sendParticles(ParticleTypes.LAVA, x, y, z, 6, 0.25, 0.05, 0.25, 0.0);
+            server.playSound(null, x, y, z, SoundEvents.LAVA_POP, SoundSource.PLAYERS, 0.8F, 0.9F + random.nextFloat() * 0.2F);
+        } else {
+            server.sendParticles(ParticleTypes.SPLASH, x, y, z, 24, 0.3, 0.05, 0.3, 0.1);
+            server.sendParticles(ParticleTypes.BUBBLE_POP, x, y, z, 8, 0.25, 0.02, 0.25, 0.02);
+            server.playSound(null, x, y, z, SoundEvents.GENERIC_SPLASH, SoundSource.PLAYERS, 0.5F, 1.2F + random.nextFloat() * 0.2F);
+        }
+        if (gem) {
+            server.sendParticles(ParticleTypes.WAX_OFF, x, y + 0.3, z, 10, 0.3, 0.2, 0.3, 0.6);
+            server.playSound(null, x, y, z, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.2F, 1.1F + random.nextFloat() * 0.2F);
+        }
+    }
+
     public void harvestWith(Player player, ItemStack panStack, InteractionHand hand) {
         if (isInLava() && !(panStack.getItem() instanceof PanItem panItem && panItem.canHarvestLava())) {
             return;
@@ -206,6 +231,8 @@ public class SparkleNodeEntity extends Entity {
 
                 allDrops.addAll(drops);
             }
+
+            playHarvestEffects(server, allDrops.stream().anyMatch(SparkleNodeEntity::isGem));
 
             for (ItemStack lootStack : allDrops) {
                 if (!player.getInventory().add(lootStack)) {

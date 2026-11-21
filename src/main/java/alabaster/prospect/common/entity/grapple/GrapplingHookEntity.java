@@ -13,20 +13,24 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
@@ -48,6 +52,9 @@ public class GrapplingHookEntity extends AbstractArrow {
     private static final double GROUND_LIFT = 0.1;
     private static final double ATTACH_HEIGHT = 0.6;
     private static final int REEL_SOUND_INTERVAL = 4;
+    private static final double ITEM_GRAB_RANGE = 0.3;
+    private static final double ITEM_REEL_SPEED = 0.35;
+    private static final double ITEM_RELEASE = 1.8;
 
     private static final EntityDataAccessor<Boolean> ANCHORED = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> LENGTH = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
@@ -60,6 +67,7 @@ public class GrapplingHookEntity extends AbstractArrow {
     private static final Map<UUID, GrapplingHookEntity> ACTIVE = new HashMap<>();
 
     private boolean claimed;
+    private boolean reloaded;
     private boolean tethered;
     private long claimTime;
     private double reelLength;
@@ -105,8 +113,12 @@ public class GrapplingHookEntity extends AbstractArrow {
     @Nullable
     public static GrapplingHookEntity owned(Player player) {
         if (!player.level().isClientSide()) return active(player);
-        List<GrapplingHookEntity> hooks = player.level().getEntitiesOfClass(GrapplingHookEntity.class, player.getBoundingBox().inflate(TRACKING_LIMIT), hook -> hook.getOwner() == player);
+        List<GrapplingHookEntity> hooks = player.level().getEntitiesOfClass(GrapplingHookEntity.class, player.getBoundingBox().inflate(TRACKING_LIMIT), hook -> hook.getOwner() == player && hook.isLive());
         return hooks.isEmpty() ? null : hooks.get(0);
+    }
+
+    public static void clearActive() {
+        ACTIVE.clear();
     }
 
     public static boolean holding(Player player, boolean thrown) {
@@ -143,6 +155,10 @@ public class GrapplingHookEntity extends AbstractArrow {
 
     public boolean isAnchored() {
         return entityData.get(ANCHORED);
+    }
+
+    public boolean isLive() {
+        return isAnchored() || getHookedEntityId() >= 0 || !inGround;
     }
 
     public boolean isThrown() {
@@ -203,8 +219,16 @@ public class GrapplingHookEntity extends AbstractArrow {
     @Override
     public void tick() {
         if (!level().isClientSide() && !claimed) {
-            claim(getOwner() instanceof Player player ? player : null);
-            if (isRemoved()) return;
+            if (reloaded) {
+                claimed = true;
+                if (isThrown()) {
+                    discard();
+                    return;
+                }
+            } else {
+                claim(getOwner() instanceof Player player ? player : null);
+                if (isRemoved()) return;
+            }
         }
         Entity target = getHookedEntity();
         if (getHookedEntityId() >= 0) {
@@ -216,6 +240,7 @@ public class GrapplingHookEntity extends AbstractArrow {
             setDeltaMovement(Vec3.ZERO);
             if (level().isClientSide()) return;
         } else {
+            if (!level().isClientSide() && tethered && !isAnchored() && !inGround && grabItem()) return;
             super.tick();
             if (level().isClientSide() || isRemoved()) return;
         }
@@ -241,7 +266,7 @@ public class GrapplingHookEntity extends AbstractArrow {
             return;
         }
         if (distance > getRopeCap() + SNAP_MARGIN || anchorBlock == null || level().getBlockState(anchorBlock).getCollisionShape(level(), anchorBlock).isEmpty()) {
-            retract();
+            snap();
             return;
         }
         double before = reelLength;
@@ -262,24 +287,35 @@ public class GrapplingHookEntity extends AbstractArrow {
     }
 
     private void reelSound(Player owner, double before) {
-        if (reel == 0 || Math.abs(reelLength - before) < 1.0E-3 || tickCount % REEL_SOUND_INTERVAL != 0) return;
-        level().playSound(null, owner.getX(), owner.getY(), owner.getZ(), ProspectSounds.GRAPPLING_HOOK_REEL.get(), SoundSource.PLAYERS, 0.4F, reel > 0 ? 1.15F : 0.9F);
+        reelSound(owner, before, reel);
+    }
+
+    private void reelSound(Player owner, double before, int direction) {
+        if (direction == 0 || Math.abs(reelLength - before) < 1.0E-3 || tickCount % REEL_SOUND_INTERVAL != 0) return;
+        level().playSound(null, owner.getX(), owner.getY(), owner.getZ(), ProspectSounds.GRAPPLING_HOOK_REEL.get(), SoundSource.PLAYERS, 0.4F, direction > 0 ? 1.15F : 0.9F);
     }
 
     private void pull(Player owner, Entity target) {
         Vec3 offset = target.position().add(0.0, target.getBbHeight() * 0.5, 0.0).subtract(ropePoint(owner));
         double distance = offset.length();
         if (distance > getRopeCap() + SNAP_MARGIN) {
-            retract();
+            snap();
             return;
         }
         double before = reelLength;
-        if (reel > 0) {
+        boolean item = target instanceof ItemEntity;
+        if (item) {
+            if (distance < ITEM_RELEASE) {
+                retract();
+                return;
+            }
+            setReelLength(Math.max(MIN_LENGTH, Math.min(reelLength, distance) - ITEM_REEL_SPEED));
+        } else if (reel > 0) {
             setReelLength(Math.max(MIN_LENGTH, Math.min(reelLength, distance) - REEL_SPEED));
         } else if (reel < 0) {
             setReelLength(Math.min(getRopeCap(), reelLength + REEL_SPEED));
         }
-        reelSound(owner, before);
+        reelSound(owner, before, item ? 1 : reel);
         if (distance <= reelLength || distance < 1.0E-4) return;
         Vec3 normal = offset.scale(1.0 / distance);
         Vec3 velocity = target.getDeltaMovement();
@@ -324,7 +360,6 @@ public class GrapplingHookEntity extends AbstractArrow {
         entityData.set(LENGTH, (float) Math.max(MIN_LENGTH, distance));
         setReelLength(Math.max(MIN_LENGTH, distance));
         entityData.set(ANCHORED, true);
-        level().playSound(null, getX(), getY(), getZ(), SoundEvents.CHAIN_PLACE, SoundSource.PLAYERS, 0.8F, 1.2F);
     }
 
     @Override
@@ -340,13 +375,41 @@ public class GrapplingHookEntity extends AbstractArrow {
             }
             return;
         }
+        hook(owner, target);
+    }
+
+    private boolean grabItem() {
+        if (!(getOwner() instanceof Player owner)) return false;
+        AABB area = getBoundingBox().expandTowards(getDeltaMovement()).inflate(ITEM_GRAB_RANGE);
+        ItemEntity closest = null;
+        double best = Double.MAX_VALUE;
+        for (ItemEntity item : level().getEntitiesOfClass(ItemEntity.class, area, ItemEntity::isAlive)) {
+            double distance = item.distanceToSqr(this);
+            if (distance >= best) continue;
+            Vec3 target = item.position().add(0.0, item.getBbHeight() * 0.5, 0.0);
+            if (ropePoint(owner).distanceTo(target) < ITEM_RELEASE * 2.0) continue;
+            if (level().clip(new ClipContext(position(), target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() != HitResult.Type.MISS) continue;
+            best = distance;
+            closest = item;
+        }
+        if (closest == null) return false;
+        hook(owner, closest);
+        return true;
+    }
+
+    private void hook(Player owner, Entity target) {
         double distance = ropePoint(owner).distanceTo(target.position());
         setReelLength(Math.max(MIN_LENGTH, distance));
         entityData.set(LENGTH, (float) reelLength);
         entityData.set(HOOKED_ENTITY, target.getId());
         setPos(target.getX(), target.getY(ATTACH_HEIGHT), target.getZ());
         setDeltaMovement(Vec3.ZERO);
-        level().playSound(null, getX(), getY(), getZ(), SoundEvents.CHAIN_HIT, SoundSource.PLAYERS, 0.8F, 1.2F);
+        level().playSound(null, getX(), getY(), getZ(), ProspectSounds.GRAPPLING_HOOK_HIT_ENTITY.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+    }
+
+    @Override
+    protected SoundEvent getDefaultHitGroundSoundEvent() {
+        return ProspectSounds.GRAPPLING_HOOK_HIT_BLOCK.get();
     }
 
     @Override
@@ -366,6 +429,14 @@ public class GrapplingHookEntity extends AbstractArrow {
     }
 
     public void retract() {
+        release(ProspectSounds.GRAPPLING_HOOK_RETRACT.get());
+    }
+
+    public void snap() {
+        release(ProspectSounds.GRAPPLING_HOOK_SNAP.get());
+    }
+
+    private void release(SoundEvent sound) {
         if (isRemoved()) return;
         Entity owner = getOwner();
         if (owner instanceof Player player && pickup == Pickup.ALLOWED) {
@@ -375,7 +446,7 @@ public class GrapplingHookEntity extends AbstractArrow {
             }
         }
         if (owner != null) {
-            level().playSound(null, owner.getX(), owner.getY(), owner.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.PLAYERS, 0.6F, 1.4F);
+            level().playSound(null, owner.getX(), owner.getY(), owner.getZ(), sound, SoundSource.PLAYERS, 0.7F, 1.0F);
         }
         discard();
     }
@@ -415,5 +486,6 @@ public class GrapplingHookEntity extends AbstractArrow {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         entityData.set(THROWN, tag.getBoolean("Thrown"));
+        reloaded = true;
     }
 }

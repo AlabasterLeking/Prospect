@@ -1,0 +1,31 @@
+{
+  "parent": "prospect:rockhound",
+  "criteria": {
+    "ate_rock_candy": {
+      "conditions": {
+        "item": {
+          "items": "prospect:rock_candy"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.sugar_rush.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:rock_candy"
+    },
+    "title": {
+      "translate": "advancements.prospect.sugar_rush.title"
+    }
+  },
+  "requirements": [
+    [
+      "ate_rock_candy"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

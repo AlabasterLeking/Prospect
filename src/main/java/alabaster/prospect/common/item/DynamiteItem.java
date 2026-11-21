@@ -18,6 +18,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractCandleBlock;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -81,12 +82,17 @@ public class DynamiteItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
         InteractionHand otherHand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
         ItemStack igniter = player.getItemInHand(otherHand);
-        if (!igniter.is(Items.FLINT_AND_STEEL)) return InteractionResultHolder.pass(stack);
+        boolean flint = igniter.is(Items.FLINT_AND_STEEL);
+        if (!flint && !igniter.is(Items.FIRE_CHARGE)) return InteractionResultHolder.pass(stack);
 
-        level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+        level.playSound(player, player.getX(), player.getY(), player.getZ(), flint ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
 
         if (!level.isClientSide()) {
-            igniter.hurtAndBreak(1, player, LivingEntity.getSlotForHand(otherHand));
+            if (flint) {
+                igniter.hurtAndBreak(1, player, LivingEntity.getSlotForHand(otherHand));
+            } else {
+                igniter.consume(1, player);
+            }
             ignite(level, player, hand, stack, type);
         }
 
@@ -104,6 +110,7 @@ public class DynamiteItem extends Item {
     private static boolean isOpenFlame(BlockState state) {
         if (CampfireBlock.isLitCampfire(state)) return true;
         if (state.getBlock() instanceof AbstractCandleBlock) return state.getValue(AbstractCandleBlock.LIT);
+        if (state.getBlock() instanceof AbstractFurnaceBlock) return state.getValue(AbstractFurnaceBlock.LIT);
         return state.getBlock() instanceof BaseFireBlock || state.getBlock() instanceof TorchBlock;
     }
 

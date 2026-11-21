@@ -28,13 +28,19 @@ import org.jetbrains.annotations.Nullable;
 public class HelmetLightBlock extends Block implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty FLICKER = BooleanProperty.create("flicker");
     public static final int LIGHT_LEVEL = 15;
+    public static final int FLICKER_LIGHT_LEVEL = 8;
     public static final int QUIET_UPDATE = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
     private static final int CHECK_INTERVAL = 20;
 
     public HelmetLightBlock(Properties properties) {
         super(properties);
-        registerDefaultState(stateDefinition.any().setValue(WATERLOGGED, false));
+        registerDefaultState(stateDefinition.any().setValue(WATERLOGGED, false).setValue(FLICKER, false));
+    }
+
+    public static int lightLevel(BlockState state) {
+        return state.getValue(FLICKER) ? FLICKER_LIGHT_LEVEL : LIGHT_LEVEL;
     }
 
     public static BlockState emptyStateFor(BlockState state) {
@@ -43,7 +49,7 @@ public class HelmetLightBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED);
+        builder.add(WATERLOGGED, FLICKER);
     }
 
     @Override

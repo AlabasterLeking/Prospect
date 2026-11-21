@@ -1,11 +1,11 @@
 package alabaster.prospect.common.item;
 
 import alabaster.prospect.common.entity.grapple.GrapplingHookEntity;
+import alabaster.prospect.common.registry.ProspectSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -51,7 +51,7 @@ public class GrapplingHookItem extends ArrowItem {
             if (!level.isClientSide()) existing.retract();
             return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
         }
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.PLAYERS, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), ProspectSounds.GRAPPLING_HOOK_THROW.get(), SoundSource.PLAYERS, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         if (!level.isClientSide()) {
             GrapplingHookEntity hook = GrapplingHookEntity.thrown(level, player, stack);
             hook.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, THROW_SPEED, 1.0F);

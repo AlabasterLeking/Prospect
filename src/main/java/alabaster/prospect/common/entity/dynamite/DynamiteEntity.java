@@ -30,17 +30,23 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
     private static final EntityDataAccessor<Integer> DATA_TYPE = SynchedEntityData.defineId(DynamiteEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_STUCK = SynchedEntityData.defineId(DynamiteEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_STUCK_ENTITY = SynchedEntityData.defineId(DynamiteEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_FUSE = SynchedEntityData.defineId(DynamiteEntity.class, EntityDataSerializers.INT);
 
     private static final float MIN_SPIN_SPEED = 8.0F;
     private static final float MAX_SPIN_SPEED = 30.0F;
     private static final float SETTLE_SPEED = 20.0F;
     private static final int STUCK_CHECK_INTERVAL = 10;
+    public static final double REST_HEIGHT = 1.5 / 16.0;
+    public static final double FUSE_TIP = 10.0 / 16.0;
+    private static final double TRAIL_SPACING = 0.15;
+    private static final int MAX_TRAIL_STEPS = 6;
 
     private int fuse = DynamiteType.STANDARD.fuseTicks;
     private float spin;
     private float spinO;
     private boolean settling;
     private Vec3 attachOffset;
+    private Vec3 lastFuseTip;
 
     public DynamiteEntity(EntityType<? extends DynamiteEntity> type, Level level) {
         super(type, level);
@@ -50,14 +56,14 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
         this(ProspectModEntities.DYNAMITE.get(), level);
         setOwner(owner);
         setPos(owner.getX(), owner.getEyeY() - 0.1, owner.getZ());
-        this.fuse = fuse;
+        setFuse(fuse);
         entityData.set(DATA_TYPE, type.ordinal());
     }
 
     public DynamiteEntity(Level level, double x, double y, double z, int fuse, DynamiteType type) {
         this(ProspectModEntities.DYNAMITE.get(), level);
         setPos(x, y, z);
-        this.fuse = fuse;
+        setFuse(fuse);
         entityData.set(DATA_TYPE, type.ordinal());
     }
 
@@ -70,7 +76,24 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
     }
 
     public void shortenFuse(int ticks) {
-        fuse = Math.min(fuse, ticks);
+        setFuse(Math.min(fuse, ticks));
+    }
+
+    private void setFuse(int ticks) {
+        fuse = ticks;
+        entityData.set(DATA_FUSE, ticks);
+    }
+
+    public int getFuse() {
+        return fuse;
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (DATA_FUSE.equals(key)) {
+            fuse = entityData.get(DATA_FUSE);
+        }
     }
 
     @Override
@@ -78,6 +101,7 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
         builder.define(DATA_TYPE, 0);
         builder.define(DATA_STUCK, false);
         builder.define(DATA_STUCK_ENTITY, -1);
+        builder.define(DATA_FUSE, DynamiteType.STANDARD.fuseTicks);
     }
 
     @Override
@@ -97,10 +121,8 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
 
         if (level().isClientSide()) {
             tickSpin();
-            level().addParticle(ParticleTypes.SMOKE, getX(), getY() + 0.25, getZ(), 0.0, 0.02, 0.0);
-            if (random.nextFloat() < 0.3F) {
-                level().addParticle(ParticleTypes.SMALL_FLAME, getX(), getY() + 0.25, getZ(), 0.0, 0.01, 0.0);
-            }
+            fuse--;
+            tickFuseParticles();
         } else if (isInWater()) {
             extinguish();
         } else if (--fuse <= 0) {
@@ -217,6 +239,28 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
         }
     }
 
+    private void tickFuseParticles() {
+        Vec3 tip = fuseTip();
+        Vec3 from = lastFuseTip == null ? tip : lastFuseTip;
+        int steps = Mth.clamp(Mth.ceil(from.distanceTo(tip) / TRAIL_SPACING), 1, MAX_TRAIL_STEPS);
+        for (int i = 1; i <= steps; i++) {
+            Vec3 at = from.lerp(tip, (double) i / steps);
+            level().addParticle(ParticleTypes.SMOKE, at.x, at.y, at.z, 0.0, 0.02, 0.0);
+        }
+        if (random.nextFloat() < 0.3F) {
+            level().addParticle(ParticleTypes.SMALL_FLAME, tip.x, tip.y, tip.z, 0.0, 0.01, 0.0);
+        }
+        lastFuseTip = tip;
+    }
+
+    private Vec3 fuseTip() {
+        double spinRad = Math.toRadians(spin);
+        double yawRad = Math.toRadians(getYRot() - 90.0F);
+        double side = -Math.sin(spinRad) * FUSE_TIP;
+        double up = Math.cos(spinRad) * FUSE_TIP + REST_HEIGHT;
+        return position().add(side * Math.cos(yawRad), up, -side * Math.sin(yawRad));
+    }
+
     private void extinguish() {
         LitDynamiteItem.playDouse(level(), getX(), getY(), getZ());
         ItemEntity drop = new ItemEntity(level(), getX(), getY(), getZ(), new ItemStack(getDynamiteType().unlitItem()));
@@ -245,7 +289,7 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        fuse = tag.getShort("Fuse");
+        setFuse(tag.getShort("Fuse"));
         entityData.set(DATA_TYPE, tag.getInt("Type"));
         entityData.set(DATA_STUCK, tag.getBoolean("Stuck"));
     }

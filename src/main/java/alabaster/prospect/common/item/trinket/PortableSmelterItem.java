@@ -30,6 +30,8 @@ public class PortableSmelterItem extends Item {
     public static final int INPUT = 0;
     public static final int FUEL = 1;
     public static final int OUTPUT = 2;
+    private static final int MAX_BAR_WIDTH = 13;
+    private static final int BAR_COLOR = 0xFF9A3C;
 
     public PortableSmelterItem(Properties properties) {
         super(properties);
@@ -162,6 +164,24 @@ public class PortableSmelterItem extends Item {
         if (output.isEmpty()) return true;
         if (!ItemStack.isSameItemSameComponents(output, result)) return false;
         return output.getCount() + result.getCount() <= output.getMaxStackSize();
+    }
+
+    @Override
+    public boolean isBarVisible(ItemStack stack) {
+        SmelterState state = readState(stack);
+        return state.cookingProgress() > 0 && state.cookingTotalTime() > 0;
+    }
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        SmelterState state = readState(stack);
+        if (state.cookingTotalTime() <= 0) return 0;
+        return Math.min(MAX_BAR_WIDTH, Math.round((float) MAX_BAR_WIDTH * state.cookingProgress() / state.cookingTotalTime()));
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return BAR_COLOR;
     }
 
     @Override

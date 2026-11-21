@@ -17,10 +17,12 @@ public class HugeShelfMushroomFeature extends Feature<HugeShelfMushroomConfigura
 
     private static final int WALL_SEARCH = 4;
     private static final int MIN_BLOCKS = 3;
-    private static final double STEP = 0.3;
-    private static final double RIM = 0.72;
-    private static final double THICK_CORE = 0.35;
-    private static final double EDGE_NOISE = 0.12;
+    private static final int LOBES = 6;
+    private static final double LOBE_MIN = 0.86;
+    private static final double LOBE_RANGE = 0.22;
+    private static final double CROWN = 0.55;
+    private static final double BELLY = 0.42;
+    private static final int CROWN_MIN_WIDTH = 3;
     private static final Direction[] VISIBLE = {Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
 
     public HugeShelfMushroomFeature() {
@@ -61,24 +63,32 @@ public class HugeShelfMushroomFeature extends Feature<HugeShelfMushroomConfigura
         for (int tier = 0; tier < tiers && width >= 1; tier++) {
             BlockPos behind = center.relative(wallDir);
             if (!level.getBlockState(behind).isFaceSturdy(level, behind, out)) break;
+            double[] lobes = new double[LOBES + 1];
+            for (int i = 0; i <= LOBES; i++) {
+                lobes[i] = LOBE_MIN + random.nextDouble() * LOBE_RANGE;
+            }
             double reachAlong = width + 0.5;
-            double reachOut = Math.max(1.0, width * (0.7 + random.nextDouble() * 0.25)) + 0.5;
-            for (int a = -width; a <= width; a++) {
-                for (int b = 0; b <= width; b++) {
-                    double dist = (a * a) / (reachAlong * reachAlong) + (b * b) / (reachOut * reachOut) + (random.nextDouble() - 0.5) * EDGE_NOISE;
-                    if (dist > 1.0) continue;
-                    BlockPos pos = center.relative(along, a).relative(out, b);
-                    if (dist < STEP) cap.add(pos.above());
-                    if (dist < RIM) {
-                        cap.add(pos);
-                        if (dist < THICK_CORE) cap.add(pos.below());
-                    } else {
-                        cap.add(pos.below());
-                    }
+            double reachOut = Math.max(1.0, width * (0.75 + random.nextDouble() * 0.2)) + 0.5;
+            int span = width + 1;
+            double[][] layer = new double[span * 2 + 1][span + 1];
+            for (int a = -span; a <= span; a++) {
+                for (int b = 0; b <= span; b++) {
+                    layer[a + span][b] = Math.sqrt((a * a) / (reachAlong * reachAlong) + (b * b) / (reachOut * reachOut)) / lobe(lobes, a, b);
                 }
             }
-            width -= random.nextInt(3) == 0 ? 2 : 1;
-            center = center.above(4 + random.nextInt(2)).relative(along, random.nextInt(5) - 2);
+            for (int a = -span; a <= span; a++) {
+                for (int b = 0; b <= span; b++) {
+                    double dist = layer[a + span][b];
+                    if (dist > 1.0 || b > 0 && neighbours(layer, a + span, b) < 2) continue;
+                    BlockPos pos = center.relative(along, a).relative(out, b);
+                    cap.add(pos);
+                    if (dist < BELLY) cap.add(pos.below());
+                    if (width >= CROWN_MIN_WIDTH && dist < CROWN) cap.add(pos.above());
+                }
+            }
+            width -= random.nextInt(4) == 0 ? 2 : 1;
+            int shift = random.nextBoolean() ? random.nextInt(3) - 1 : (random.nextBoolean() ? 2 : -2);
+            center = center.above(4 + random.nextInt(2)).relative(along, shift);
         }
 
         cap.removeIf(pos -> !canReplace(level, pos));
@@ -96,6 +106,24 @@ public class HugeShelfMushroomFeature extends Feature<HugeShelfMushroomConfigura
             setBlock(level, pos, state);
         }
         return true;
+    }
+
+    private static double lobe(double[] lobes, int a, int b) {
+        double angle = a == 0 && b == 0 ? Math.PI / 2 : Math.atan2(b, a);
+        double t = angle / Math.PI * LOBES;
+        int i = Math.min((int) t, LOBES - 1);
+        double f = t - i;
+        f = f * f * (3.0 - 2.0 * f);
+        return lobes[i] * (1.0 - f) + lobes[i + 1] * f;
+    }
+
+    private static int neighbours(double[][] layer, int x, int y) {
+        int count = 0;
+        if (x > 0 && layer[x - 1][y] <= 1.0) count++;
+        if (x < layer.length - 1 && layer[x + 1][y] <= 1.0) count++;
+        if (y > 0 && layer[x][y - 1] <= 1.0) count++;
+        if (y < layer[x].length - 1 && layer[x][y + 1] <= 1.0) count++;
+        return count;
     }
 
     private static boolean canReplace(WorldGenLevel level, BlockPos pos) {

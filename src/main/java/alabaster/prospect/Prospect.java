@@ -38,6 +38,7 @@ public class Prospect {
         ProspectDataComponents.DATA_COMPONENTS.register(modEventBus);
         ProspectSounds.SOUNDS.register(modEventBus);
         ProspectMobEffects.MOB_EFFECTS.register(modEventBus);
+        ProspectMapDecorations.MAP_DECORATIONS.register(modEventBus);
         ProspectingGems.bootstrap();
 
         modEventBus.addListener(this::commonSetup);

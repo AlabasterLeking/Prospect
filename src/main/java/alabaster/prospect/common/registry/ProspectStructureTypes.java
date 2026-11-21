@@ -10,6 +10,7 @@ import alabaster.prospect.common.worldgen.ScatterProcessor;
 import alabaster.prospect.common.worldgen.HillsideStructure;
 import alabaster.prospect.common.worldgen.ProspectorCampStructure;
 import alabaster.prospect.common.worldgen.UniformOreProcessor;
+import alabaster.prospect.common.worldgen.ZiplineProcessor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.StructureType;
@@ -30,6 +31,7 @@ public class ProspectStructureTypes {
     public static final Supplier<StructureProcessorType<CaveInProcessor>> CAVE_IN = PROCESSORS.register("cave_in", () -> () -> CaveInProcessor.CODEC);
     public static final Supplier<StructureProcessorType<ScatterProcessor>> SCATTER = PROCESSORS.register("scatter", () -> () -> ScatterProcessor.CODEC);
     public static final Supplier<StructureProcessorType<EntityChanceProcessor>> ENTITY_CHANCE = PROCESSORS.register("entity_chance", () -> () -> EntityChanceProcessor.CODEC);
+    public static final Supplier<StructureProcessorType<ZiplineProcessor>> ZIPLINE = PROCESSORS.register("zipline", () -> () -> ZiplineProcessor.CODEC);
 
     public static final Supplier<StructureType<HillsideStructure>> HILLSIDE = STRUCTURE_TYPES.register("hillside", () -> () -> HillsideStructure.CODEC);
     public static final Supplier<StructureType<QuarryStructure>> QUARRY = STRUCTURE_TYPES.register("quarry", () -> () -> QuarryStructure.CODEC);

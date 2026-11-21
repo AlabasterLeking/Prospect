@@ -26,6 +26,11 @@ public final class ProspectAdvancements {
     public static final String HOOKED_ON_A_FEELING = "hooked_on_a_feeling";
     public static final String ZIPPEE = "zippee";
     public static final String GET_OVER_HERE = "get_over_here";
+    public static final String SLIME_TIME = "slime_time";
+    public static final String SUGAR_RUSH = "sugar_rush";
+    public static final String ROCK_BOTTOM = "rock_bottom";
+    public static final String HEAD_IN_THE_CLOUDS = "head_in_the_clouds";
+    public static final String SHATTERPROOF = "shatterproof";
 
     public static void award(ServerPlayer player, String name) {
         AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, name));

@@ -1,0 +1,34 @@
+{
+  "parent": "prospect:gem_collector",
+  "criteria": {
+    "placed_sapphire_glass": {
+      "conditions": {
+        "location": [
+          {
+            "block": "prospect:sapphire_glass",
+            "condition": "minecraft:block_state_property"
+          }
+        ]
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.shatterproof.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:sapphire_glass"
+    },
+    "title": {
+      "translate": "advancements.prospect.shatterproof.title"
+    }
+  },
+  "requirements": [
+    [
+      "placed_sapphire_glass"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

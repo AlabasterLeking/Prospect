@@ -547,6 +547,9 @@
           }
         }
       ]
+    },
+    {
+      "processor_type": "prospect:zipline"
     }
   ]
 }

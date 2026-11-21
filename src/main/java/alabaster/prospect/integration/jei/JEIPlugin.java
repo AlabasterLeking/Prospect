@@ -2,7 +2,9 @@ package alabaster.prospect.integration.jei;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.crafting.GemSocketRecipe;
+import alabaster.prospect.common.registry.ProspectKeyBindings;
 import alabaster.prospect.common.registry.ProspectModItems;
+import alabaster.prospect.common.tag.ProspectModTags;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -11,6 +13,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +25,7 @@ import net.minecraft.world.item.crafting.SmithingRecipe;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.stream.Stream;
 
 @JeiPlugin
 @ParametersAreNonnullByDefault
@@ -51,6 +55,26 @@ public class JEIPlugin implements IModPlugin {
                 Component.translatable("jei.info.gem_ruby"));
         registration.addIngredientInfo(new ItemStack(ProspectModItems.SAPPHIRE.get()), VanillaTypes.ITEM_STACK,
                 Component.translatable("jei.info.gem_sapphire"));
+
+        List<ItemStack> lines = Stream.concat(BuiltInRegistries.ITEM.getTag(ProspectModTags.ROPES).stream().flatMap(set -> set.stream()), BuiltInRegistries.ITEM.getTag(ProspectModTags.CHAINS).stream().flatMap(set -> set.stream()))
+                .distinct()
+                .map(ItemStack::new)
+                .toList();
+        if (!lines.isEmpty()) {
+            registration.addIngredientInfo(lines, VanillaTypes.ITEM_STACK, Component.translatable("jei.info.zipline"));
+        }
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.GRAPPLING_HOOK.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.grappling_hook", ProspectKeyBindings.GRAPPLE_REEL_IN.getTranslatedKeyMessage(), ProspectKeyBindings.GRAPPLE_LET_OUT.getTranslatedKeyMessage()));
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.SLIME_BUCKET.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.slime_bucket"));
+        registration.addIngredientInfo(List.of(new ItemStack(ProspectModItems.DYNAMITE.get()), new ItemStack(ProspectModItems.STICKY_DYNAMITE.get()), new ItemStack(ProspectModItems.DYNAMITE_BUNDLE.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.dynamite"));
+        registration.addIngredientInfo(List.of(new ItemStack(ProspectModItems.COPPER_PAN.get()), new ItemStack(ProspectModItems.IRON_PAN.get()), new ItemStack(ProspectModItems.GOLDEN_PAN.get()), new ItemStack(ProspectModItems.NETHERITE_PAN.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.pan"));
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.ROCK_CANDY.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.rock_candy"));
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.ALTIMETER.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.altimeter"));
 
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {

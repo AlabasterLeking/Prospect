@@ -1,0 +1,33 @@
+{
+  "parent": "prospect:root",
+  "criteria": {
+    "has_slime_bucket": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:slime_bucket"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.slime_time.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:slime_bucket"
+    },
+    "title": {
+      "translate": "advancements.prospect.slime_time.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_slime_bucket"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

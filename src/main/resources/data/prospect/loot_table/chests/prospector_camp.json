@@ -157,6 +157,51 @@
               }
             }
           ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:rock_candy",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:sticky_dynamite",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:wooden_rail",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 12
+              }
+            }
+          ]
         }
       ]
     },
@@ -284,6 +329,41 @@
         {
           "type": "minecraft:item",
           "name": "prospect:dynamite_bundle",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:golden_pan",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:altimeter",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:grappling_hook",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:prospecting_pickaxe",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.2,
+                "max": 0.6
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:portable_smelter",
           "weight": 1
         }
       ]

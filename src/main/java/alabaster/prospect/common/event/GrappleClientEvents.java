@@ -50,6 +50,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import alabaster.prospect.common.registry.ProspectSounds;
+import net.minecraft.sounds.SoundSource;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,6 +69,8 @@ public class GrappleClientEvents {
     private static final double SWING_PUSH = 0.03;
     private static final double SLACK_TOLERANCE = 0.05;
     private static final double MIN_FREE = 0.5;
+    private static final double TAUT_SPEED = 0.3;
+    private static final double BUMP_SPEED = 0.15;
 
     private static final double RIDE_GRAVITY = 0.08;
     private static final double RIDE_DRAG = 0.995;
@@ -83,6 +87,9 @@ public class GrappleClientEvents {
     private static int releasedId = -1;
     private static int reelSent;
     private static double length;
+    @Nullable
+    private static Vec3 lastAnchor;
+    private static boolean taut;
 
     private static int ziplineId = -1;
     private static double ziplineT;
@@ -213,7 +220,9 @@ public class GrappleClientEvents {
         for (Entity entity : player.clientLevel.entitiesForRendering()) {
             if (entity instanceof GrapplingHookEntity hook && attached(hook) && hook.getOwner() == player && hook.getId() != releasedId) {
                 hookId = hook.getId();
-                length = hook.getRopeLength();
+                length = Math.max(hook.getRopeLength(), GrapplingHookEntity.ropePoint(player).distanceTo(hook.position()));
+                lastAnchor = null;
+                taut = false;
                 reelSent = 0;
                 return hook;
             }
@@ -225,6 +234,13 @@ public class GrappleClientEvents {
         RopeWrap wrap = updateWrap(hook, player);
         length += wrap.takeDelta();
         Vec3 anchor = hook.position();
+        if (lastAnchor != null && !anchor.equals(lastAnchor)) {
+            Vec3 point = GrapplingHookEntity.ropePoint(player);
+            double before = wrap.fixedLength(lastAnchor) + point.distanceTo(wrap.pivot(lastAnchor));
+            double after = wrap.fixedLength(anchor) + point.distanceTo(wrap.pivot(anchor));
+            length += Math.max(0.0, after - before);
+        }
+        lastAnchor = anchor;
         double fixed = wrap.fixedLength(anchor);
         Vec3 offset = GrapplingHookEntity.ropePoint(player).subtract(wrap.pivot(anchor));
         double distance = offset.length();
@@ -238,7 +254,10 @@ public class GrappleClientEvents {
         length = Math.max(length, fixed + MIN_FREE);
         double free = length - fixed;
         player.resetFallDistance();
-        if (distance < free - SLACK_TOLERANCE || distance < 1.0E-4) return;
+        if (distance < free - SLACK_TOLERANCE || distance < 1.0E-4) {
+            taut = false;
+            return;
+        }
 
         Vec3 normal = offset.scale(1.0 / distance);
         boolean grounded = player.onGround();
@@ -251,6 +270,11 @@ public class GrappleClientEvents {
         }
         Vec3 velocity = player.getDeltaMovement();
         double outward = velocity.dot(normal);
+        if (!taut && !grounded && outward > TAUT_SPEED) {
+            float strength = (float) Mth.clamp(outward, TAUT_SPEED, 1.0);
+            player.level().playLocalSound(player.getX(), player.getEyeY(), player.getZ(), ProspectSounds.GRAPPLING_HOOK_TAUT.get(), SoundSource.PLAYERS, strength, 0.9F + player.getRandom().nextFloat() * 0.2F, false);
+        }
+        taut = true;
         double allowed = paying ? REEL_SPEED : 0.0;
         if (outward > allowed) {
             Vec3 removed = normal.scale(outward - allowed);
@@ -307,6 +331,7 @@ public class GrappleClientEvents {
         double margin = Math.min(0.5, RIDE_END_MARGIN / spanLength);
         ziplineT = Mth.clamp(ziplineT + ziplineSpeed / spanLength, margin, 1.0 - margin);
         if (ziplineT == margin || ziplineT == 1.0 - margin) {
+            bump(player);
             ziplineSpeed = 0.0;
         }
 
@@ -315,10 +340,17 @@ public class GrappleClientEvents {
         player.move(MoverType.SELF, target.subtract(player.position()));
         if (player.position().distanceToSqr(target) > RIDE_BLOCKED) {
             ziplineT = previousT;
+            bump(player);
             ziplineSpeed = 0.0;
         }
         player.setDeltaMovement(direction.scale(ziplineSpeed));
         player.resetFallDistance();
+    }
+
+    private static void bump(LocalPlayer player) {
+        if (Math.abs(ziplineSpeed) < BUMP_SPEED) return;
+        float strength = (float) Mth.clamp(Math.abs(ziplineSpeed), BUMP_SPEED, 1.0);
+        player.level().playLocalSound(player.getX(), player.getY() + player.getBbHeight(), player.getZ(), ProspectSounds.ZIPLINE_BUMP.get(), SoundSource.PLAYERS, strength, 0.9F + player.getRandom().nextFloat() * 0.2F, false);
     }
 
     private static void mount(LocalPlayer player, ZiplineEntity line, double t) {

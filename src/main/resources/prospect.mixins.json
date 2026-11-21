@@ -17,7 +17,8 @@
     "ItemInHandLayerMixin",
     "AmbientOcclusionFaceMixin",
     "ModelBlockRendererMixin",
-    "PlayerModelMixin"
+    "PlayerModelMixin",
+    "GuiAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

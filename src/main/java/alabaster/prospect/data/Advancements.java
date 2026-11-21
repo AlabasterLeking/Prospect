@@ -1,20 +1,26 @@
 package alabaster.prospect.data;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.registry.ProspectModBlocks;
 import alabaster.prospect.common.registry.ProspectModEntities;
 import alabaster.prospect.common.registry.ProspectModItems;
 import alabaster.prospect.common.tag.ProspectModTags;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.ConsumeItemTrigger;
+import net.minecraft.advancements.critereon.EntityEquipmentPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.ItemUsedOnLocationTrigger;
 import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.advancements.critereon.TradeTrigger;
 import net.minecraft.core.Holder;
@@ -38,6 +44,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class Advancements extends AdvancementProvider {
+    private static final double ROCK_BOTTOM_Y = -59.0;
+    private static final double BUILD_LIMIT_Y = 320.0;
     private static final ResourceLocation BACKGROUND = ResourceLocation.withDefaultNamespace("textures/block/tuff.png");
 
     public Advancements(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper helper) {
@@ -64,14 +72,27 @@ public class Advancements extends AdvancementProvider {
                 .addCriterion("has_mining_helmet", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.MINING_HELMET.get()))
                 .save(saver, id(ProspectAdvancements.BRIGHT_IDEA));
 
+        child(root, ProspectAdvancements.SLIME_TIME, ProspectModItems.SLIME_BUCKET.get(), AdvancementType.TASK, false)
+                .addCriterion("has_slime_bucket", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.SLIME_BUCKET.get()))
+                .save(saver, id(ProspectAdvancements.SLIME_TIME));
+
+        AdvancementHolder rockBottom = altimeterAt(root, ProspectAdvancements.ROCK_BOTTOM, MinMaxBounds.Doubles.atMost(ROCK_BOTTOM_Y), saver);
+        altimeterAt(rockBottom, ProspectAdvancements.HEAD_IN_THE_CLOUDS, MinMaxBounds.Doubles.atLeast(BUILD_LIMIT_Y), saver);
+
         AdvancementHolder rockhound = child(root, ProspectAdvancements.ROCKHOUND, ProspectModItems.PROSPECTING_PICKAXE.get(), AdvancementType.TASK, false)
                 .addCriterion("has_prospecting_pickaxe", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.PROSPECTING_PICKAXE.get()))
                 .save(saver, id(ProspectAdvancements.ROCKHOUND));
-        child(rockhound, ProspectAdvancements.GEM_COLLECTOR, ProspectModItems.RUBY.get(), AdvancementType.GOAL, false)
+        child(rockhound, ProspectAdvancements.SUGAR_RUSH, ProspectModItems.ROCK_CANDY.get(), AdvancementType.TASK, false)
+                .addCriterion("ate_rock_candy", ConsumeItemTrigger.TriggerInstance.usedItem(ProspectModItems.ROCK_CANDY.get()))
+                .save(saver, id(ProspectAdvancements.SUGAR_RUSH));
+        AdvancementHolder gemCollector = child(rockhound, ProspectAdvancements.GEM_COLLECTOR, ProspectModItems.RUBY.get(), AdvancementType.GOAL, false)
                 .addCriterion("ruby", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.RUBY.get()))
                 .addCriterion("sapphire", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.SAPPHIRE.get()))
                 .addCriterion("topaz", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.TOPAZ.get()))
                 .save(saver, id(ProspectAdvancements.GEM_COLLECTOR));
+        child(gemCollector, ProspectAdvancements.SHATTERPROOF, ProspectModItems.SAPPHIRE_GLASS.get(), AdvancementType.TASK, false)
+                .addCriterion("placed_sapphire_glass", ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(ProspectModBlocks.SAPPHIRE_GLASS.get()))
+                .save(saver, id(ProspectAdvancements.SHATTERPROOF));
 
         AdvancementHolder struckADeal = child(root, ProspectAdvancements.STRUCK_A_DEAL, ProspectModItems.WANDERING_PROSPECTOR_SPAWN_EGG.get(), AdvancementType.TASK, false)
                 .addCriterion("traded", CriteriaTriggers.TRADE.createCriterion(new TradeTrigger.TriggerInstance(Optional.empty(), Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(ProspectModEntities.WANDERING_PROSPECTOR.get()))), Optional.empty())))
@@ -100,6 +121,16 @@ public class Advancements extends AdvancementProvider {
             }
         };
         return HolderSet.emptyNamed(owner, tag);
+    }
+
+    private static AdvancementHolder altimeterAt(AdvancementHolder parent, String name, MinMaxBounds.Doubles y, Consumer<AdvancementHolder> saver) {
+        LocationPredicate.Builder location = LocationPredicate.Builder.location().setY(y);
+        ItemPredicate.Builder altimeter = ItemPredicate.Builder.item().of(ProspectModItems.ALTIMETER.get());
+        return child(parent, name, ProspectModItems.ALTIMETER.get(), AdvancementType.TASK, false)
+                .addCriterion("main_hand", PlayerTrigger.TriggerInstance.located(EntityPredicate.Builder.entity().located(location).equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(altimeter))))
+                .addCriterion("off_hand", PlayerTrigger.TriggerInstance.located(EntityPredicate.Builder.entity().located(location).equipment(EntityEquipmentPredicate.Builder.equipment().offhand(altimeter))))
+                .requirements(AdvancementRequirements.Strategy.OR)
+                .save(saver, id(name));
     }
 
     private static Advancement.Builder child(AdvancementHolder parent, String name, ItemLike icon, AdvancementType type, boolean hidden) {

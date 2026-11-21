@@ -88,6 +88,26 @@
           "type": "minecraft:item",
           "name": "minecraft:shears",
           "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:iron_pan",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "minecraft:uniform",
+                "min": 0.2,
+                "max": 0.7
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:grappling_hook",
+          "weight": 1
         }
       ]
     }

@@ -54,6 +54,9 @@
           "weight": 10
         }
       ]
+    },
+    {
+      "processor_type": "prospect:zipline"
     }
   ]
 }

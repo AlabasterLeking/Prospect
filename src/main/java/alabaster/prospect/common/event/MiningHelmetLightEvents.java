@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,6 +41,11 @@ public class MiningHelmetLightEvents {
 
     private static final Map<UUID, GlobalPos> ACTIVE_LIGHTS = new ConcurrentHashMap<>();
     private static final Map<UUID, GlobalPos> LAST_EYE_POS = new ConcurrentHashMap<>();
+    private static final Map<UUID, Integer> FLICKER_TICKS = new ConcurrentHashMap<>();
+
+    private static final int FLICKER_CHANCE = 40;
+    private static final int FLICKER_MIN_TICKS = 20;
+    private static final int FLICKER_MAX_TICKS = 40;
 
     private static final BlockPos[] SEARCH_OFFSETS = {
             new BlockPos(0, 0, 0),
@@ -67,14 +73,21 @@ public class MiningHelmetLightEvents {
             return;
         }
 
+        boolean flicker = flickering(entity);
         GlobalPos eye = GlobalPos.of(level.dimension(), BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ()));
         GlobalPos previous = ACTIVE_LIGHTS.get(id);
-        if (eye.equals(LAST_EYE_POS.get(id)) && isStillPlaced(level, previous)) return;
+        if (eye.equals(LAST_EYE_POS.get(id)) && isStillPlaced(level, previous)) {
+            setFlicker(level, previous.pos(), flicker);
+            return;
+        }
         LAST_EYE_POS.put(id, eye);
 
         BlockPos ownPos = previous != null && previous.dimension().equals(level.dimension()) ? previous.pos() : null;
         BlockPos placeAt = findPlaceablePosition(level, eye.pos(), ownPos);
-        if (placeAt != null && placeAt.equals(ownPos) && isStillPlaced(level, previous)) return;
+        if (placeAt != null && placeAt.equals(ownPos) && isStillPlaced(level, previous)) {
+            setFlicker(level, placeAt, flicker);
+            return;
+        }
 
         if (placeAt == null) {
             ACTIVE_LIGHTS.remove(id);
@@ -82,7 +95,7 @@ public class MiningHelmetLightEvents {
             BlockState current = level.getBlockState(placeAt);
             boolean water = current.is(Blocks.WATER) || current.is(ProspectModBlocks.HELMET_LIGHT.get()) && current.getValue(HelmetLightBlock.WATERLOGGED);
             ACTIVE_LIGHTS.put(id, GlobalPos.of(level.dimension(), placeAt));
-            level.setBlock(placeAt, ProspectModBlocks.HELMET_LIGHT.get().defaultBlockState().setValue(HelmetLightBlock.WATERLOGGED, water), HelmetLightBlock.QUIET_UPDATE);
+            level.setBlock(placeAt, ProspectModBlocks.HELMET_LIGHT.get().defaultBlockState().setValue(HelmetLightBlock.WATERLOGGED, water).setValue(HelmetLightBlock.FLICKER, flicker), HelmetLightBlock.QUIET_UPDATE);
         }
 
         if (previous != null && !previous.equals(ACTIVE_LIGHTS.get(id))) {
@@ -114,6 +127,7 @@ public class MiningHelmetLightEvents {
     public static void onServerStopped(ServerStoppedEvent event) {
         ACTIVE_LIGHTS.clear();
         LAST_EYE_POS.clear();
+        FLICKER_TICKS.clear();
     }
 
     public static boolean usesBlockLights() {
@@ -129,8 +143,32 @@ public class MiningHelmetLightEvents {
         return helmet.is(ProspectModTags.MINING_HELMET_LIGHT) && MiningHelmetItem.isLightOn(helmet);
     }
 
+    private static boolean flickering(LivingEntity entity) {
+        if (!entity.getType().is(EntityTypeTags.UNDEAD)) return false;
+        UUID id = entity.getUUID();
+        int remaining = FLICKER_TICKS.getOrDefault(id, 0);
+        if (remaining <= 0) {
+            if (entity.getRandom().nextInt(FLICKER_CHANCE) != 0) return false;
+            remaining = FLICKER_MIN_TICKS + entity.getRandom().nextInt(FLICKER_MAX_TICKS - FLICKER_MIN_TICKS + 1);
+        }
+        if (remaining > 1) {
+            FLICKER_TICKS.put(id, remaining - 1);
+        } else {
+            FLICKER_TICKS.remove(id);
+        }
+        return entity.getRandom().nextBoolean();
+    }
+
+    private static void setFlicker(Level level, BlockPos pos, boolean flicker) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getValue(HelmetLightBlock.FLICKER) != flicker) {
+            level.setBlock(pos, state.setValue(HelmetLightBlock.FLICKER, flicker), HelmetLightBlock.QUIET_UPDATE);
+        }
+    }
+
     private static void release(@Nullable MinecraftServer server, UUID id) {
         LAST_EYE_POS.remove(id);
+        FLICKER_TICKS.remove(id);
         GlobalPos pos = ACTIVE_LIGHTS.remove(id);
         if (pos != null && server != null) {
             clearLight(server, pos);

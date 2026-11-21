@@ -6,6 +6,7 @@ import alabaster.prospect.common.entity.grapple.GrapplingHookEntity;
 import alabaster.prospect.common.entity.grapple.ZiplineEntity;
 import alabaster.prospect.common.network.RopePendingPayload;
 import alabaster.prospect.common.network.ZiplineRidingPayload;
+import alabaster.prospect.common.registry.ProspectSounds;
 import alabaster.prospect.common.tag.ProspectModTags;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
 import net.minecraft.core.BlockPos;
@@ -31,6 +32,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
@@ -191,6 +193,8 @@ public class GrappleEvents {
             RIDERS.put(player.getUUID(), ziplineId);
         }
         if (wasRiding != (ziplineId != null)) {
+            SoundEvent sound = (ziplineId != null ? ProspectSounds.ZIPLINE_ATTACH : ProspectSounds.ZIPLINE_DETACH).get();
+            player.level().playSound(null, player.getX(), player.getY() + player.getBbHeight(), player.getZ(), sound, SoundSource.PLAYERS, 0.7F, 1.0F);
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new ZiplineRidingPayload(player.getId(), ziplineId != null));
         }
     }
@@ -228,6 +232,13 @@ public class GrappleEvents {
         }
         player.resetFallDistance();
         GrapplingHookEntity.keepAloft(player);
+    }
+
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        RIDERS.clear();
+        PENDING.clear();
+        GrapplingHookEntity.clearActive();
     }
 
     @SubscribeEvent

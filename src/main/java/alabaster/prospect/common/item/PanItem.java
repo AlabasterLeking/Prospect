@@ -31,6 +31,7 @@ public class PanItem extends Item {
     private static final int PARTICLE_INTERVAL_TICKS = 3;
     private static final int PARTICLES_PER_BURST = 5;
     private static final int SIFT_INTERVAL_TICKS = 8;
+    private static final int DRIPS = 8;
 
     private final boolean canHarvestLava;
     private final ItemLike repairMaterial;
@@ -98,17 +99,32 @@ public class PanItem extends Item {
             return;
         }
 
+        boolean lava = SparkleNodeEntity.isClientHarvestingLava(player.getId());
+        if (remainingUseDuration <= 1) {
+            spawnDrips(player, level, lava);
+            return;
+        }
         int elapsed = USE_DURATION - remainingUseDuration;
         if (elapsed % PARTICLE_INTERVAL_TICKS != 0) return;
-        boolean lava = SparkleNodeEntity.isClientHarvestingLava(player.getId());
         spawnAmbientParticles(player, level, lava);
     }
 
+    private void spawnDrips(Player player, Level level, boolean lava) {
+        Vec3 origin = panOrigin(player);
+        var particle = lava ? ParticleTypes.FALLING_LAVA : ParticleTypes.FALLING_WATER;
+        for (int i = 0; i < DRIPS; i++) {
+            double ox = (level.random.nextDouble() - 0.5) * 0.6;
+            double oz = (level.random.nextDouble() - 0.5) * 0.6;
+            level.addParticle(particle, origin.x + ox, origin.y - 0.05, origin.z + oz, 0.0, 0.0, 0.0);
+        }
+    }
+
+    private static Vec3 panOrigin(Player player) {
+        return player.getEyePosition().add(player.getLookAngle().scale(1.2)).subtract(0, 0.6, 0);
+    }
+
     private void spawnAmbientParticles(Player player, Level level, boolean lava) {
-        Vec3 look = player.getLookAngle();
-        Vec3 origin = player.getEyePosition()
-                .add(look.scale(1.2))
-                .subtract(0, 0.6, 0);
+        Vec3 origin = panOrigin(player);
 
         var particle = lava ? ParticleTypes.LAVA : ParticleTypes.SPLASH;
 

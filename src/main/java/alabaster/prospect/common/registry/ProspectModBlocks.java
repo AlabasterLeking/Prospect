@@ -126,7 +126,7 @@ public class ProspectModBlocks {
                     .noLootTable()
                     .noOcclusion()
                     .pushReaction(PushReaction.DESTROY)
-                    .lightLevel(state -> HelmetLightBlock.LIGHT_LEVEL)));
+                    .lightLevel(HelmetLightBlock::lightLevel)));
 
     private static BlockBehaviour.Properties sapphireGlassProperties(Block template) {
         return BlockBehaviour.Properties.ofFullCopy(template).mapColor(MapColor.COLOR_BLUE).strength(1.5F, 1200.0F).requiresCorrectToolForDrops();
