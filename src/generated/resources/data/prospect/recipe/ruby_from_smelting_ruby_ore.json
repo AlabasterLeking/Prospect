@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "group": "ruby",
+  "ingredient": {
+    "tag": "prospect:ruby_ores"
+  },
+  "result": {
+    "count": 1,
+    "id": "prospect:ruby"
+  }
+}
