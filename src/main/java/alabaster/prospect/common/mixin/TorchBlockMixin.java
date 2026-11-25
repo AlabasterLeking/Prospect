@@ -29,7 +29,7 @@ public abstract class TorchBlockMixin extends BaseTorchBlock {
             super.randomTick(state, level, pos, random);
             return;
         }
-        if (Config.TORCHES_EXTINGUISH_IN_RAIN.get() && level.isRainingAt(pos) && random.nextFloat() < 0.5F) {
+        if (Config.TORCHES_EXTINGUISH_IN_RAIN.get() && level.isRainingAt(pos) && random.nextFloat() < Config.TORCH_RAIN_CHANCE.get()) {
             ExtinguishedLight.douse(level, pos, state);
         }
     }

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "prospect:dynamite_bundle"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "prospect:dynamite"
+  }
+}

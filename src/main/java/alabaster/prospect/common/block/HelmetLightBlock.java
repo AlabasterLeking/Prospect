@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -28,19 +29,17 @@ import org.jetbrains.annotations.Nullable;
 public class HelmetLightBlock extends Block implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final BooleanProperty FLICKER = BooleanProperty.create("flicker");
-    public static final int LIGHT_LEVEL = 15;
-    public static final int FLICKER_LIGHT_LEVEL = 8;
+    public static final IntegerProperty LIGHT = IntegerProperty.create("light", 1, 15);
     public static final int QUIET_UPDATE = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
     private static final int CHECK_INTERVAL = 20;
 
     public HelmetLightBlock(Properties properties) {
         super(properties);
-        registerDefaultState(stateDefinition.any().setValue(WATERLOGGED, false).setValue(FLICKER, false));
+        registerDefaultState(stateDefinition.any().setValue(WATERLOGGED, false).setValue(LIGHT, 15));
     }
 
     public static int lightLevel(BlockState state) {
-        return state.getValue(FLICKER) ? FLICKER_LIGHT_LEVEL : LIGHT_LEVEL;
+        return state.getValue(LIGHT);
     }
 
     public static BlockState emptyStateFor(BlockState state) {
@@ -49,7 +48,7 @@ public class HelmetLightBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED, FLICKER);
+        builder.add(WATERLOGGED, LIGHT);
     }
 
     @Override

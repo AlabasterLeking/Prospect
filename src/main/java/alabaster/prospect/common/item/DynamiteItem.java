@@ -1,5 +1,7 @@
 package alabaster.prospect.common.item;
 
+import alabaster.prospect.Config;
+import alabaster.prospect.common.registry.ProspectModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -50,15 +52,27 @@ public class DynamiteItem extends Item {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Block placed = type.placedBlock();
-        if (placed != null && (player.isSecondaryUseActive() || level.getBlockState(pos).is(placed))) {
+        BlockState clicked = level.getBlockState(pos);
+        boolean sneaking = player.isSecondaryUseActive();
+        if (!sneaking && isOpenFlame(clicked)) {
+            if (!level.isClientSide()) {
+                ignite(level, player, context.getHand(), context.getItemInHand(), type);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
+        if (placed == null) return InteractionResult.PASS;
+        if (sneaking || clicked.is(placed) || !isIgniter(player.getItemInHand(otherHand(context.getHand())))) {
             return place(context, placed);
         }
-        if (!isOpenFlame(level.getBlockState(pos))) return InteractionResult.PASS;
+        return InteractionResult.PASS;
+    }
 
-        if (!level.isClientSide()) {
-            ignite(level, player, context.getHand(), context.getItemInHand(), type);
-        }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+    private static InteractionHand otherHand(InteractionHand hand) {
+        return hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+    }
+
+    private static boolean isIgniter(ItemStack stack) {
+        return stack.is(Items.FLINT_AND_STEEL) || stack.is(Items.FIRE_CHARGE);
     }
 
     private static InteractionResult place(UseOnContext context, Block block) {
@@ -80,10 +94,10 @@ public class DynamiteItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        InteractionHand otherHand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+        InteractionHand otherHand = otherHand(hand);
         ItemStack igniter = player.getItemInHand(otherHand);
         boolean flint = igniter.is(Items.FLINT_AND_STEEL);
-        if (!flint && !igniter.is(Items.FIRE_CHARGE)) return InteractionResultHolder.pass(stack);
+        if (!isIgniter(igniter)) return InteractionResultHolder.pass(stack);
 
         level.playSound(player, player.getX(), player.getY(), player.getZ(), flint ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
 
@@ -116,6 +130,12 @@ public class DynamiteItem extends Item {
 
     private static void ignite(Level level, Player player, InteractionHand hand, ItemStack stack, DynamiteType type) {
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TNT_PRIMED, SoundSource.PLAYERS, 0.6F, 1.4F);
+        int cooldown = Config.DYNAMITE_LIGHT_COOLDOWN.get();
+        if (cooldown > 0) {
+            player.getCooldowns().addCooldown(ProspectModItems.DYNAMITE.get(), cooldown);
+            player.getCooldowns().addCooldown(ProspectModItems.STICKY_DYNAMITE.get(), cooldown);
+            player.getCooldowns().addCooldown(ProspectModItems.DYNAMITE_BUNDLE.get(), cooldown);
+        }
 
         ItemStack lit = LitDynamiteItem.create(type);
         if (stack.getCount() > 1) {

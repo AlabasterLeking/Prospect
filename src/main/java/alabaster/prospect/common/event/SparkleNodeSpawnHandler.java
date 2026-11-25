@@ -1,5 +1,8 @@
 package alabaster.prospect.common.event;
 
+import alabaster.prospect.Config;
+import alabaster.prospect.common.entity.sparklenode.SparkleNodeEntity;
+import net.minecraft.world.phys.AABB;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.entity.sparklenode.SparkleNodeSpawner;
 import net.minecraft.core.BlockPos;
@@ -20,7 +23,7 @@ import java.util.Set;
 public class SparkleNodeSpawnHandler {
 
     private static final int SPAWN_INTERVAL_TICKS = 20;
-    private static final float SPAWN_CHANCE = 0.01f;
+    private static final double NODE_COUNT_RADIUS = 32.0;
     private static final int CANDIDATES_PER_ATTEMPT = 8;
 
     @SubscribeEvent
@@ -29,9 +32,14 @@ public class SparkleNodeSpawnHandler {
         if (level.getGameTime() % SPAWN_INTERVAL_TICKS != 0) return;
 
         RandomSource random = level.random;
+        float chance = Config.SPARKLE_NODE_CHANCE.get().floatValue();
+        int maxNodes = Config.MAX_SPARKLE_NODES.get();
+        if (chance <= 0.0F || maxNodes <= 0) return;
 
         Set<Long> visited = new HashSet<>();
         for (ServerPlayer player : level.players()) {
+            AABB nearby = player.getBoundingBox().inflate(NODE_COUNT_RADIUS, level.getHeight(), NODE_COUNT_RADIUS);
+            if (level.getEntitiesOfClass(SparkleNodeEntity.class, nearby).size() >= maxNodes) continue;
             ChunkPos center = player.chunkPosition();
 
             for (int cx = center.x - 1; cx <= center.x + 1; cx++) {
@@ -41,7 +49,7 @@ public class SparkleNodeSpawnHandler {
 
                     LevelChunk chunk = level.getChunkSource().getChunkNow(cx, cz);
                     if (chunk == null) continue;
-                    if (random.nextFloat() >= SPAWN_CHANCE) continue;
+                    if (random.nextFloat() >= chance) continue;
 
                     trySpawnInChunk(level, chunk.getPos(), random);
                 }

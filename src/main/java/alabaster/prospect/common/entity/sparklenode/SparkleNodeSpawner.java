@@ -1,5 +1,6 @@
 package alabaster.prospect.common.entity.sparklenode;
 
+import alabaster.prospect.Config;
 import alabaster.prospect.common.registry.ProspectModEntities;
 import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.BlockPos;
@@ -17,7 +18,7 @@ public class SparkleNodeSpawner {
     private static final int CHECK_RADIUS = 2;
     private static final float MIN_FLUID_FRACTION = 0.25f;
     private static final int AREA_CELLS = (CHECK_RADIUS * 2 + 1) * (CHECK_RADIUS * 2 + 1); // 25
-    private static final int MAX_FLOOR_SEARCH_DEPTH = 32;
+    private static final int MAX_LAVA_DEPTH = 32;
 
     public static boolean trySpawn(ServerLevel level, BlockPos pos) {
         boolean isLava = isLava(level, pos);
@@ -27,7 +28,7 @@ public class SparkleNodeSpawner {
         BlockPos above = pos.above();
         if (isSameFluid(level, above, isLava)) return false;
 
-        BlockPos below = findFloor(level, pos, isLava);
+        BlockPos below = findFloor(level, pos, isLava, isLava ? MAX_LAVA_DEPTH : Config.SPARKLE_NODE_MAX_DEPTH.get());
         if (below == null) return false;
         BlockState groundState = level.getBlockState(below);
         if (!groundState.is(ProspectModTags.SPAWNS_SPARKLE_NODES)) return false;
@@ -58,9 +59,9 @@ public class SparkleNodeSpawner {
         return true;
     }
 
-    private static BlockPos findFloor(ServerLevel level, BlockPos surface, boolean lava) {
+    private static BlockPos findFloor(ServerLevel level, BlockPos surface, boolean lava, int maxDepth) {
         BlockPos.MutableBlockPos cursor = surface.mutable();
-        for (int i = 0; i < MAX_FLOOR_SEARCH_DEPTH; i++) {
+        for (int i = 0; i < maxDepth; i++) {
             cursor.move(0, -1, 0);
             if (!isSameFluid(level, cursor, lava)) {
                 return cursor.immutable();

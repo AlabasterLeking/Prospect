@@ -1,5 +1,6 @@
 package alabaster.prospect.common.item;
 
+import alabaster.prospect.Config;
 import alabaster.prospect.common.prospecting.OreCandidate;
 import alabaster.prospect.common.prospecting.ProspectingContext;
 import alabaster.prospect.common.prospecting.ProspectingGemEffect;
@@ -37,7 +38,6 @@ import java.util.*;
 
 public class ProspectingPickaxeItem extends Item {
 
-    private static final int BASE_RADIUS = 12;
     private static final int COOLDOWN_TICKS = 30;
     private static final double PING_RANGE = 32.0;
     public static int distanceIncrement = 3;
@@ -136,7 +136,7 @@ public class ProspectingPickaxeItem extends Item {
         ProspectingContext gemCtx = new ProspectingContext(level, player, stack, clickedPos, ctx.getClickedFace());
         List<ProspectingGemEffect> gems = activeGems(stack);
 
-        int radius = BASE_RADIUS;
+        int radius = Config.PICKAXE_SEARCH_RADIUS.get();
         for (ProspectingGemEffect gem : gems) {
             radius = gem.modifyRadius(radius, gemCtx);
         }

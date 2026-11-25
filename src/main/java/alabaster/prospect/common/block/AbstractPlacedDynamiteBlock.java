@@ -42,6 +42,7 @@ public abstract class AbstractPlacedDynamiteBlock extends HorizontalDirectionalB
 
     private static final int CHAIN_FUSE_MIN = 10;
     private static final int CHAIN_FUSE_SPREAD = 20;
+    private static final float LYING_SPIN = 270.0F;
 
     private final DynamiteType type;
     private final Map<BlockState, VoxelShape> shapes = new HashMap<>();
@@ -63,6 +64,10 @@ public abstract class AbstractPlacedDynamiteBlock extends HorizontalDirectionalB
 
     protected List<double[]> layout(BlockState state) {
         return layout(state.getValue(countProperty()));
+    }
+
+    protected boolean isLying(BlockState state) {
+        return false;
     }
 
     @Override
@@ -199,11 +204,15 @@ public abstract class AbstractPlacedDynamiteBlock extends HorizontalDirectionalB
 
     private void spawn(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity igniter, int fuse) {
         if (!(level instanceof ServerLevel server)) return;
+        Direction facing = state.getValue(FACING);
+        float yaw = 270.0F - facing.toYRot();
+        float spin = isLying(state) ? LYING_SPIN : 0.0F;
         List<double[]> boxes = layout(state);
         for (double[] box : boxes) {
-            double[] r = rotate(box, state.getValue(FACING));
-            Vec3 at = new Vec3(pos.getX() + (r[0] + r[3]) / 32.0, pos.getY(), pos.getZ() + (r[2] + r[5]) / 32.0);
+            double[] r = rotate(box, facing);
+            Vec3 at = new Vec3(pos.getX() + (r[0] + r[3]) / 32.0, pos.getY() + r[1] / 16.0, pos.getZ() + (r[2] + r[5]) / 32.0);
             DynamiteEntity dynamite = new DynamiteEntity(server, at.x, at.y, at.z, fuse, type);
+            dynamite.rest(yaw, spin, pos.below());
             if (igniter != null) {
                 dynamite.setOwner(igniter);
             }

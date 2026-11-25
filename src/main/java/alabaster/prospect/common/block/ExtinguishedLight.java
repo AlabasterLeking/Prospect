@@ -4,6 +4,7 @@ import alabaster.prospect.common.registry.ProspectModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -26,14 +27,16 @@ public final class ExtinguishedLight {
 
     public static ItemInteractionResult relight(ItemStack stack, Level level, BlockPos pos, Player player, InteractionHand hand, BlockState lit) {
         boolean flint = stack.is(Items.FLINT_AND_STEEL);
-        if (!flint && !stack.is(Items.FIRE_CHARGE)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        boolean torch = stack.is(Items.TORCH);
+        if (!flint && !torch && !stack.is(Items.FIRE_CHARGE)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (!level.isClientSide()) {
             level.setBlock(pos, lit, Block.UPDATE_ALL_IMMEDIATE);
-            level.playSound(null, pos, flint ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.random.nextFloat() * 0.4F + 0.8F);
+            SoundEvent sound = flint ? SoundEvents.FLINTANDSTEEL_USE : torch ? SoundEvents.FIRE_AMBIENT : SoundEvents.FIRECHARGE_USE;
+            level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, level.random.nextFloat() * 0.4F + 0.8F);
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
             if (flint) {
                 stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
-            } else {
+            } else if (!torch) {
                 stack.consume(1, player);
             }
         }

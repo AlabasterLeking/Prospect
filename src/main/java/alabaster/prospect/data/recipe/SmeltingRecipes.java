@@ -21,22 +21,21 @@ public class SmeltingRecipes
     private static final int SMELTING_TIME = 200;
     private static final int BLASTING_TIME = 100;
     private static final int BULK_BLASTING_TIME = 800;
-    private static final int BULK_COUNT = 9;
-    private static final float RAW_IRON_EXPERIENCE = 0.7F;
-    private static final float RAW_COPPER_EXPERIENCE = 0.7F;
-    private static final float RAW_GOLD_EXPERIENCE = 1.0F;
+    private static final float IRON_BLOCK_EXPERIENCE = 6.3F;
+    private static final float COPPER_BLOCK_EXPERIENCE = 6.3F;
+    private static final float GOLD_BLOCK_EXPERIENCE = 9.0F;
 
     public static void register(RecipeOutput output) {
         gemOre(output, ProspectModTags.RUBY_ORES, ProspectModItems.RUBY.get(), "ruby");
         gemOre(output, ProspectModTags.SAPPHIRE_ORES, ProspectModItems.SAPPHIRE.get(), "sapphire");
         gemOre(output, ProspectModTags.TOPAZ_ORES, ProspectModItems.TOPAZ.get(), "topaz");
-        rawBlock(output, Items.RAW_IRON_BLOCK, Items.IRON_BLOCK, RAW_IRON_EXPERIENCE, "iron");
-        rawBlock(output, Items.RAW_COPPER_BLOCK, Items.COPPER_BLOCK, RAW_COPPER_EXPERIENCE, "copper");
-        rawBlock(output, Items.RAW_GOLD_BLOCK, Items.GOLD_BLOCK, RAW_GOLD_EXPERIENCE, "gold");
+        rawBlock(output, Items.RAW_IRON_BLOCK, Items.IRON_BLOCK, IRON_BLOCK_EXPERIENCE, "iron");
+        rawBlock(output, Items.RAW_COPPER_BLOCK, Items.COPPER_BLOCK, COPPER_BLOCK_EXPERIENCE, "copper");
+        rawBlock(output, Items.RAW_GOLD_BLOCK, Items.GOLD_BLOCK, GOLD_BLOCK_EXPERIENCE, "gold");
     }
 
-    private static void rawBlock(RecipeOutput output, ItemLike rawBlock, ItemLike block, float experiencePerRaw, String name) {
-        SimpleCookingRecipeBuilder.blasting(Ingredient.of(rawBlock), RecipeCategory.MISC, block, experiencePerRaw * BULK_COUNT, BULK_BLASTING_TIME)
+    private static void rawBlock(RecipeOutput output, ItemLike rawBlock, ItemLike block, float experience, String name) {
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(rawBlock), RecipeCategory.MISC, block, experience, BULK_BLASTING_TIME)
                 .group(name + "_block")
                 .unlockedBy("has_raw_" + name + "_block", InventoryChangeTrigger.TriggerInstance.hasItems(rawBlock))
                 .save(output, ResourceLocation.fromNamespaceAndPath(Prospect.MODID, name + "_block_from_blasting_raw_" + name + "_block"));

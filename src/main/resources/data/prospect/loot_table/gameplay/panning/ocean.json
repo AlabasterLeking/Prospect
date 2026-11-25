@@ -6,10 +6,11 @@
       "rolls": 1,
       "entries": [
         { "type": "minecraft:item", "name": "minecraft:prismarine_shard", "weight": 18 },
-        { "type": "minecraft:item", "name": "minecraft:kelp", "weight": 10 },
+        { "type": "minecraft:item", "name": "minecraft:kelp", "weight": 10, "quality": -2 },
         { "type": "minecraft:item", "name": "minecraft:iron_nugget", "weight": 10 },
-        { "type": "minecraft:item", "name": "minecraft:prismarine_crystals", "weight": 6 },
-        { "type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 6 }
+        { "type": "minecraft:item", "name": "minecraft:prismarine_crystals", "weight": 6, "quality": 1 },
+        { "type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 6 },
+        { "type": "minecraft:item", "name": "minecraft:nautilus_shell", "weight": 1, "quality": 1 }
       ]
     }
   ]

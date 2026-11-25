@@ -37,6 +37,11 @@
         },
         {
           "type": "minecraft:item",
+          "name": "prospect:ruby",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:miner_pottery_sherd",
           "weight": 1
         },

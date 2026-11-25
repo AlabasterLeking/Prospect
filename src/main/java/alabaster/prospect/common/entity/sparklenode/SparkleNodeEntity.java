@@ -1,6 +1,7 @@
 package alabaster.prospect.common.entity.sparklenode;
 
 import alabaster.prospect.common.item.PanItem;
+import alabaster.prospect.common.prospecting.PanningTables;
 import alabaster.prospect.common.registry.ProspectSounds;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
 import net.minecraft.ChatFormatting;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import alabaster.prospect.common.registry.ProspectEnchantments;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -35,6 +37,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.neoforge.common.Tags;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +51,12 @@ public class SparkleNodeEntity extends Entity {
 
     private static final Map<Integer, Boolean> CLIENT_HARVEST_LAVA = new HashMap<>();
     private static final int SHIMMER_CHANCE = 80;
+    private static final float SPARKLE_CHANCE = 0.2F;
+    private static final int FADE_TICKS = 200;
+    private static final float MIN_FADE = 0.1F;
 
     private int lifetime = 1200; // 1 minutes default
+    private UUID panner;
 
     public SparkleNodeEntity(EntityType<?> type, Level level) {
         super(type, level);
@@ -59,9 +66,12 @@ public class SparkleNodeEntity extends Entity {
     public void tick() {
         super.tick();
 
-        this.entityData.set(AGE, getAge() + 1);
+        if (!level().isClientSide() && !beingPanned()) {
+            this.entityData.set(AGE, getAge() + 1);
+        }
 
-        if (random.nextFloat() < 0.2f) {
+        float fade = Math.max(MIN_FADE, Math.min(1.0F, (float) (lifetime - getAge()) / FADE_TICKS));
+        if (random.nextFloat() < SPARKLE_CHANCE * fade) {
             double spread = 0.9;
             double x = getX() + (random.nextDouble() - 0.5) * spread;
             double y = getY() + 0.02;
@@ -71,12 +81,33 @@ public class SparkleNodeEntity extends Entity {
             level().addParticle(particle, x, y, z, 0, 0.01, 0);
         }
 
-        if (level().isClientSide() && random.nextInt(SHIMMER_CHANCE) == 0) {
+        if (level().isClientSide() && random.nextFloat() * SHIMMER_CHANCE < fade) {
             level().playLocalSound(getX(), getY(), getZ(), ProspectSounds.SPARKLE_NODE_SHIMMER.get(), SoundSource.AMBIENT, 0.5F, 0.9F + random.nextFloat() * 0.3F, false);
         }
 
-        if (getAge() >= lifetime) {
+        if (!level().isClientSide() && getAge() >= lifetime) {
+            fizzle();
             discard();
+        }
+    }
+
+    private boolean beingPanned() {
+        if (panner == null) return false;
+        Player player = level().getPlayerByUUID(panner);
+        if (player != null && player.isUsingItem() && player.getPersistentData().getInt("HarvestingNode") == getId()) return true;
+        panner = null;
+        return false;
+    }
+
+    private void fizzle() {
+        if (!(level() instanceof ServerLevel server)) return;
+        double y = getY() + 0.05;
+        if (isInLava()) {
+            server.sendParticles(ParticleTypes.SMOKE, getX(), y, getZ(), 6, 0.25, 0.02, 0.25, 0.01);
+            server.playSound(null, getX(), y, getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.AMBIENT, 0.3F, 1.6F + random.nextFloat() * 0.3F);
+        } else {
+            server.sendParticles(ParticleTypes.BUBBLE_POP, getX(), y, getZ(), 8, 0.3, 0.02, 0.3, 0.02);
+            server.playSound(null, getX(), y, getZ(), SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.AMBIENT, 0.6F, 1.2F + random.nextFloat() * 0.3F);
         }
     }
 
@@ -120,7 +151,14 @@ public class SparkleNodeEntity extends Entity {
         if (hand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 
         ItemStack panStack = player.getItemInHand(hand);
-        if (!(panStack.getItem() instanceof PanItem panItem)) return InteractionResult.PASS;
+        if (!(panStack.getItem() instanceof PanItem panItem)) {
+            if (!player.level().isClientSide) {
+                boolean offhandPan = player.getOffhandItem().getItem() instanceof PanItem;
+                player.displayClientMessage(Component.translatable(offhandPan ? "message.prospect.sparkle_node.main_hand" : "message.prospect.sparkle_node.need_tool")
+                        .withStyle(ChatFormatting.GOLD), true);
+            }
+            return InteractionResult.PASS;
+        }
 
         if (isInLava() && !panItem.canHarvestLava()) {
             if (!player.level().isClientSide) {
@@ -138,6 +176,7 @@ public class SparkleNodeEntity extends Entity {
         } else if (player instanceof ServerPlayer serverPlayer) {
             // Record that the player is harvesting this node
             serverPlayer.getPersistentData().putInt("HarvestingNode", this.getId());
+            panner = serverPlayer.getUUID();
             serverPlayer.getPersistentData().putString("HarvestingHand", hand.name());
         }
 
@@ -149,12 +188,9 @@ public class SparkleNodeEntity extends Entity {
     }
 
     private ResourceLocation getBiomeLootTable(ServerLevel level) {
-        var biome = level.getBiome(blockPosition());
-        ResourceLocation biomeId = biome.unwrapKey()
-                .map(k -> k.location())
-                .orElse(ResourceLocation.fromNamespaceAndPath("minecraft", "plains"));
-
-        return ResourceLocation.fromNamespaceAndPath("prospect", "gameplay/panning/" + biomeId.getPath());
+        Holder<Biome> biome = level.getBiome(blockPosition());
+        String table = PanningTables.resolve(level.getServer(), biome);
+        return PanningTables.id(table != null ? table : biome.unwrapKey().map(key -> key.location().getPath()).orElse("plains"));
     }
 
     private static boolean isGem(ItemStack stack) {
@@ -207,6 +243,7 @@ public class SparkleNodeEntity extends Entity {
                     .withParameter(LootContextParams.THIS_ENTITY, this)
                     .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
                     .withParameter(LootContextParams.DAMAGE_SOURCE, server.damageSources().generic())
+                    .withLuck((panStack.getItem() instanceof PanItem pan ? pan.luck() : 0.0F) + player.getLuck())
                     .create(LootContextParamSets.ENTITY);
 
             Holder<Enchantment> panningLuck = server.registryAccess()

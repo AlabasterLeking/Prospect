@@ -1,272 +1,137 @@
 {
   "variants": {
-    "facing=east,lying=false,sticks=1": {
-      "model": "prospect:block/placed_dynamite_1",
-      "y": 90
-    },
-    "facing=east,lying=false,sticks=2": {
-      "model": "prospect:block/placed_dynamite_2",
-      "y": 90
-    },
-    "facing=east,lying=false,sticks=3": {
-      "model": "prospect:block/placed_dynamite_3",
-      "y": 90
-    },
-    "facing=east,lying=false,sticks=4": {
-      "model": "prospect:block/placed_dynamite_4",
-      "y": 90
-    },
-    "facing=east,lying=false,sticks=5": {
-      "model": "prospect:block/placed_dynamite_5",
-      "y": 90
-    },
-    "facing=east,lying=false,sticks=6": {
-      "model": "prospect:block/placed_dynamite_6",
-      "y": 90
-    },
-    "facing=east,lying=false,sticks=7": {
-      "model": "prospect:block/placed_dynamite_7",
-      "y": 90
-    },
-    "facing=east,lying=false,sticks=8": {
-      "model": "prospect:block/placed_dynamite_8",
-      "y": 90
-    },
-    "facing=east,lying=false,sticks=9": {
-      "model": "prospect:block/placed_dynamite_9",
-      "y": 90
-    },
-    "facing=east,lying=true,sticks=1": {
+    "facing=east,sticks=1": {
       "model": "prospect:block/placed_dynamite_lying_1",
       "y": 90
     },
-    "facing=east,lying=true,sticks=2": {
+    "facing=east,sticks=2": {
       "model": "prospect:block/placed_dynamite_lying_2",
       "y": 90
     },
-    "facing=east,lying=true,sticks=3": {
+    "facing=east,sticks=3": {
       "model": "prospect:block/placed_dynamite_lying_3",
       "y": 90
     },
-    "facing=east,lying=true,sticks=4": {
+    "facing=east,sticks=4": {
       "model": "prospect:block/placed_dynamite_lying_4",
       "y": 90
     },
-    "facing=east,lying=true,sticks=5": {
+    "facing=east,sticks=5": {
       "model": "prospect:block/placed_dynamite_lying_5",
       "y": 90
     },
-    "facing=east,lying=true,sticks=6": {
+    "facing=east,sticks=6": {
       "model": "prospect:block/placed_dynamite_lying_6",
       "y": 90
     },
-    "facing=east,lying=true,sticks=7": {
+    "facing=east,sticks=7": {
       "model": "prospect:block/placed_dynamite_lying_7",
       "y": 90
     },
-    "facing=east,lying=true,sticks=8": {
+    "facing=east,sticks=8": {
       "model": "prospect:block/placed_dynamite_lying_8",
       "y": 90
     },
-    "facing=east,lying=true,sticks=9": {
+    "facing=east,sticks=9": {
       "model": "prospect:block/placed_dynamite_lying_9",
       "y": 90
     },
-    "facing=north,lying=false,sticks=1": {
-      "model": "prospect:block/placed_dynamite_1"
-    },
-    "facing=north,lying=false,sticks=2": {
-      "model": "prospect:block/placed_dynamite_2"
-    },
-    "facing=north,lying=false,sticks=3": {
-      "model": "prospect:block/placed_dynamite_3"
-    },
-    "facing=north,lying=false,sticks=4": {
-      "model": "prospect:block/placed_dynamite_4"
-    },
-    "facing=north,lying=false,sticks=5": {
-      "model": "prospect:block/placed_dynamite_5"
-    },
-    "facing=north,lying=false,sticks=6": {
-      "model": "prospect:block/placed_dynamite_6"
-    },
-    "facing=north,lying=false,sticks=7": {
-      "model": "prospect:block/placed_dynamite_7"
-    },
-    "facing=north,lying=false,sticks=8": {
-      "model": "prospect:block/placed_dynamite_8"
-    },
-    "facing=north,lying=false,sticks=9": {
-      "model": "prospect:block/placed_dynamite_9"
-    },
-    "facing=north,lying=true,sticks=1": {
+    "facing=north,sticks=1": {
       "model": "prospect:block/placed_dynamite_lying_1"
     },
-    "facing=north,lying=true,sticks=2": {
+    "facing=north,sticks=2": {
       "model": "prospect:block/placed_dynamite_lying_2"
     },
-    "facing=north,lying=true,sticks=3": {
+    "facing=north,sticks=3": {
       "model": "prospect:block/placed_dynamite_lying_3"
     },
-    "facing=north,lying=true,sticks=4": {
+    "facing=north,sticks=4": {
       "model": "prospect:block/placed_dynamite_lying_4"
     },
-    "facing=north,lying=true,sticks=5": {
+    "facing=north,sticks=5": {
       "model": "prospect:block/placed_dynamite_lying_5"
     },
-    "facing=north,lying=true,sticks=6": {
+    "facing=north,sticks=6": {
       "model": "prospect:block/placed_dynamite_lying_6"
     },
-    "facing=north,lying=true,sticks=7": {
+    "facing=north,sticks=7": {
       "model": "prospect:block/placed_dynamite_lying_7"
     },
-    "facing=north,lying=true,sticks=8": {
+    "facing=north,sticks=8": {
       "model": "prospect:block/placed_dynamite_lying_8"
     },
-    "facing=north,lying=true,sticks=9": {
+    "facing=north,sticks=9": {
       "model": "prospect:block/placed_dynamite_lying_9"
     },
-    "facing=south,lying=false,sticks=1": {
-      "model": "prospect:block/placed_dynamite_1",
-      "y": 180
-    },
-    "facing=south,lying=false,sticks=2": {
-      "model": "prospect:block/placed_dynamite_2",
-      "y": 180
-    },
-    "facing=south,lying=false,sticks=3": {
-      "model": "prospect:block/placed_dynamite_3",
-      "y": 180
-    },
-    "facing=south,lying=false,sticks=4": {
-      "model": "prospect:block/placed_dynamite_4",
-      "y": 180
-    },
-    "facing=south,lying=false,sticks=5": {
-      "model": "prospect:block/placed_dynamite_5",
-      "y": 180
-    },
-    "facing=south,lying=false,sticks=6": {
-      "model": "prospect:block/placed_dynamite_6",
-      "y": 180
-    },
-    "facing=south,lying=false,sticks=7": {
-      "model": "prospect:block/placed_dynamite_7",
-      "y": 180
-    },
-    "facing=south,lying=false,sticks=8": {
-      "model": "prospect:block/placed_dynamite_8",
-      "y": 180
-    },
-    "facing=south,lying=false,sticks=9": {
-      "model": "prospect:block/placed_dynamite_9",
-      "y": 180
-    },
-    "facing=south,lying=true,sticks=1": {
+    "facing=south,sticks=1": {
       "model": "prospect:block/placed_dynamite_lying_1",
       "y": 180
     },
-    "facing=south,lying=true,sticks=2": {
+    "facing=south,sticks=2": {
       "model": "prospect:block/placed_dynamite_lying_2",
       "y": 180
     },
-    "facing=south,lying=true,sticks=3": {
+    "facing=south,sticks=3": {
       "model": "prospect:block/placed_dynamite_lying_3",
       "y": 180
     },
-    "facing=south,lying=true,sticks=4": {
+    "facing=south,sticks=4": {
       "model": "prospect:block/placed_dynamite_lying_4",
       "y": 180
     },
-    "facing=south,lying=true,sticks=5": {
+    "facing=south,sticks=5": {
       "model": "prospect:block/placed_dynamite_lying_5",
       "y": 180
     },
-    "facing=south,lying=true,sticks=6": {
+    "facing=south,sticks=6": {
       "model": "prospect:block/placed_dynamite_lying_6",
       "y": 180
     },
-    "facing=south,lying=true,sticks=7": {
+    "facing=south,sticks=7": {
       "model": "prospect:block/placed_dynamite_lying_7",
       "y": 180
     },
-    "facing=south,lying=true,sticks=8": {
+    "facing=south,sticks=8": {
       "model": "prospect:block/placed_dynamite_lying_8",
       "y": 180
     },
-    "facing=south,lying=true,sticks=9": {
+    "facing=south,sticks=9": {
       "model": "prospect:block/placed_dynamite_lying_9",
       "y": 180
     },
-    "facing=west,lying=false,sticks=1": {
-      "model": "prospect:block/placed_dynamite_1",
-      "y": 270
-    },
-    "facing=west,lying=false,sticks=2": {
-      "model": "prospect:block/placed_dynamite_2",
-      "y": 270
-    },
-    "facing=west,lying=false,sticks=3": {
-      "model": "prospect:block/placed_dynamite_3",
-      "y": 270
-    },
-    "facing=west,lying=false,sticks=4": {
-      "model": "prospect:block/placed_dynamite_4",
-      "y": 270
-    },
-    "facing=west,lying=false,sticks=5": {
-      "model": "prospect:block/placed_dynamite_5",
-      "y": 270
-    },
-    "facing=west,lying=false,sticks=6": {
-      "model": "prospect:block/placed_dynamite_6",
-      "y": 270
-    },
-    "facing=west,lying=false,sticks=7": {
-      "model": "prospect:block/placed_dynamite_7",
-      "y": 270
-    },
-    "facing=west,lying=false,sticks=8": {
-      "model": "prospect:block/placed_dynamite_8",
-      "y": 270
-    },
-    "facing=west,lying=false,sticks=9": {
-      "model": "prospect:block/placed_dynamite_9",
-      "y": 270
-    },
-    "facing=west,lying=true,sticks=1": {
+    "facing=west,sticks=1": {
       "model": "prospect:block/placed_dynamite_lying_1",
       "y": 270
     },
-    "facing=west,lying=true,sticks=2": {
+    "facing=west,sticks=2": {
       "model": "prospect:block/placed_dynamite_lying_2",
       "y": 270
     },
-    "facing=west,lying=true,sticks=3": {
+    "facing=west,sticks=3": {
       "model": "prospect:block/placed_dynamite_lying_3",
       "y": 270
     },
-    "facing=west,lying=true,sticks=4": {
+    "facing=west,sticks=4": {
       "model": "prospect:block/placed_dynamite_lying_4",
       "y": 270
     },
-    "facing=west,lying=true,sticks=5": {
+    "facing=west,sticks=5": {
       "model": "prospect:block/placed_dynamite_lying_5",
       "y": 270
     },
-    "facing=west,lying=true,sticks=6": {
+    "facing=west,sticks=6": {
       "model": "prospect:block/placed_dynamite_lying_6",
       "y": 270
     },
-    "facing=west,lying=true,sticks=7": {
+    "facing=west,sticks=7": {
       "model": "prospect:block/placed_dynamite_lying_7",
       "y": 270
     },
-    "facing=west,lying=true,sticks=8": {
+    "facing=west,sticks=8": {
       "model": "prospect:block/placed_dynamite_lying_8",
       "y": 270
     },
-    "facing=west,lying=true,sticks=9": {
+    "facing=west,sticks=9": {
       "model": "prospect:block/placed_dynamite_lying_9",
       "y": 270
     }

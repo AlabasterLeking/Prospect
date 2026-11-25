@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 public class DynamiteRenderer extends EntityRenderer<DynamiteEntity> {
 
     private static final float SCALE = 1.0F;
-    private static final float REST_HEIGHT = (float) DynamiteEntity.REST_HEIGHT * SCALE;
     private static final float MODEL_CENTER_Y = 6.0F / 16.0F;
     private static final float FLASH_TICKS = 10.0F;
     private static final float SWELL = 0.2F;
@@ -43,10 +42,11 @@ public class DynamiteRenderer extends EntityRenderer<DynamiteEntity> {
             }
         }
 
+        float spin = entity.getSpin(partialTick);
         poseStack.pushPose();
-        poseStack.translate(0.0F, REST_HEIGHT, 0.0F);
+        poseStack.translate(0.0F, (float) entity.restHeight(spin) * scale, 0.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTick, entity.yRotO, entity.getYRot()) - 90.0F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getSpin(partialTick)));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(spin));
         poseStack.scale(scale, scale, scale);
         poseStack.translate(0.0F, 0.5F - MODEL_CENTER_Y, 0.0F);
         itemRenderer.renderStatic(entity.getItem(), ItemDisplayContext.NONE, packedLight, overlay, poseStack, buffer, entity.level(), entity.getId());

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dynamite_bundle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "prospect:dynamite_bundle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "prospect:dynamite_from_dynamite_bundle"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dynamite_bundle"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "prospect:dynamite_from_dynamite_bundle"
+    ]
+  }
+}

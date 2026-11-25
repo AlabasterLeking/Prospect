@@ -5,8 +5,8 @@
       "name": "default",
       "rolls": 1,
       "entries": [
-        { "type": "minecraft:item", "name": "minecraft:basalt", "weight": 18 },
-        { "type": "minecraft:item", "name": "minecraft:blackstone", "weight": 16 },
+        { "type": "minecraft:item", "name": "minecraft:basalt", "weight": 18, "quality": -2 },
+        { "type": "minecraft:item", "name": "minecraft:blackstone", "weight": 16, "quality": -2 },
         { "type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 12 },
         { "type": "minecraft:item", "name": "minecraft:raw_gold", "weight": 8 },
         { "type": "minecraft:item", "name": "minecraft:quartz", "weight": 6 },

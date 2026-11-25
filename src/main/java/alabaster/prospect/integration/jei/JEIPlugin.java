@@ -2,6 +2,7 @@ package alabaster.prospect.integration.jei;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.crafting.GemSocketRecipe;
+import alabaster.prospect.common.prospecting.PanningTables;
 import alabaster.prospect.common.registry.ProspectKeyBindings;
 import alabaster.prospect.common.registry.ProspectModItems;
 import alabaster.prospect.common.tag.ProspectModTags;
@@ -9,6 +10,8 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
@@ -16,6 +19,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -36,7 +40,22 @@ public class JEIPlugin implements IModPlugin {
     private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Prospect.MODID, "jei_plugin");
 
     @Override
+    public void registerCategories(IRecipeCategoryRegistration registration) {
+        int mostEntries = PanningTables.clientTables().stream().mapToInt(table -> table.entries().size()).max().orElse(1);
+        registration.addRecipeCategories(new PanningCategory(registration.getJeiHelpers().getGuiHelper(), Mth.positiveCeilDiv(mostEntries, PanningCategory.COLUMNS)));
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(ProspectModItems.COPPER_PAN.get()), PanningCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ProspectModItems.IRON_PAN.get()), PanningCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ProspectModItems.GOLDEN_PAN.get()), PanningCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ProspectModItems.NETHERITE_PAN.get()), PanningCategory.TYPE);
+    }
+
+    @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        registration.addRecipes(PanningCategory.TYPE, PanningTables.clientTables());
         registration.addIngredientInfo(new ItemStack(ProspectModItems.PROSPECTING_PICKAXE.get()), VanillaTypes.ITEM_STACK,
                 Component.translatable("jei.info.prospecting_pickaxe"));
         registration.addIngredientInfo(new ItemStack(Items.QUARTZ), VanillaTypes.ITEM_STACK,

@@ -74,8 +74,8 @@ public class BlockStates extends BlockStateProvider
         rail(ProspectModBlocks.WOODEN_RAIL.get());
         extinguishedTorch(ProspectModBlocks.EXTINGUISHED_TORCH.get(), ProspectModBlocks.EXTINGUISHED_WALL_TORCH.get());
         extinguishedLantern(ProspectModBlocks.EXTINGUISHED_LANTERN.get());
-        placedDynamite(ProspectModBlocks.PLACED_DYNAMITE.get(), PlacedDynamiteBlock.STICKS);
-        placedDynamite(ProspectModBlocks.PLACED_DYNAMITE_BUNDLE.get(), PlacedDynamiteBundleBlock.BUNDLES);
+        placedDynamite(ProspectModBlocks.PLACED_DYNAMITE.get(), PlacedDynamiteBlock.STICKS, "placed_dynamite_lying_");
+        placedDynamite(ProspectModBlocks.PLACED_DYNAMITE_BUNDLE.get(), PlacedDynamiteBundleBlock.BUNDLES, "placed_dynamite_bundle_");
     }
 
     private void tintedPane(IronBarsBlock block) {
@@ -109,10 +109,9 @@ public class BlockStates extends BlockStateProvider
                 .build(), LanternBlock.WATERLOGGED);
     }
 
-    private void placedDynamite(Block block, IntegerProperty count) {
-        String name = blockName(block);
+    private void placedDynamite(Block block, IntegerProperty count, String model) {
         getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder()
-                .modelFile(models().getExistingFile(resourceBlock(name + (state.hasProperty(PlacedDynamiteBlock.LYING) && state.getValue(PlacedDynamiteBlock.LYING) ? "_lying_" : "_") + state.getValue(count))))
+                .modelFile(models().getExistingFile(resourceBlock(model + state.getValue(count))))
                 .rotationY(((int) state.getValue(HorizontalDirectionalBlock.FACING).toYRot() + 180) % 360)
                 .build());
     }

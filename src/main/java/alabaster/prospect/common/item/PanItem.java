@@ -35,15 +35,23 @@ public class PanItem extends Item {
 
     private final boolean canHarvestLava;
     private final ItemLike repairMaterial;
+    private final float luck;
+    private final int enchantability;
 
-    public PanItem(Properties props, boolean canHarvestLava, ItemLike repairMaterial) {
+    public PanItem(Properties props, boolean canHarvestLava, ItemLike repairMaterial, float luck, int enchantability) {
         super(props);
         this.canHarvestLava = canHarvestLava;
         this.repairMaterial = repairMaterial;
+        this.luck = luck;
+        this.enchantability = enchantability;
     }
 
     public boolean canHarvestLava() {
         return canHarvestLava;
+    }
+
+    public float luck() {
+        return luck;
     }
 
     @Override
@@ -53,7 +61,7 @@ public class PanItem extends Item {
 
     @Override
     public int getEnchantmentValue() {
-        return 10;
+        return enchantability;
     }
 
     @Override

@@ -28,7 +28,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class LitDynamiteItem extends Item {
 
-    private static final int FUSE_BAR_COLOR = 0xFF8A1E;
+    private static final int FUSE_BAR_FULL_GREEN = 0x8A;
+    private static final int FUSE_BAR_EMPTY_GREEN = 0x2A;
+    private static final int FUSE_BAR_RED = 0xFF;
+    private static final int FUSE_BAR_BLUE = 0x1E;
+    private static final int FUSE_BAR_FLASH = 0xFFFFFF;
+    private static final int FUSE_WARNING_TICKS = 20;
     private static final int FULL_CHARGE_TICKS = 20;
     private static final float MIN_THROW_VELOCITY = 0.5F;
     private static final float MAX_THROW_VELOCITY = 1.5F;
@@ -173,7 +178,11 @@ public class LitDynamiteItem extends Item {
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return FUSE_BAR_COLOR;
+        int fuse = getFuse(stack);
+        if (fuse <= FUSE_WARNING_TICKS && fuse / 2 % 2 == 0) return FUSE_BAR_FLASH;
+        float remaining = Mth.clamp((float) fuse / type.fuseTicks, 0.0F, 1.0F);
+        int green = Math.round(Mth.lerp(remaining, FUSE_BAR_EMPTY_GREEN, FUSE_BAR_FULL_GREEN));
+        return FUSE_BAR_RED << 16 | green << 8 | FUSE_BAR_BLUE;
     }
 
     @Override

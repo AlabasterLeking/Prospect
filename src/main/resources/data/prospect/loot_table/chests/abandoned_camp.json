@@ -300,6 +300,36 @@
           "weight": 1
         }
       ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:map",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:exploration_map",
+              "destination": "prospect:abandoned_mines",
+              "decoration": "prospect:abandoned_mine",
+              "zoom": 2,
+              "skip_existing_chunks": true
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "item_name",
+              "name": {
+                "translate": "filled_map.prospect.abandoned_mine"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "random_sequence": "prospect:chests/abandoned_camp"

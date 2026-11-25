@@ -1,11 +1,14 @@
 package alabaster.prospect;
 
+import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.TranslatableEnum;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @EventBusSubscriber(modid = Prospect.MODID, bus = EventBusSubscriber.Bus.MOD)
@@ -13,7 +16,6 @@ public class Config {
     public static ModConfigSpec COMMON_CONFIG;
     private static final Map<String, ModConfigSpec.BooleanValue> ITEMS = new HashMap<>();
 
-    public static ModConfigSpec.BooleanValue ENABLE_MINING_HELMET_OVERLAY;
     public static ModConfigSpec.BooleanValue ENABLE_GUNPOWDER_FUSE_PLACEMENT;
     public static ModConfigSpec.BooleanValue ENABLE_WANDERING_PROSPECTOR;
     public static ModConfigSpec.EnumValue<HelmetLightMode> MINING_HELMET_LIGHT_MODE;
@@ -22,6 +24,12 @@ public class Config {
     public static ModConfigSpec.BooleanValue ENABLE_ABANDONED_MINES;
     public static ModConfigSpec.DoubleValue ABANDONED_MINE_CHANCE;
     public static ModConfigSpec.BooleanValue TORCHES_EXTINGUISH_IN_RAIN;
+    public static ModConfigSpec.BooleanValue HELMET_TAKES_DAMAGE;
+    public static ModConfigSpec.BooleanValue HELMET_WEAR_DIMMING;
+    public static ModConfigSpec.IntValue HELMET_WORN_LIGHT_LEVEL;
+    public static ModConfigSpec.BooleanValue HELMET_WEAR_FLICKER;
+    public static ModConfigSpec.DoubleValue HELMET_WEAR_FLICKER_THRESHOLD;
+    public static ModConfigSpec.BooleanValue UNDEAD_HELMET_FLICKER;
     public static ModConfigSpec.BooleanValue DYNAMITE_DESTROYS_BLOCKS;
     public static ModConfigSpec.BooleanValue DYNAMITE_FOLLOWS_MOB_GRIEFING;
     public static final Map<String, ModConfigSpec.BooleanValue> CAMP_VARIANTS = new HashMap<>();
@@ -37,6 +45,13 @@ public class Config {
     public static ModConfigSpec.DoubleValue GRAPPLE_MAX_LENGTH;
     public static ModConfigSpec.DoubleValue GRAPPLE_THROWN_MAX_LENGTH;
     public static ModConfigSpec.DoubleValue ZIPLINE_MAX_LENGTH;
+    public static ModConfigSpec.BooleanValue GRAPPLE_GRAB_ITEMS;
+    public static ModConfigSpec.IntValue DYNAMITE_LIGHT_COOLDOWN;
+    public static ModConfigSpec.DoubleValue TORCH_RAIN_CHANCE;
+    public static ModConfigSpec.DoubleValue SPARKLE_NODE_CHANCE;
+    public static ModConfigSpec.IntValue MAX_SPARKLE_NODES;
+    public static ModConfigSpec.IntValue SPARKLE_NODE_MAX_DEPTH;
+    public static ModConfigSpec.IntValue PICKAXE_SEARCH_RADIUS;
 
     public record Feature(ModConfigSpec.BooleanValue enabled, ModConfigSpec.IntValue rarity) {
     }
@@ -61,10 +76,15 @@ public class Config {
         return value == null ? fallback : value.get().floatValue();
     }
 
-    public enum HelmetLightMode {
+    public enum HelmetLightMode implements TranslatableEnum {
         AUTO,
         BLOCKS,
-        DYNAMIC_LIGHTS
+        DYNAMIC_LIGHTS;
+
+        @Override
+        public Component getTranslatedName() {
+            return Component.translatable("prospect.configuration.lightMode." + name().toLowerCase(Locale.ROOT));
+        }
     }
 
     public Config() {
@@ -78,32 +98,49 @@ public class Config {
     static {
         ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
 
-        ENABLE_MINING_HELMET_OVERLAY = COMMON_BUILDER
-                .comment("Whether the vignette glow overlay is shown while wearing a lit mining helmet underground.")
-                .define("enableMiningHelmetOverlay", true);
-
-        ENABLE_GUNPOWDER_FUSE_PLACEMENT = COMMON_BUILDER
-                .comment("Whether right-clicking gunpowder against a block places a gunpowder fuse.")
-                .define("enableGunpowderFusePlacement", true);
-
-        ENABLE_WANDERING_PROSPECTOR = COMMON_BUILDER
-                .comment("Whether the Wandering Prospector periodically spawns near players in the Overworld.")
-                .define("enableWanderingProspector", true);
-
-        MINING_HELMET_LIGHT_MODE = COMMON_BUILDER
-                .comment("How the mining helmet lights up its surroundings.",
-                        "AUTO: use LambDynamicLights when it is installed, otherwise place invisible light blocks.",
-                        "BLOCKS: always place invisible light blocks, which every player sees.",
-                        "DYNAMIC_LIGHTS: never place light blocks; only players running LambDynamicLights see the light.")
-                .defineEnum("miningHelmetLightMode", HelmetLightMode.AUTO);
-
         COMMON_BUILDER.push("lights");
         TORCHES_EXTINGUISH_IN_RAIN = COMMON_BUILDER
-                .comment("Whether torches left out in the rain slowly go out, leaving Extinguished Torches that can be relit with flint and steel.")
+                .comment("Whether torches left out in the rain slowly go out, leaving Extinguished Torches that can be relit with flint and steel, a fire charge or a torch.")
                 .define("torchesExtinguishInRain", false);
+        TORCH_RAIN_CHANCE = COMMON_BUILDER
+                .comment("How quickly torches go out in the rain when torchesExtinguishInRain is on: the chance a torch goes out each time it gets a random tick, which is roughly once a minute at the default random tick speed.")
+                .defineInRange("rainExtinguishChance", 0.5, 0.0, 1.0);
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.push("miningHelmet");
+        MINING_HELMET_LIGHT_MODE = COMMON_BUILDER
+                .comment("How the mining helmet lights up its surroundings.",
+                        "Auto: use LambDynamicLights when it is installed, otherwise place invisible light blocks.",
+                        "Block Light: always place invisible light blocks, which every player sees.",
+                        "Dynamic Lights: never place light blocks; only players running LambDynamicLights see the light.")
+                .defineEnum("lightMode", HelmetLightMode.AUTO);
+        HELMET_TAKES_DAMAGE = COMMON_BUILDER
+                .comment("Whether the mining helmet loses durability when its wearer is hurt, like other helmets.")
+                .define("takesDamage", true);
+        HELMET_WEAR_DIMMING = COMMON_BUILDER
+                .comment("Whether the mining helmet's light gets dimmer as the helmet loses durability. Only applies to the block light mode.")
+                .define("wearDimming", true);
+        HELMET_WORN_LIGHT_LEVEL = COMMON_BUILDER
+                .comment("Light level of a mining helmet that is about to break, when wearDimming is on. A helmet at full durability gives light level 15.")
+                .defineInRange("wornLightLevel", 7, 1, 15);
+        HELMET_WEAR_FLICKER = COMMON_BUILDER
+                .comment("Whether a badly worn mining helmet's light occasionally flickers. Only applies to the block light mode.")
+                .define("wearFlicker", true);
+        HELMET_WEAR_FLICKER_THRESHOLD = COMMON_BUILDER
+                .comment("Durability left, as a fraction, below which a worn mining helmet starts to flicker. It flickers more often the closer it gets to breaking.")
+                .defineInRange("wearFlickerThreshold", 0.25, 0.0, 1.0);
+        UNDEAD_HELMET_FLICKER = COMMON_BUILDER
+                .comment("Whether mining helmets worn by undead mobs burn dimmer and flicker.")
+                .define("undeadFlicker", true);
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.push("dynamite");
+        ENABLE_GUNPOWDER_FUSE_PLACEMENT = COMMON_BUILDER
+                .comment("Whether right-clicking gunpowder against a block places a gunpowder fuse.")
+                .define("gunpowderFusePlacement", true);
+        DYNAMITE_LIGHT_COOLDOWN = COMMON_BUILDER
+                .comment("Ticks before you can light another stick of dynamite after lighting one. 20 ticks is one second. 0 turns the cooldown off.")
+                .defineInRange("lightCooldown", 20, 0, 200);
         DYNAMITE_DESTROYS_BLOCKS = COMMON_BUILDER
                 .comment("Whether dynamite explosions break blocks. When disabled, dynamite still damages and knocks back entities.")
                 .define("destroysBlocks", true);
@@ -189,9 +226,27 @@ public class Config {
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.push("mobs");
+        ENABLE_WANDERING_PROSPECTOR = COMMON_BUILDER
+                .comment("Whether the Wandering Prospector periodically spawns near players in the Overworld.")
+                .define("wanderingProspector", true);
         ZOMBIE_PROSPECTOR_SPAWNS = COMMON_BUILDER
                 .comment("Whether Zombie Prospectors spawn naturally underground. The ones trapped in mines are set under structures.mineDetails.")
                 .define("zombieProspectorSpawns", true);
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.push("prospecting");
+        SPARKLE_NODE_CHANCE = COMMON_BUILDER
+                .comment("Chance each second that a loaded chunk next to a player tries to spawn a sparkle node for panning. 0 stops new nodes from spawning.")
+                .defineInRange("sparkleNodeChance", 0.01, 0.0, 1.0);
+        MAX_SPARKLE_NODES = COMMON_BUILDER
+                .comment("Most sparkle nodes that can be around a player at once. New ones stop spawning near a player once this many are within 32 blocks.")
+                .defineInRange("maxSparkleNodes", 8, 0, 64);
+        SPARKLE_NODE_MAX_DEPTH = COMMON_BUILDER
+                .comment("Deepest water, in blocks, that sparkle nodes can spawn on. Nodes in Nether lava ignore this.")
+                .defineInRange("sparkleNodeMaxDepth", 3, 1, 32);
+        PICKAXE_SEARCH_RADIUS = COMMON_BUILDER
+                .comment("How far, in blocks, the prospecting pickaxe searches for ore before gem upgrades. Larger values can cause lag spikes when it's used.")
+                .defineInRange("pickaxeSearchRadius", 12, 4, 24);
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.push("grappling");
@@ -207,6 +262,9 @@ public class Config {
         ZIPLINE_MAX_LENGTH = COMMON_BUILDER
                 .comment("The longest zipline or fence-to-fence rope that can be tied.")
                 .defineInRange("ziplineMaxLength", 64.0, 4.0, 256.0);
+        GRAPPLE_GRAB_ITEMS = COMMON_BUILDER
+                .comment("Whether a flying grappling hook can snag dropped items and reel them back to you.")
+                .define("grabItems", true);
         COMMON_BUILDER.pop();
 
         COMMON_CONFIG = COMMON_BUILDER.build();

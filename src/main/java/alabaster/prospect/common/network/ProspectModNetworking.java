@@ -5,6 +5,7 @@ import alabaster.prospect.common.event.GrappleEvents;
 import alabaster.prospect.common.item.SlimeBucketItem;
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.item.MiningHelmetItem;
+import alabaster.prospect.common.prospecting.PanningTables;
 import alabaster.prospect.common.tag.ProspectModTags;
 import alabaster.prospect.common.utilities.ClientJumpingMinecart;
 import alabaster.prospect.common.utilities.JumpingMinecart;
@@ -22,7 +23,7 @@ public class ProspectModNetworking {
 
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar("2");
+        PayloadRegistrar registrar = event.registrar("3");
 
         registrar.playToServer(
                 ToggleMiningHelmetLightPayload.TYPE,
@@ -109,6 +110,12 @@ public class ProspectModNetworking {
                 SlimeChunkPayload.TYPE,
                 SlimeChunkPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> SlimeBucketItem.setDancing(payload.inSlimeChunk()))
+        );
+
+        registrar.playToClient(
+                PanningTablesPayload.TYPE,
+                PanningTablesPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> PanningTables.setClientTables(payload.tables()))
         );
 
         registrar.playToClient(

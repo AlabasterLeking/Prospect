@@ -90,6 +90,49 @@
           ]
         }
       ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:ruby",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:sapphire",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "prospect:topaz",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:empty",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_block",
+          "weight": 1
+        }
+      ]
     }
   ]
 }

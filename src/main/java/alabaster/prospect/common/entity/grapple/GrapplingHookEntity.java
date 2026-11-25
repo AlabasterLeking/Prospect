@@ -240,7 +240,7 @@ public class GrapplingHookEntity extends AbstractArrow {
             setDeltaMovement(Vec3.ZERO);
             if (level().isClientSide()) return;
         } else {
-            if (!level().isClientSide() && tethered && !isAnchored() && !inGround && grabItem()) return;
+            if (!level().isClientSide() && tethered && !isAnchored() && !inGround && Config.GRAPPLE_GRAB_ITEMS.get() && grabItem()) return;
             super.tick();
             if (level().isClientSide() || isRemoved()) return;
         }

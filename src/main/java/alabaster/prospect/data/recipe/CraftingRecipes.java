@@ -8,6 +8,7 @@ import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 
 public class CraftingRecipes {
@@ -176,6 +177,10 @@ public class CraftingRecipes {
                 .define('Q', Items.QUARTZ)
                 .unlockedBy("has_quartz", InventoryChangeTrigger.TriggerInstance.hasItems(Items.QUARTZ))
                 .save(output);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.QUARTZ, 4)
+                .requires(ProspectModItems.CRYSTALLINE_QUARTZ.get())
+                .unlockedBy("has_crystalline_quartz", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.CRYSTALLINE_QUARTZ.get()))
+                .save(output, "prospect:quartz_from_crystalline_quartz");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ProspectModItems.ALTIMETER.get(), 1)
                 .pattern(" C ")
@@ -201,6 +206,18 @@ public class CraftingRecipes {
                 .requires(Items.STRING)
                 .unlockedBy("has_dynamite", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE.get()))
                 .save(output);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.DYNAMITE.get(), 3)
+                .requires(ProspectModItems.DYNAMITE_BUNDLE.get())
+                .unlockedBy("has_dynamite_bundle", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE_BUNDLE.get()))
+                .save(output, "prospect:dynamite_from_dynamite_bundle");
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ProspectModItems.STICKY_DYNAMITE.get(), 8)
+                .pattern("DDD")
+                .pattern("DSD")
+                .pattern("DDD")
+                .define('D', ProspectModItems.DYNAMITE.get())
+                .define('S', Items.SLIME_BALL)
+                .unlockedBy("has_dynamite", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE.get()))
+                .save(output, "prospect:sticky_dynamite_bulk");
     }
 
     private static void recipesMaterials(RecipeOutput output) {
@@ -225,6 +242,9 @@ public class CraftingRecipes {
                 .group("cyan_dye")
                 .unlockedBy("has_glowthread", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.GLOWTHREAD.get()))
                 .save(output, "prospect:cyan_dye_from_glowthread");
+        mushroomDye(output, ProspectModItems.GLOWING_MUSHROOM_BLUE.get(), Items.BLUE_DYE, "blue");
+        mushroomDye(output, ProspectModItems.GLOWING_MUSHROOM_GREEN.get(), Items.GREEN_DYE, "green");
+        mushroomDye(output, ProspectModItems.GLOWING_MUSHROOM_PURPLE.get(), Items.PURPLE_DYE, "purple");
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STRING, 1)
                 .requires(ProspectModItems.GLOWTHREAD.get(), 2)
                 .unlockedBy("has_glowthread", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.GLOWTHREAD.get()))
@@ -241,5 +261,13 @@ public class CraftingRecipes {
                 .requires(ProspectModItems.TOPAZ_BLOCK.get())
                 .unlockedBy("has_topaz_block", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.TOPAZ_BLOCK.get()))
                 .save(output);
+    }
+
+    private static void mushroomDye(RecipeOutput output, ItemLike mushroom, ItemLike dye, String color) {
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, dye, 1)
+                .requires(mushroom)
+                .group(color + "_dye")
+                .unlockedBy("has_glowing_mushroom_" + color, InventoryChangeTrigger.TriggerInstance.hasItems(mushroom))
+                .save(output, "prospect:" + color + "_dye_from_glowing_mushroom");
     }
 }

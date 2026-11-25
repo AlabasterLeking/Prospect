@@ -192,13 +192,19 @@ public class PortableSmelterItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         NonNullList<ItemStack> items = readItems(stack);
-        if (readState(stack).isLit()) {
+        SmelterState state = readState(stack);
+        if (state.isLit()) {
             tooltip.add(Component.translatable("item.prospect.portable_smelter.lit").withStyle(net.minecraft.ChatFormatting.GOLD));
         }
+        if (items.stream().allMatch(ItemStack::isEmpty)) {
+            tooltip.add(Component.translatable("item.prospect.portable_smelter.empty").withStyle(net.minecraft.ChatFormatting.DARK_GRAY));
+            return;
+        }
+        String[] labels = {"input", "fuel", "output"};
         for (int i = 0; i < SLOTS; i++) {
             ItemStack item = items.get(i);
             if (!item.isEmpty()) {
-                tooltip.add(Component.translatable("item.prospect.portable_smelter.slot", item.getCount(), item.getHoverName()).withStyle(net.minecraft.ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("item.prospect.portable_smelter." + labels[i], item.getCount(), item.getHoverName()).withStyle(net.minecraft.ChatFormatting.GRAY));
             }
         }
     }

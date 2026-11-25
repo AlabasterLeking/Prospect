@@ -36,6 +36,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -82,6 +83,16 @@ public class GrappleClientEvents {
     private static final double MOUNT_RADIUS = 0.4;
     private static final double HOP = 0.42;
     private static final double PREVIEW_SAG = 0.04;
+    private static final double MANTLE_FREE = 2.0;
+    private static final double MANTLE_HEIGHT = 3.5;
+    private static final double MANTLE_REACH = 1.2;
+    private static final double MANTLE_STEP = 0.6;
+    private static final double MANTLE_CLEARANCE = 0.4;
+    private static final double MANTLE_FORWARD = 0.25;
+    private static final double MANTLE_MAX_LIFT = 1.0;
+    private static final double PLAYER_GRAVITY = 0.08;
+    private static final double LIFT_SCALE = 1.15;
+    private static final int MANTLE_TICKS = 15;
 
     private static int hookId = -1;
     private static int releasedId = -1;
@@ -90,6 +101,9 @@ public class GrappleClientEvents {
     @Nullable
     private static Vec3 lastAnchor;
     private static boolean taut;
+    private static int mantleTicks;
+    private static double mantleTop;
+    private static Vec3 mantleDirection = Vec3.ZERO;
 
     private static int ziplineId = -1;
     private static double ziplineT;
@@ -223,6 +237,7 @@ public class GrappleClientEvents {
                 length = Math.max(hook.getRopeLength(), GrapplingHookEntity.ropePoint(player).distanceTo(hook.position()));
                 lastAnchor = null;
                 taut = false;
+                mantleTicks = 0;
                 reelSent = 0;
                 return hook;
             }
@@ -242,8 +257,18 @@ public class GrappleClientEvents {
         }
         lastAnchor = anchor;
         double fixed = wrap.fixedLength(anchor);
-        Vec3 offset = GrapplingHookEntity.ropePoint(player).subtract(wrap.pivot(anchor));
+        Vec3 pivot = wrap.pivot(anchor);
+        Vec3 offset = GrapplingHookEntity.ropePoint(player).subtract(pivot);
         double distance = offset.length();
+        if (mantleTicks > 0) {
+            mantleTick(player);
+            length = Math.max(length, fixed + distance);
+            return;
+        }
+        if (ProspectKeyBindings.GRAPPLE_REEL_IN.isDown() && length - fixed <= MANTLE_FREE && startMantle(player, pivot, anchor)) {
+            length = Math.max(length, fixed + distance);
+            return;
+        }
         boolean paying = false;
         if (ProspectKeyBindings.GRAPPLE_REEL_IN.isDown()) {
             length = Math.max(Math.min(length, fixed + GrapplingHookEntity.MIN_LENGTH), length - REEL_SPEED);
@@ -290,6 +315,40 @@ public class GrappleClientEvents {
             velocity = velocity.add(push.subtract(normal.scale(push.dot(normal))));
         }
         player.setDeltaMovement(velocity);
+    }
+
+    private static boolean startMantle(LocalPlayer player, Vec3 pivot, Vec3 anchor) {
+        double rise = pivot.y - player.getY();
+        if (rise <= 0.0 || rise > MANTLE_HEIGHT) return false;
+        Vec3 toPivot = new Vec3(pivot.x - player.getX(), 0.0, pivot.z - player.getZ());
+        if (toPivot.horizontalDistance() > MANTLE_REACH) return false;
+        Vec3 over = new Vec3(anchor.x - pivot.x, 0.0, anchor.z - pivot.z);
+        if (over.lengthSqr() < 1.0E-4) over = toPivot;
+        if (over.lengthSqr() < 1.0E-4) return false;
+        over = over.normalize();
+        Vec3 landing = pivot.add(over.scale(MANTLE_STEP));
+        AABB standing = player.getBoundingBox().move(landing.x - player.getX(), landing.y - player.getY() + 0.01, landing.z - player.getZ());
+        if (!player.level().noCollision(player, standing)) return false;
+        double lift = Math.min(MANTLE_MAX_LIFT, Math.sqrt(2.0 * PLAYER_GRAVITY * (rise + MANTLE_CLEARANCE)) * LIFT_SCALE);
+        player.setDeltaMovement(0.0, lift, 0.0);
+        player.resetFallDistance();
+        mantleTop = pivot.y;
+        mantleDirection = over;
+        mantleTicks = MANTLE_TICKS;
+        taut = false;
+        return true;
+    }
+
+    private static void mantleTick(LocalPlayer player) {
+        mantleTicks--;
+        player.resetFallDistance();
+        if (player.getY() < mantleTop) return;
+        if (player.onGround()) {
+            mantleTicks = 0;
+            return;
+        }
+        Vec3 velocity = player.getDeltaMovement();
+        player.setDeltaMovement(mantleDirection.x * MANTLE_FORWARD, velocity.y, mantleDirection.z * MANTLE_FORWARD);
     }
 
     private static Vec3 inputDirection(LocalPlayer player) {
@@ -490,6 +549,7 @@ public class GrappleClientEvents {
     private static void release() {
         releasedId = hookId;
         hookId = -1;
+        mantleTicks = 0;
     }
 
     @SubscribeEvent
@@ -497,6 +557,7 @@ public class GrappleClientEvents {
         hookId = -1;
         releasedId = -1;
         reelSent = 0;
+        mantleTicks = 0;
         ziplineId = -1;
         ziplineSpeed = 0.0;
         RIDING.clear();
