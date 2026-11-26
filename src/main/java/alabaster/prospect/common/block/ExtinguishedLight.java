@@ -1,6 +1,8 @@
 package alabaster.prospect.common.block;
 
 import alabaster.prospect.common.registry.ProspectModBlocks;
+import alabaster.prospect.common.registry.ProspectSounds;
+import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 
 public final class ExtinguishedLight {
@@ -31,8 +34,15 @@ public final class ExtinguishedLight {
         if (!flint && !torch && !stack.is(Items.FIRE_CHARGE)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (!level.isClientSide()) {
             level.setBlock(pos, lit, Block.UPDATE_ALL_IMMEDIATE);
-            SoundEvent sound = flint ? SoundEvents.FLINTANDSTEEL_USE : torch ? SoundEvents.FIRE_AMBIENT : SoundEvents.FIRECHARGE_USE;
-            level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, level.random.nextFloat() * 0.4F + 0.8F);
+            if (!torch) {
+                SoundEvent sound = flint ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRECHARGE_USE;
+                level.playSound(null, pos, sound, SoundSource.BLOCKS, flint ? 1.0F : 0.5F, level.random.nextFloat() * 0.4F + 0.8F);
+            }
+            boolean lantern = lit.getBlock() instanceof LanternBlock;
+            if (lantern) {
+                level.playSound(null, pos, ProspectSounds.LANTERN_OPEN.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
+            level.playSound(null, pos, lantern ? ProspectSounds.LANTERN_RELIGHT.get() : ProspectSounds.TORCH_RELIGHT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
             if (flint) {
                 stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
@@ -61,6 +71,9 @@ public final class ExtinguishedLight {
 
     public static boolean douse(ServerLevel level, BlockPos pos, BlockState state) {
         BlockState out = extinguished(state);
+        if (out == null && state.is(ProspectModTags.DOUSEABLE) && state.hasProperty(BlockStateProperties.LIT) && state.getValue(BlockStateProperties.LIT)) {
+            out = state.setValue(BlockStateProperties.LIT, false);
+        }
         if (out == null) return false;
         level.setBlock(pos, out, Block.UPDATE_ALL);
         level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (level.random.nextFloat() - level.random.nextFloat()) * 0.8F);

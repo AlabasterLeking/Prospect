@@ -1,6 +1,7 @@
 package alabaster.prospect.common.prospecting;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.common.tag.ProspectModTags;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -41,6 +42,7 @@ public final class PanningTables {
     private static final FileToIdConverter FILES = FileToIdConverter.json("loot_table/" + FOLDER.substring(0, FOLDER.length() - 1));
 
     private static final List<Map.Entry<TagKey<Biome>, String>> GROUPS = List.of(
+            Map.entry(ProspectModTags.VOLCANIC_BIOMES, "volcanic"),
             Map.entry(Tags.Biomes.IS_SNOWY, "snowy"),
             Map.entry(BiomeTags.IS_BADLANDS, "badlands"),
             Map.entry(BiomeTags.IS_RIVER, "river"),

@@ -269,7 +269,11 @@ public class SparkleNodeEntity extends Entity {
                 allDrops.addAll(drops);
             }
 
-            playHarvestEffects(server, allDrops.stream().anyMatch(SparkleNodeEntity::isGem));
+            boolean gem = allDrops.stream().anyMatch(SparkleNodeEntity::isGem);
+            playHarvestEffects(server, gem);
+            if (gem && player instanceof ServerPlayer serverPlayer) {
+                ProspectAdvancements.award(serverPlayer, ProspectAdvancements.HIDDEN_GEM);
+            }
 
             for (ItemStack lootStack : allDrops) {
                 if (!player.getInventory().add(lootStack)) {

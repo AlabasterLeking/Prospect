@@ -1,0 +1,26 @@
+{
+  "parent": "prospect:fire_in_the_hole",
+  "criteria": {
+    "triggered": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.prospect.overkill.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "prospect:dynamite_bundle"
+    },
+    "title": {
+      "translate": "advancements.prospect.overkill.title"
+    }
+  },
+  "requirements": [
+    [
+      "triggered"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -31,6 +31,8 @@ public final class ProspectAdvancements {
     public static final String ROCK_BOTTOM = "rock_bottom";
     public static final String HEAD_IN_THE_CLOUDS = "head_in_the_clouds";
     public static final String SHATTERPROOF = "shatterproof";
+    public static final String OVERKILL = "overkill";
+    public static final String HIDDEN_GEM = "hidden_gem";
 
     public static void award(ServerPlayer player, String name) {
         AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, name));

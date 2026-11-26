@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+  "type": "immersiveengineering:crusher",
+  "energy": 6000,
+  "input": {
+    "tag": "c:ores/sapphire"
+  },
+  "result": {
+    "basePredicate": {
+      "item": "prospect:sapphire"
+    },
+    "count": 2
+  }
+}

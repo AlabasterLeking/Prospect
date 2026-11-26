@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "Q": {
+    "#": {
       "item": "minecraft:quartz"
     }
   },
   "pattern": [
-    " Q ",
-    "Q Q",
-    " Q "
+    "###",
+    "###",
+    "###"
   ],
   "result": {
     "count": 1,

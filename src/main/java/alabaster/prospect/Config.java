@@ -52,6 +52,11 @@ public class Config {
     public static ModConfigSpec.IntValue MAX_SPARKLE_NODES;
     public static ModConfigSpec.IntValue SPARKLE_NODE_MAX_DEPTH;
     public static ModConfigSpec.IntValue PICKAXE_SEARCH_RADIUS;
+    public static ModConfigSpec.BooleanValue MINECART_COUPLING;
+    public static ModConfigSpec.DoubleValue COUPLING_REACH;
+    public static ModConfigSpec.DoubleValue COUPLING_SPACING;
+    public static ModConfigSpec.DoubleValue COUPLING_SNAP_DISTANCE;
+    public static ModConfigSpec.IntValue MAX_TRAIN_LENGTH;
 
     public record Feature(ModConfigSpec.BooleanValue enabled, ModConfigSpec.IntValue rarity) {
     }
@@ -237,7 +242,7 @@ public class Config {
         COMMON_BUILDER.push("prospecting");
         SPARKLE_NODE_CHANCE = COMMON_BUILDER
                 .comment("Chance each second that a loaded chunk next to a player tries to spawn a sparkle node for panning. 0 stops new nodes from spawning.")
-                .defineInRange("sparkleNodeChance", 0.01, 0.0, 1.0);
+                .defineInRange("sparkleNodeChance", 0.006, 0.0, 1.0);
         MAX_SPARKLE_NODES = COMMON_BUILDER
                 .comment("Most sparkle nodes that can be around a player at once. New ones stop spawning near a player once this many are within 32 blocks.")
                 .defineInRange("maxSparkleNodes", 8, 0, 64);
@@ -265,6 +270,24 @@ public class Config {
         GRAPPLE_GRAB_ITEMS = COMMON_BUILDER
                 .comment("Whether a flying grappling hook can snag dropped items and reel them back to you.")
                 .define("grabItems", true);
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.push("minecarts");
+        MINECART_COUPLING = COMMON_BUILDER
+                .comment("Whether minecarts can be coupled together with chains so they roll as one train. Turning this off stops existing couplings from pulling, but shears and breaking carts still give the chains back.")
+                .define("minecartCoupling", true);
+        COUPLING_REACH = COMMON_BUILDER
+                .comment("How far apart, in blocks, two minecarts can be when coupling them.")
+                .defineInRange("couplingReach", 3.0, 1.0, 8.0);
+        COUPLING_SPACING = COMMON_BUILDER
+                .comment("How far apart, in blocks, coupled minecarts are held, measured centre to centre.")
+                .defineInRange("couplingSpacing", 1.6, 1.0, 4.0);
+        COUPLING_SNAP_DISTANCE = COMMON_BUILDER
+                .comment("How far apart, in blocks, coupled minecarts can be dragged before the chain snaps. Always at least a block more than the coupling reach.")
+                .defineInRange("couplingSnapDistance", 6.0, 2.0, 32.0);
+        MAX_TRAIN_LENGTH = COMMON_BUILDER
+                .comment("The most minecarts that can be coupled into one train. 0 allows any length.")
+                .defineInRange("maxTrainLength", 0, 0, 256);
         COMMON_BUILDER.pop();
 
         COMMON_CONFIG = COMMON_BUILDER.build();

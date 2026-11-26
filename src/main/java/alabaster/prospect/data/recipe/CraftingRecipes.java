@@ -155,8 +155,15 @@ public class CraftingRecipes {
                 .unlockedBy("has_tnt", InventoryChangeTrigger.TriggerInstance.hasItems(Items.TNT))
                 .save(output);
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.STICKY_DYNAMITE.get(), 1)
-                .requires(ProspectModItems.DYNAMITE.get())
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.DYNAMITE.get(), 1)
+                .requires(Items.GUNPOWDER)
+                .requires(Items.PAPER)
+                .requires(Items.STRING)
+                .unlockedBy("has_gunpowder", InventoryChangeTrigger.TriggerInstance.hasItems(Items.GUNPOWDER))
+                .save(output, "prospect:dynamite_from_gunpowder");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.STICKY_DYNAMITE.get(), 4)
+                .requires(ProspectModItems.DYNAMITE.get(), 4)
                 .requires(Items.SLIME_BALL)
                 .unlockedBy("has_dynamite", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE.get()))
                 .save(output);
@@ -171,13 +178,13 @@ public class CraftingRecipes {
                 .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ProspectModItems.CRYSTALLINE_QUARTZ.get(), 1)
-                .pattern(" Q ")
-                .pattern("Q Q")
-                .pattern(" Q ")
-                .define('Q', Items.QUARTZ)
+                .pattern("###")
+                .pattern("###")
+                .pattern("###")
+                .define('#', Items.QUARTZ)
                 .unlockedBy("has_quartz", InventoryChangeTrigger.TriggerInstance.hasItems(Items.QUARTZ))
                 .save(output);
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.QUARTZ, 4)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.QUARTZ, 9)
                 .requires(ProspectModItems.CRYSTALLINE_QUARTZ.get())
                 .unlockedBy("has_crystalline_quartz", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.CRYSTALLINE_QUARTZ.get()))
                 .save(output, "prospect:quartz_from_crystalline_quartz");
@@ -202,22 +209,14 @@ public class CraftingRecipes {
                 .save(output);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.DYNAMITE_BUNDLE.get(), 1)
-                .requires(ProspectModItems.DYNAMITE.get(), 3)
+                .requires(ProspectModItems.DYNAMITE.get(), 4)
                 .requires(Items.STRING)
                 .unlockedBy("has_dynamite", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE.get()))
                 .save(output);
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.DYNAMITE.get(), 3)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ProspectModItems.DYNAMITE.get(), 4)
                 .requires(ProspectModItems.DYNAMITE_BUNDLE.get())
                 .unlockedBy("has_dynamite_bundle", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE_BUNDLE.get()))
                 .save(output, "prospect:dynamite_from_dynamite_bundle");
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ProspectModItems.STICKY_DYNAMITE.get(), 8)
-                .pattern("DDD")
-                .pattern("DSD")
-                .pattern("DDD")
-                .define('D', ProspectModItems.DYNAMITE.get())
-                .define('S', Items.SLIME_BALL)
-                .unlockedBy("has_dynamite", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.DYNAMITE.get()))
-                .save(output, "prospect:sticky_dynamite_bulk");
     }
 
     private static void recipesMaterials(RecipeOutput output) {

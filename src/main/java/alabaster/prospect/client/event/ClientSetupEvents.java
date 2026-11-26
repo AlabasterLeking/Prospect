@@ -21,6 +21,9 @@ import net.minecraft.world.entity.LivingEntity;
 import alabaster.prospect.common.registry.ProspectKeyBindings;
 import alabaster.prospect.common.registry.ProspectModEntities;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.world.item.component.ChargedProjectiles;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -77,6 +80,8 @@ public class ClientSetupEvents {
             ResourceLocation.fromNamespaceAndPath(Prospect.MODID, "lit");
     private static final ResourceLocation DANCE_PROPERTY =
             ResourceLocation.fromNamespaceAndPath(Prospect.MODID, "dance");
+    private static final ResourceLocation GRAPPLING_HOOK_PROPERTY =
+            ResourceLocation.fromNamespaceAndPath(Prospect.MODID, "grappling_hook");
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
@@ -94,6 +99,11 @@ public class ClientSetupEvents {
                         if (world == null) return 0.0F;
                         long step = world.getGameTime() / SlimeBucketItem.DANCE_TICKS_PER_FRAME;
                         return (1 + step % SlimeBucketItem.DANCE_FRAMES) / 10.0F;
+                    });
+            ItemProperties.register(Items.CROSSBOW, GRAPPLING_HOOK_PROPERTY,
+                    (stack, level, entity, seed) -> {
+                        ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
+                        return projectiles != null && projectiles.contains(ProspectModItems.GRAPPLING_HOOK.get()) ? 1.0F : 0.0F;
                     });
             ItemProperties.register(ProspectModItems.PORTABLE_SMELTER.get(), LIT_PROPERTY,
                     (stack, level, entity, seed) -> PortableSmelterItem.readState(stack).isLit() ? 1.0F : 0.0F);

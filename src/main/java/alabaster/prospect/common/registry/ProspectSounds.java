@@ -14,6 +14,7 @@ public class ProspectSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAPPLING_HOOK_REEL = register("item.grappling_hook.reel");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAPPLING_HOOK_THROW = register("item.grappling_hook.throw");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAPPLING_HOOK_TAUT = register("item.grappling_hook.taut");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRAPPLING_HOOK_CREAK = register("item.grappling_hook.creak");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAPPLING_HOOK_HIT_BLOCK = register("entity.grappling_hook.hit_block");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAPPLING_HOOK_HIT_ENTITY = register("entity.grappling_hook.hit_entity");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAPPLING_HOOK_RETRACT = register("entity.grappling_hook.retract");
@@ -25,6 +26,9 @@ public class ProspectSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SPARKLE_NODE_SHIMMER = register("entity.sparkle_node.shimmer");
     public static final DeferredHolder<SoundEvent, SoundEvent> PAN_SIFT = register("item.pan.sift");
     public static final DeferredHolder<SoundEvent, SoundEvent> PAN_SIFT_LAVA = register("item.pan.sift_lava");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TORCH_RELIGHT = register("block.extinguished_torch.relight");
+    public static final DeferredHolder<SoundEvent, SoundEvent> LANTERN_RELIGHT = register("block.extinguished_lantern.relight");
+    public static final DeferredHolder<SoundEvent, SoundEvent> LANTERN_OPEN = register("block.extinguished_lantern.open");
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Prospect.MODID, name)));

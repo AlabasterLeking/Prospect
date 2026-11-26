@@ -3,12 +3,15 @@ package alabaster.prospect.common.entity.dynamite;
 import alabaster.prospect.common.item.DynamiteType;
 import alabaster.prospect.common.item.LitDynamiteItem;
 import alabaster.prospect.common.registry.ProspectModEntities;
+import alabaster.prospect.common.utilities.ProspectAdvancements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -46,6 +49,7 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
     private static final double WAKE_SPEED_SQR = 1.0E-4;
     private static final double TRAIL_SPACING = 0.15;
     private static final int MAX_TRAIL_STEPS = 6;
+    private static final int SLIME_DRIP_CHANCE = 12;
 
     private int fuse = DynamiteType.STANDARD.fuseTicks;
     private float spin;
@@ -99,6 +103,13 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
     @Override
     public void lerpMotion(double x, double y, double z) {
         setDeltaMovement(x, y, z);
+    }
+
+    @Override
+    public void recreateFromPacket(ClientboundAddEntityPacket packet) {
+        super.recreateFromPacket(packet);
+        yRotO = getYRot();
+        xRotO = getXRot();
     }
 
     private void wake() {
@@ -167,11 +178,15 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
             tickSpin();
             fuse--;
             tickFuseParticles();
+            tickSlimeDrip();
         } else if (isInWater()) {
             extinguish();
         } else if (--fuse <= 0) {
             discard();
             LitDynamiteItem.explode(level(), this, getX(), getY(0.0625), getZ(), getDynamiteType());
+            if (getDynamiteType() == DynamiteType.BUNDLE && getOwner() instanceof ServerPlayer player) {
+                ProspectAdvancements.award(player, ProspectAdvancements.OVERKILL);
+            }
         }
     }
 
@@ -303,6 +318,14 @@ public class DynamiteEntity extends Projectile implements ItemSupplier {
             level().addParticle(ParticleTypes.SMALL_FLAME, tip.x, tip.y, tip.z, 0.0, 0.01, 0.0);
         }
         lastFuseTip = tip;
+    }
+
+    private void tickSlimeDrip() {
+        if (!getDynamiteType().sticky || !isStuck() || random.nextInt(SLIME_DRIP_CHANCE) != 0) return;
+        double x = getX() + (random.nextDouble() - 0.5) * 0.2;
+        double y = getY() + random.nextDouble() * 0.1;
+        double z = getZ() + (random.nextDouble() - 0.5) * 0.2;
+        level().addParticle(ParticleTypes.ITEM_SLIME, x, y, z, 0.0, -0.02, 0.0);
     }
 
     private Vec3 fuseTip() {

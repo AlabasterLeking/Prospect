@@ -1,0 +1,32 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "prospect:ruby_ore"
+    }
+  ],
+  "processing_time": 350,
+  "results": [
+    {
+      "id": "prospect:ruby"
+    },
+    {
+      "chance": 0.75,
+      "id": "prospect:ruby"
+    },
+    {
+      "chance": 0.75,
+      "id": "create:experience_nugget"
+    },
+    {
+      "chance": 0.125,
+      "id": "minecraft:cobblestone"
+    }
+  ]
+}

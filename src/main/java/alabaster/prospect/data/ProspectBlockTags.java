@@ -6,6 +6,7 @@ import alabaster.prospect.common.tag.ProspectCommonTags;
 import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
@@ -30,6 +31,10 @@ public class ProspectBlockTags extends BlockTagsProvider {
     }
 
     protected void registerModTags() {
+        tag(ProspectModTags.DOUSEABLE)
+                .addOptional(ResourceLocation.fromNamespaceAndPath("supplementaries", "sconce"))
+                .addOptional(ResourceLocation.fromNamespaceAndPath("supplementaries", "sconce_wall"));
+
         tag(ProspectModTags.SPAWNS_SPARKLE_NODES)
                 .addTags(
                         BlockTags.SAND,

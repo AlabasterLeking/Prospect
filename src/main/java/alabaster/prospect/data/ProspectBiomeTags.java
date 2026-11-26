@@ -2,6 +2,7 @@ package alabaster.prospect.data;
 
 import alabaster.prospect.Prospect;
 import alabaster.prospect.common.registry.ProspectBiomes;
+import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -17,6 +18,9 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import java.util.concurrent.CompletableFuture;
 
 public class ProspectBiomeTags extends BiomeTagsProvider {
+
+    private static final String BOP = "biomesoplenty";
+    private static final String TERRALITH = "terralith";
 
     public static final TagKey<Biome> HAS_PROSPECTOR_CAMP = tag("has_structure/prospector_camp");
     public static final TagKey<Biome> HAS_PROSPECTOR_CAMP_BADLANDS = tag("has_structure/prospector_camp_badlands");
@@ -35,6 +39,12 @@ public class ProspectBiomeTags extends BiomeTagsProvider {
 
     public ProspectBiomeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper helper) {
         super(output, lookupProvider, Prospect.MODID, helper);
+    }
+
+    private static void optional(TagAppender<Biome> appender, String namespace, String... paths) {
+        for (String path : paths) {
+            appender.addOptional(ResourceLocation.fromNamespaceAndPath(namespace, path));
+        }
     }
 
     private static TagKey<Biome> tag(String path) {
@@ -57,11 +67,32 @@ public class ProspectBiomeTags extends BiomeTagsProvider {
         tag(HAS_ABANDONED_MINE_BADLANDS).addTag(BiomeTags.IS_BADLANDS);
         tag(HAS_ABANDONED_MINE_JUNGLE).addTag(BiomeTags.IS_JUNGLE);
         tag(HAS_ABANDONED_MINE_SNOWY).add(Biomes.SNOWY_SLOPES, Biomes.FROZEN_PEAKS, Biomes.JAGGED_PEAKS, Biomes.GROVE);
-        tag(HAS_ABANDONED_MINE_DESERT).add(Biomes.DESERT);
+        tag(HAS_ABANDONED_MINE_DESERT).add(Biomes.DESERT).addTag(Tags.Biomes.IS_DESERT);
         tag(HAS_ABANDONED_MINE_FUNGAL).add(Biomes.DARK_FOREST);
         tag(HAS_ABANDONED_MINE_SAVANNA).addTag(BiomeTags.IS_SAVANNA);
         tag(HAS_ABANDONED_MINE_QUARRY).add(Biomes.STONY_PEAKS, Biomes.WINDSWEPT_GRAVELLY_HILLS);
-        tag(HAS_ABANDONED_MINE_MANGROVE).add(Biomes.MANGROVE_SWAMP, Biomes.SWAMP);
+        tag(HAS_ABANDONED_MINE_MANGROVE).add(Biomes.MANGROVE_SWAMP, Biomes.SWAMP).addTag(Tags.Biomes.IS_SWAMP);
+
+
+        optional(tag(HAS_PROSPECTOR_CAMP), BOP, "grassland", "pasture", "prairie", "field", "shrubland", "lavender_field", "overgrown_greens");
+        optional(tag(HAS_PROSPECTOR_CAMP), TERRALITH, "blooming_plateau", "blooming_valley", "brushland", "lush_valley", "shield", "steppe", "valley_clearing", "lavender_valley");
+        optional(tag(HAS_PROSPECTOR_CAMP_TAIGA), BOP, "coniferous_forest", "fir_clearing");
+        optional(tag(HAS_PROSPECTOR_CAMP_TAIGA), TERRALITH, "siberian_taiga", "birch_taiga", "alpine_grove");
+        optional(tag(HAS_PROSPECTOR_CAMP_SNOWY), BOP, "snowy_coniferous_forest", "snowy_fir_clearing", "snowy_maple_woods");
+        optional(tag(HAS_PROSPECTOR_CAMP_SNOWY), TERRALITH, "wintry_forest", "snowy_maple_forest");
+        optional(tag(HAS_ABANDONED_MINE), BOP, "maple_woods", "seasonal_forest", "woodland", "old_growth_woodland", "redwood_forest", "aspen_glade", "jacaranda_glade", "mediterranean_forest", "coniferous_forest", "fir_clearing", "dead_forest", "old_growth_dead_forest");
+        optional(tag(HAS_ABANDONED_MINE), TERRALITH, "alpine_grove", "birch_taiga", "cloud_forest", "lavender_forest", "sakura_grove", "siberian_grove", "siberian_taiga", "forested_highlands", "alpine_highlands", "haze_mountain", "rocky_mountains");
+        optional(tag(HAS_ABANDONED_MINE_BADLANDS), TERRALITH, "bryce_canyon", "white_mesa");
+        optional(tag(HAS_ABANDONED_MINE_SNOWY), BOP, "snowy_coniferous_forest", "snowy_fir_clearing", "snowy_maple_woods");
+        optional(tag(HAS_ABANDONED_MINE_SNOWY), TERRALITH, "frozen_cliffs", "wintry_forest", "snowy_maple_forest", "snowy_cherry_grove", "windswept_spires", "emerald_peaks");
+        optional(tag(HAS_ABANDONED_MINE_DESERT), TERRALITH, "desert_canyon", "desert_oasis", "desert_spires", "ancient_sands", "sandstone_valley", "lush_desert");
+        optional(tag(HAS_ABANDONED_MINE_FUNGAL), BOP, "ominous_woods");
+        optional(tag(HAS_ABANDONED_MINE_FUNGAL), TERRALITH, "moonlight_grove");
+        optional(tag(HAS_ABANDONED_MINE_QUARRY), BOP, "crag", "jade_cliffs");
+        optional(tag(HAS_ABANDONED_MINE_QUARRY), TERRALITH, "stony_spires", "granite_cliffs", "yosemite_cliffs", "painted_mountains", "white_cliffs", "gravel_desert");
+
+        optional(tag(ProspectModTags.VOLCANIC_BIOMES), BOP, "volcano", "volcanic_plains", "hot_springs");
+        optional(tag(ProspectModTags.VOLCANIC_BIOMES), TERRALITH, "volcanic_peaks", "volcanic_crater", "caldera", "basalt_cliffs", "yellowstone");
 
         ResourceLocation grove = ProspectBiomes.GLOWSHROOM_GROVE.location();
         tag(BiomeTags.IS_OVERWORLD).addOptional(grove);

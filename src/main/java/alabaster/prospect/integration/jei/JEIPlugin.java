@@ -82,6 +82,10 @@ public class JEIPlugin implements IModPlugin {
         if (!lines.isEmpty()) {
             registration.addIngredientInfo(lines, VanillaTypes.ITEM_STACK, Component.translatable("jei.info.zipline"));
         }
+        List<ItemStack> chains = BuiltInRegistries.ITEM.getTag(ProspectModTags.CHAINS).stream().flatMap(set -> set.stream()).map(ItemStack::new).toList();
+        if (!chains.isEmpty()) {
+            registration.addIngredientInfo(chains, VanillaTypes.ITEM_STACK, Component.translatable("jei.info.minecart_link"));
+        }
         registration.addIngredientInfo(new ItemStack(ProspectModItems.GRAPPLING_HOOK.get()), VanillaTypes.ITEM_STACK,
                 Component.translatable("jei.info.grappling_hook", ProspectKeyBindings.GRAPPLE_REEL_IN.getTranslatedKeyMessage(), ProspectKeyBindings.GRAPPLE_LET_OUT.getTranslatedKeyMessage()));
         registration.addIngredientInfo(new ItemStack(ProspectModItems.SLIME_BUCKET.get()), VanillaTypes.ITEM_STACK,
@@ -94,6 +98,16 @@ public class JEIPlugin implements IModPlugin {
                 Component.translatable("jei.info.rock_candy"));
         registration.addIngredientInfo(new ItemStack(ProspectModItems.ALTIMETER.get()), VanillaTypes.ITEM_STACK,
                 Component.translatable("jei.info.altimeter"));
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.MINING_HELMET.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.mining_helmet", ProspectKeyBindings.TOGGLE_MINING_HELMET_LIGHT.getTranslatedKeyMessage()));
+        registration.addIngredientInfo(List.of(new ItemStack(ProspectModItems.EXTINGUISHED_TORCH.get()), new ItemStack(ProspectModItems.EXTINGUISHED_LANTERN.get())), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.extinguished_light"));
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.WOODEN_RAIL.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.wooden_rail"));
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.LAUNCH_RAIL.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.launch_rail"));
+        registration.addIngredientInfo(new ItemStack(ProspectModItems.PAYLOAD_RAIL.get()), VanillaTypes.ITEM_STACK,
+                Component.translatable("jei.info.payload_rail"));
 
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {

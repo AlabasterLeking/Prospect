@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_dynamite": {
+    "has_gunpowder": {
       "conditions": {
         "items": [
           {
-            "items": "prospect:dynamite"
+            "items": "minecraft:gunpowder"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "prospect:sticky_dynamite_bulk"
+        "recipe": "prospect:dynamite_from_gunpowder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_dynamite"
+      "has_gunpowder"
     ]
   ],
   "rewards": {
     "recipes": [
-      "prospect:sticky_dynamite_bulk"
+      "prospect:dynamite_from_gunpowder"
     ]
   }
 }

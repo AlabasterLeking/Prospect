@@ -202,6 +202,25 @@
       }
     ]
   },
+  "item.grappling_hook.creak": {
+    "subtitle": "subtitles.prospect.item.grappling_hook.creak",
+    "sounds": [
+      {
+        "name": "minecraft:block.scaffolding.step",
+        "type": "event",
+        "pitch": 0.6,
+        "volume": 0.6,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:block.ladder.step",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.5,
+        "weight": 1
+      }
+    ]
+  },
   "entity.grappling_hook.hit_block": {
     "subtitle": "subtitles.prospect.entity.grappling_hook.hit_block",
     "sounds": [
@@ -312,6 +331,69 @@
         "type": "event",
         "pitch": 0.7,
         "volume": 0.5
+      }
+    ]
+  },
+  "block.extinguished_torch.relight": {
+    "subtitle": "subtitles.prospect.block.extinguished_torch.relight",
+    "sounds": [
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.3,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event",
+        "pitch": 1.9,
+        "volume": 0.25,
+        "weight": 1
+      },
+      {
+        "name": "minecraft:block.campfire.crackle",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.9,
+        "weight": 2
+      }
+    ]
+  },
+  "block.extinguished_lantern.relight": {
+    "subtitle": "subtitles.prospect.block.extinguished_lantern.relight",
+    "sounds": [
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.25,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:block.campfire.crackle",
+        "type": "event",
+        "pitch": 1.1,
+        "volume": 0.8,
+        "weight": 2
+      }
+    ]
+  },
+  "block.extinguished_lantern.open": {
+    "sounds": [
+      {
+        "name": "minecraft:block.lantern.hit",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.6,
+        "weight": 2
+      },
+      {
+        "name": "minecraft:block.chain.hit",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.4,
+        "weight": 1
       }
     ]
   }

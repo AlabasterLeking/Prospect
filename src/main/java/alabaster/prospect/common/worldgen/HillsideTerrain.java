@@ -46,7 +46,6 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
     ).apply(instance, HillsideTerrain::new));
 
     private static final int MAX_FILL_DEPTH = 12;
-    private static final int TAPER = 3;
     private static final int FILL_TAPER = 6;
     public static final int MARGIN = 14;
     private static final int GRADE_RADIUS = 6;
@@ -54,12 +53,15 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
     private static final int BOWL_RADIUS = 8;
     private static final int PATH_FRINGE = 2;
     private static final int[] PATH_CHANCE = {92, 45, 15};
+    private static final int PATH_FADE = 3;
     private static final int CLUSTER_SIZE = 3;
     private static final int CLUSTER_JITTER = 2;
     private static final double RIM_WORN_FRACTION = 0.55;
     private static final double SPREAD_JITTER = 0.3;
     private static final float MAX_DRESS_DENSITY = 0.6F;
     private static final int PLUG_HEIGHT = 4;
+    private static final int BLEND_RADIUS = 6;
+    private static final double BLEND_JITTER = 0.25;
 
     public void prepare(WorldGenLevel level, BoundingBox chunk, Vec3i size, Function<BlockPos, BlockPos> toWorld) {
         bowl.ifPresent(area -> bowl(level, chunk, area, toWorld));
@@ -109,7 +111,7 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
             piles(level, chunk, toWorld);
         }
         if (!paths.isEmpty()) {
-            paths(level, chunk, toWorld);
+            paths(level, chunk, size, toWorld);
         }
         dress(level, chunk, surface, toWorld);
         if (rubbleDensity > 0.0F && rubbleArea.isPresent()) {
@@ -229,31 +231,11 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
         int centerX = size.getX() / 2;
         List<BlockPos> placed = new java.util.ArrayList<>();
         for (BoundingBox area : cover) {
-            int fromX = area.minX() - (area.minX() <= centerX ? TAPER : 0);
-            int toX = area.maxX() + (area.maxX() >= centerX ? TAPER : 0);
-            for (int x = fromX; x <= toX; x++) {
-                for (int z = area.minZ(); z <= area.maxZ() + TAPER; z++) {
-                    int dx = x < area.minX() ? area.minX() - x : Math.max(0, x - area.maxX());
-                    int dz = Math.max(0, z - area.maxZ());
-                    int top = area.maxY() - spread(dx, dz, toWorld.apply(new BlockPos(x, 0, z)));
-                    int bottom = top - MAX_FILL_DEPTH;
-                    for (int y = top; y >= bottom; y--) {
-                        BlockPos pos = toWorld.apply(new BlockPos(x, y, z));
-                        if (!chunk.isInside(pos)) continue;
-                        BlockState state = level.getBlockState(pos);
-                        if (!state.isAir() && !state.canBeReplaced()) break;
-                        level.setBlock(pos, ground[1], Block.UPDATE_CLIENTS);
-                        placed.add(pos.immutable());
-                    }
-                }
-            }
+            int fromX = area.minX() - (area.minX() <= centerX ? BLEND_RADIUS : 0);
+            int toX = area.maxX() + (area.maxX() >= centerX ? BLEND_RADIUS : 0);
+            blend(level, chunk, area, fromX, toX, toWorld, ground, placed, false);
         }
-        for (BlockPos pos : placed) {
-            if (level.getBlockState(pos.above()).isAir()) {
-                level.setBlock(pos, ground[0], Block.UPDATE_CLIENTS);
-                surface.add(pos);
-            }
-        }
+        topSoil(level, placed, ground, surface);
     }
 
     private void backfill(WorldGenLevel level, BoundingBox chunk, Vec3i size, Function<BlockPos, BlockPos> toWorld, List<BlockPos> surface) {
@@ -262,25 +244,63 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
         List<BlockPos> placed = new java.util.ArrayList<>();
         for (BoundingBox area : backfill) {
             boolean left = area.maxX() < centerX;
-            int fromX = left ? area.minX() - TAPER : area.minX();
-            int toX = left ? area.maxX() : area.maxX() + TAPER;
-            for (int x = fromX; x <= toX; x++) {
-                for (int z = area.minZ(); z <= area.maxZ() + TAPER; z++) {
-                    int dx = x < area.minX() ? area.minX() - x : Math.max(0, x - area.maxX());
-                    int dz = Math.max(0, z - area.maxZ());
-                    BlockPos base = toWorld.apply(new BlockPos(x, area.maxY(), z));
-                    BlockPos pos = base.below(spread(dx, dz, base));
-                    plug(level, chunk, pos, ground, placed);
-                    for (int depth = 0; depth < MAX_FILL_DEPTH && pos.getY() > level.getMinBuildHeight(); depth++, pos = pos.below()) {
-                        if (!chunk.isInside(pos)) continue;
-                        BlockState state = level.getBlockState(pos);
-                        if (!state.isAir() && !state.canBeReplaced() && state.getFluidState().isEmpty()) break;
-                        level.setBlock(pos, ground[1], Block.UPDATE_CLIENTS);
-                        placed.add(pos.immutable());
-                    }
+            int fromX = left ? area.minX() - BLEND_RADIUS : area.minX();
+            int toX = left ? area.maxX() : area.maxX() + BLEND_RADIUS;
+            blend(level, chunk, area, fromX, toX, toWorld, ground, placed, true);
+        }
+        topSoil(level, placed, ground, surface);
+    }
+
+    private static void blend(WorldGenLevel level, BoundingBox chunk, BoundingBox area, int fromX, int toX, Function<BlockPos, BlockPos> toWorld, BlockState[] ground, List<BlockPos> placed, boolean plugGaps) {
+        for (int x = fromX; x <= toX; x++) {
+            for (int z = area.minZ(); z <= area.maxZ() + BLEND_RADIUS; z++) {
+                int dx = x < area.minX() ? area.minX() - x : Math.max(0, x - area.maxX());
+                int dz = Math.max(0, z - area.maxZ());
+                BlockPos top = toWorld.apply(new BlockPos(x, area.maxY(), z));
+                if (!chunk.isInside(top.getX(), chunk.minY(), top.getZ())) continue;
+                if (dx == 0 && dz == 0) {
+                    if (plugGaps) plug(level, chunk, top, ground, placed);
+                    fillDown(level, chunk, top, ground, placed);
+                    continue;
+                }
+                double distance = Math.sqrt(dx * dx + dz * dz) + (hash(top.getX(), top.getZ(), 23) % 7 - 3) * BLEND_JITTER;
+                if (distance >= BLEND_RADIUS) continue;
+                int natural = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, top.getX(), top.getZ()) - 1;
+                if (natural >= top.getY()) continue;
+                BlockPos naturalPos = new BlockPos(top.getX(), natural, top.getZ());
+                if (!level.getFluidState(naturalPos).isEmpty()) continue;
+                double t = 1.0 - distance / BLEND_RADIUS;
+                double weight = t * t * (3.0 - 2.0 * t);
+                int target = natural + (int) Math.round((top.getY() - natural) * weight);
+                if (target <= natural) continue;
+                BlockState naturalState = level.getBlockState(naturalPos);
+                if (naturalState.is(ground[0].getBlock()) && !ground[0].is(ground[1].getBlock())) {
+                    level.setBlock(naturalPos, ground[1], Block.UPDATE_CLIENTS);
+                }
+                for (int y = natural + 1; y <= target; y++) {
+                    BlockPos pos = new BlockPos(top.getX(), y, top.getZ());
+                    if (!chunk.isInside(pos)) continue;
+                    BlockState state = level.getBlockState(pos);
+                    if (!state.isAir() && !state.canBeReplaced()) break;
+                    level.setBlock(pos, ground[1], Block.UPDATE_CLIENTS);
+                    placed.add(pos);
                 }
             }
         }
+    }
+
+    private static void fillDown(WorldGenLevel level, BoundingBox chunk, BlockPos top, BlockState[] ground, List<BlockPos> placed) {
+        BlockPos pos = top;
+        for (int depth = 0; depth < MAX_FILL_DEPTH && pos.getY() > level.getMinBuildHeight(); depth++, pos = pos.below()) {
+            if (!chunk.isInside(pos)) continue;
+            BlockState state = level.getBlockState(pos);
+            if (!state.isAir() && !state.canBeReplaced() && state.getFluidState().isEmpty()) break;
+            level.setBlock(pos, ground[1], Block.UPDATE_CLIENTS);
+            placed.add(pos.immutable());
+        }
+    }
+
+    private static void topSoil(WorldGenLevel level, List<BlockPos> placed, BlockState[] ground, List<BlockPos> surface) {
         for (BlockPos pos : placed) {
             if (level.getBlockState(pos.above()).isAir()) {
                 level.setBlock(pos, ground[0], Block.UPDATE_CLIENTS);
@@ -413,37 +433,51 @@ public record HillsideTerrain(Optional<BoundingBox> fill, Optional<BoundingBox> 
         return above.isAir() || above.canBeReplaced();
     }
 
-    private void paths(WorldGenLevel level, BoundingBox chunk, Function<BlockPos, BlockPos> toWorld) {
+    private void paths(WorldGenLevel level, BoundingBox chunk, Vec3i size, Function<BlockPos, BlockPos> toWorld) {
         for (BoundingBox area : paths) {
+            int reach = Math.max(outside(area.minX(), area.minZ(), size), outside(area.maxX(), area.maxZ(), size));
             for (int x = area.minX() - PATH_FRINGE; x <= area.maxX() + PATH_FRINGE; x++) {
                 for (int z = area.minZ() - PATH_FRINGE; z <= area.maxZ() + PATH_FRINGE; z++) {
                     int edge = Math.max(Math.max(area.minX() - x, x - area.maxX()), Math.max(area.minZ() - z, z - area.maxZ()));
                     edge = Math.max(0, edge);
                     BlockPos column = toWorld.apply(new BlockPos(x, 0, z));
                     if (!chunk.isInside(column.getX(), chunk.minY(), column.getZ())) continue;
-                    if (hash(column.getX(), column.getZ(), 13) % 100 >= PATH_CHANCE[edge]) continue;
+                    int chance = PATH_CHANCE[edge];
+                    int fade = outside(x, z, size) - (reach - PATH_FADE);
+                    if (reach > PATH_FADE * 2 && fade > 0) chance = chance * (PATH_FADE + 1 - fade) / (PATH_FADE + 1);
+                    if (hash(column.getX(), column.getZ(), 13) % 100 >= chance) continue;
                     BlockPos top = surface(level, column);
                     BlockState state = level.getBlockState(top);
-                    if (state.is(Blocks.SNOW)) {
-                        if (hash(column.getX(), column.getZ(), 17) % 3 > 0) level.setBlock(top, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
-                        top = top.below();
-                        state = level.getBlockState(top);
-                    }
-                    BlockState worn = worn(state, top, edge);
+                    boolean snowed = state.is(Blocks.SNOW);
+                    BlockPos ground = snowed ? top.below() : top;
+                    boolean cold = snowed || level.getBiome(ground).value().coldEnoughToSnow(ground);
+                    BlockState worn = worn(level.getBlockState(ground), ground, edge, cold);
                     if (worn == null) continue;
-                    BlockState above = level.getBlockState(top.above());
-                    if (!above.isAir() && (worn.is(Blocks.DIRT_PATH) || (edge == 0 && above.canBeReplaced()))) {
-                        level.setBlock(top.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    if (snowed && (worn.is(Blocks.DIRT_PATH) || hash(column.getX(), column.getZ(), 17) % 3 > 0)) {
+                        level.setBlock(top, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
                     }
-                    level.setBlock(top, worn, Block.UPDATE_CLIENTS);
+                    BlockState above = level.getBlockState(ground.above());
+                    if (!above.isAir() && (worn.is(Blocks.DIRT_PATH) || (edge == 0 && above.canBeReplaced()))) {
+                        level.setBlock(ground.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    }
+                    level.setBlock(ground, worn, Block.UPDATE_CLIENTS);
                 }
             }
         }
     }
 
-    private static BlockState worn(BlockState state, BlockPos pos, int edge) {
+    private static int outside(int x, int z, Vec3i size) {
+        return Math.max(Math.max(-x, x - size.getX() + 1), Math.max(-z, z - size.getZ() + 1));
+    }
+
+    private static BlockState worn(BlockState state, BlockPos pos, int edge, boolean cold) {
         Block[] mix;
-        if (state.is(Blocks.SAND) || state.is(Blocks.SANDSTONE)) {
+        if (cold && (state.is(BlockTags.DIRT) || state.is(Blocks.SNOW_BLOCK) || state.is(Blocks.POWDER_SNOW))) {
+            if (edge > 0 && clustered(pos, 23, 3) > 0) return null;
+            mix = edge == 0
+                    ? new Block[]{Blocks.DIRT_PATH, Blocks.DIRT_PATH, Blocks.DIRT_PATH, Blocks.PACKED_ICE, Blocks.DIRT_PATH, Blocks.DIRT_PATH, Blocks.DIRT_PATH}
+                    : new Block[]{Blocks.DIRT_PATH};
+        } else if (state.is(Blocks.SAND) || state.is(Blocks.SANDSTONE)) {
             mix = new Block[]{Blocks.SAND, Blocks.SMOOTH_SANDSTONE, Blocks.SAND, Blocks.SANDSTONE, Blocks.COARSE_DIRT};
         } else if (state.is(Blocks.RED_SAND) || state.is(BlockTags.TERRACOTTA) || state.is(Blocks.RED_SANDSTONE)) {
             mix = new Block[]{Blocks.RED_SAND, Blocks.COARSE_DIRT, Blocks.RED_SAND, Blocks.RED_SANDSTONE, Blocks.TERRACOTTA};

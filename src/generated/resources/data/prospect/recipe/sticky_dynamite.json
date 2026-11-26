@@ -6,11 +6,20 @@
       "item": "prospect:dynamite"
     },
     {
+      "item": "prospect:dynamite"
+    },
+    {
+      "item": "prospect:dynamite"
+    },
+    {
+      "item": "prospect:dynamite"
+    },
+    {
       "item": "minecraft:slime_ball"
     }
   ],
   "result": {
-    "count": 1,
+    "count": 4,
     "id": "prospect:sticky_dynamite"
   }
 }

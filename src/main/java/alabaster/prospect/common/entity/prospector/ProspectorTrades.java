@@ -4,7 +4,9 @@ import alabaster.prospect.common.prospecting.ProspectingGems;
 import alabaster.prospect.common.prospecting.ProspectingSockets;
 import alabaster.prospect.common.registry.ProspectDataComponents;
 import alabaster.prospect.common.registry.ProspectEnchantments;
+import alabaster.prospect.common.registry.ProspectMapDecorations;
 import alabaster.prospect.common.registry.ProspectModItems;
+import alabaster.prospect.common.tag.ProspectModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -58,8 +60,15 @@ public final class ProspectorTrades {
             ProspectorTrades::foreignGem
     };
 
+    public static final VillagerTrades.ItemListing[] BUYING = {
+            (trader, random) -> buy(ProspectModItems.RUBY.get(), 2, 8),
+            (trader, random) -> buy(ProspectModItems.SAPPHIRE.get(), 2, 8),
+            (trader, random) -> buy(ProspectModItems.TOPAZ.get(), 2, 8)
+    };
+
     public static final VillagerTrades.ItemListing[] RARE = {
             ProspectorTrades::mineshaftMap,
+            ProspectorTrades::abandonedMineMap,
             (trader, random) -> new MerchantOffer(new ItemCost(ProspectModItems.RUBY.get(), 3), new ItemStack(ProspectModItems.GOLDEN_PAN.get()), 1, 1, 0.05F),
             ProspectorTrades::panningLuckBook,
             ProspectorTrades::socketedPickaxe
@@ -67,6 +76,10 @@ public final class ProspectorTrades {
 
     private static MerchantOffer sell(ItemStack result, int emeralds, int maxUses) {
         return new MerchantOffer(new ItemCost(Items.EMERALD, emeralds), result, maxUses, 1, 0.05F);
+    }
+
+    private static MerchantOffer buy(Item gem, int emeralds, int maxUses) {
+        return new MerchantOffer(new ItemCost(gem, 1), new ItemStack(Items.EMERALD, emeralds), maxUses, 2, 0.05F);
     }
 
     private static MerchantOffer dyedMiningHelmet(Entity trader, RandomSource random) {
@@ -97,6 +110,20 @@ public final class ProspectorTrades {
         map.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.prospect.mineshaft"));
 
         return new MerchantOffer(new ItemCost(ProspectModItems.TOPAZ.get(), 2), Optional.of(new ItemCost(Items.EMERALD, 4)), map, 1, 1, 0.05F);
+    }
+
+    private static MerchantOffer abandonedMineMap(Entity trader, RandomSource random) {
+        if (!(trader.level() instanceof ServerLevel level)) return null;
+
+        BlockPos target = level.findNearestMapStructure(ProspectModTags.ABANDONED_MINES, trader.blockPosition(), 100, true);
+        if (target == null) return null;
+
+        ItemStack map = MapItem.create(level, target.getX(), target.getZ(), (byte) 2, true, true);
+        MapItem.renderBiomePreviewMap(level, map);
+        MapItemSavedData.addTargetDecoration(map, target, "+", ProspectMapDecorations.ABANDONED_MINE);
+        map.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.prospect.abandoned_mine"));
+
+        return new MerchantOffer(new ItemCost(Items.EMERALD, 10), Optional.of(new ItemCost(Items.COMPASS, 1)), map, 1, 1, 0.05F);
     }
 
     private static MerchantOffer panningLuckBook(Entity trader, RandomSource random) {

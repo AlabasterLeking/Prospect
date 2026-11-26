@@ -15,9 +15,11 @@ import java.util.List;
 public class PlacedDynamiteBundleBlock extends AbstractPlacedDynamiteBlock {
 
     public static final MapCodec<PlacedDynamiteBundleBlock> CODEC = simpleCodec(PlacedDynamiteBundleBlock::new);
-    public static final int MAX_BUNDLES = 3;
+    public static final int MAX_BUNDLES = 4;
     public static final IntegerProperty BUNDLES = IntegerProperty.create("bundles", 1, MAX_BUNDLES);
-    private static final double[][] ROWS = {{6.5}, {4.5, 8.5}, {2.5, 6.5, 10.5}};
+    private static final double[][][] SLOTS = {{{5, 5}}, {{5, 2}, {5, 8}}, {{2, 2}, {2, 8}, {8, 5}}, {{2, 2}, {8, 2}, {2, 8}, {8, 8}}};
+    private static final double FOOTPRINT = 6.0;
+    private static final double HEIGHT = 12.0;
 
     public PlacedDynamiteBundleBlock(Properties properties) {
         super(DynamiteType.BUNDLE, properties);
@@ -37,8 +39,8 @@ public class PlacedDynamiteBundleBlock extends AbstractPlacedDynamiteBlock {
     @Override
     protected List<double[]> layout(int count) {
         List<double[]> boxes = new ArrayList<>();
-        for (double z : ROWS[count - 1]) {
-            boxes.add(new double[]{3.5, 0, z, 12.5, 12, z + 3});
+        for (double[] slot : SLOTS[count - 1]) {
+            boxes.add(new double[]{slot[0], 0, slot[1], slot[0] + FOOTPRINT, HEIGHT, slot[1] + FOOTPRINT});
         }
         return boxes;
     }

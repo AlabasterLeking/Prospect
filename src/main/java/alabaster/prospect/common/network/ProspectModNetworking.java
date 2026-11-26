@@ -107,6 +107,12 @@ public class ProspectModNetworking {
         );
 
         registrar.playToClient(
+                MinecartLinkPayload.TYPE,
+                MinecartLinkPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> alabaster.prospect.common.event.MinecartLinkEvents.applyClient(payload))
+        );
+
+        registrar.playToClient(
                 SlimeChunkPayload.TYPE,
                 SlimeChunkPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> SlimeBucketItem.setDancing(payload.inSlimeChunk()))

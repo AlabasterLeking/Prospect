@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "damage": 0,
+  "items": "prospect:sticky_dynamite",
+  "knockback": 0.0,
+  "reload_ticks": 30,
+  "render_mode": {
+    "type": "create:tumble"
+  },
+  "sound_pitch": 0.85,
+  "velocity_multiplier": 1.0
+}

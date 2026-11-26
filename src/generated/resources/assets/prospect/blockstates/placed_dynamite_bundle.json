@@ -44,6 +44,21 @@
     "bundles=3,facing=west": {
       "model": "prospect:block/placed_dynamite_bundle_3",
       "y": 270
+    },
+    "bundles=4,facing=east": {
+      "model": "prospect:block/placed_dynamite_bundle_4",
+      "y": 90
+    },
+    "bundles=4,facing=north": {
+      "model": "prospect:block/placed_dynamite_bundle_4"
+    },
+    "bundles=4,facing=south": {
+      "model": "prospect:block/placed_dynamite_bundle_4",
+      "y": 180
+    },
+    "bundles=4,facing=west": {
+      "model": "prospect:block/placed_dynamite_bundle_4",
+      "y": 270
     }
   }
 }

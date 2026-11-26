@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "supplementaries:sconce",
+      "required": false
+    },
+    {
+      "id": "supplementaries:sconce_wall",
+      "required": false
+    }
+  ]
+}

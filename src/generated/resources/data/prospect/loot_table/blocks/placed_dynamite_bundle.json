@@ -34,6 +34,20 @@
               ],
               "count": 3.0,
               "function": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "conditions": [
+                {
+                  "block": "prospect:placed_dynamite_bundle",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "bundles": "4"
+                  }
+                }
+              ],
+              "count": 4.0,
+              "function": "minecraft:set_count"
             }
           ],
           "name": "prospect:dynamite_bundle"

@@ -64,6 +64,7 @@ public class Advancements extends AdvancementProvider {
                 .save(saver, id(ProspectAdvancements.DEAD_END));
 
         AdvancementHolder payDirt = triggered(root, ProspectAdvancements.PAY_DIRT, ProspectModItems.COPPER_PAN.get(), AdvancementType.TASK, false, saver);
+        triggered(payDirt, ProspectAdvancements.HIDDEN_GEM, Items.DIAMOND, AdvancementType.TASK, false, saver);
         child(payDirt, ProspectAdvancements.TRIAL_BY_FIRE, ProspectModItems.NETHERITE_PAN.get(), AdvancementType.GOAL, false)
                 .addCriterion("has_netherite_pan", InventoryChangeTrigger.TriggerInstance.hasItems(ProspectModItems.NETHERITE_PAN.get()))
                 .save(saver, id(ProspectAdvancements.TRIAL_BY_FIRE));
@@ -108,6 +109,7 @@ public class Advancements extends AdvancementProvider {
 
         AdvancementHolder fireInTheHole = triggered(root, ProspectAdvancements.FIRE_IN_THE_HOLE, ProspectModItems.DYNAMITE.get(), AdvancementType.TASK, false, saver);
         triggered(fireInTheHole, ProspectAdvancements.HOT_POTATO, ProspectModItems.LIT_DYNAMITE.get(), AdvancementType.TASK, true, saver);
+        triggered(fireInTheHole, ProspectAdvancements.OVERKILL, ProspectModItems.DYNAMITE_BUNDLE.get(), AdvancementType.TASK, false, saver);
     }
 
     private static <T> HolderSet<T> externalTag(HolderLookup.RegistryLookup<T> lookup, TagKey<T> tag) {

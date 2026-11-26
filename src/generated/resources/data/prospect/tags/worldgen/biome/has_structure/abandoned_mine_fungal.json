@@ -1,5 +1,13 @@
 {
   "values": [
-    "minecraft:dark_forest"
+    "minecraft:dark_forest",
+    {
+      "id": "biomesoplenty:ominous_woods",
+      "required": false
+    },
+    {
+      "id": "terralith:moonlight_grove",
+      "required": false
+    }
   ]
 }

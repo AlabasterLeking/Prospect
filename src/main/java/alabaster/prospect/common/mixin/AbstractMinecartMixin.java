@@ -2,6 +2,7 @@ package alabaster.prospect.common.mixin;
 
 import alabaster.prospect.common.network.MinecartJumpingPayload;
 import alabaster.prospect.common.utilities.JumpingMinecart;
+import alabaster.prospect.common.utilities.MinecartLinks;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
 import alabaster.prospect.common.registry.ProspectParticleTypes;
 import alabaster.prospect.common.utilities.RailCatch;
@@ -164,7 +165,7 @@ public abstract class AbstractMinecartMixin extends Entity implements JumpingMin
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void skipAirbornePush(Entity entity, CallbackInfo ci) {
         if (level().isClientSide()) return;
-        if (prospect$airborne || entity instanceof JumpingMinecart other && other.prospect$isAirborne()) {
+        if (prospect$airborne || entity instanceof JumpingMinecart other && other.prospect$isAirborne() || MinecartLinks.isLinked(this, entity)) {
             ci.cancel();
         }
     }

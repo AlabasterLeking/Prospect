@@ -6,6 +6,7 @@ import alabaster.prospect.common.registry.ProspectModEntities;
 import alabaster.prospect.common.registry.ProspectModItems;
 import alabaster.prospect.common.registry.ProspectSounds;
 import alabaster.prospect.common.utilities.ProspectAdvancements;
+import alabaster.prospect.integration.create.CreateCompat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -34,6 +35,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +65,8 @@ public class GrapplingHookEntity extends AbstractArrow {
     private static final EntityDataAccessor<Integer> HOOKED_ENTITY = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> MAX = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> CURRENT = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> CONTRAPTION = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Vector3f> CONTRAPTION_ANCHOR = SynchedEntityData.defineId(GrapplingHookEntity.class, EntityDataSerializers.VECTOR3);
 
     private static final Map<UUID, GrapplingHookEntity> ACTIVE = new HashMap<>();
 
@@ -151,6 +155,8 @@ public class GrapplingHookEntity extends AbstractArrow {
         builder.define(HOOKED_ENTITY, -1);
         builder.define(MAX, 48.0F);
         builder.define(CURRENT, 0.0F);
+        builder.define(CONTRAPTION, -1);
+        builder.define(CONTRAPTION_ANCHOR, new Vector3f());
     }
 
     public boolean isAnchored() {
@@ -163,6 +169,14 @@ public class GrapplingHookEntity extends AbstractArrow {
 
     public boolean isThrown() {
         return entityData.get(THROWN);
+    }
+
+    public int getContraptionId() {
+        return entityData.get(CONTRAPTION);
+    }
+
+    public boolean onContraption() {
+        return getContraptionId() >= 0;
     }
 
     public int getHookedEntityId() {
@@ -231,7 +245,9 @@ public class GrapplingHookEntity extends AbstractArrow {
             }
         }
         Entity target = getHookedEntity();
-        if (getHookedEntityId() >= 0) {
+        if (onContraption()) {
+            if (!followContraption() || level().isClientSide()) return;
+        } else if (getHookedEntityId() >= 0) {
             if (target == null || !target.isAlive()) {
                 if (!level().isClientSide()) retract();
                 return;
@@ -241,8 +257,10 @@ public class GrapplingHookEntity extends AbstractArrow {
             if (level().isClientSide()) return;
         } else {
             if (!level().isClientSide() && tethered && !isAnchored() && !inGround && Config.GRAPPLE_GRAB_ITEMS.get() && grabItem()) return;
-            super.tick();
-            if (level().isClientSide() || isRemoved()) return;
+            if (level().isClientSide() || !latchContraption()) {
+                super.tick();
+                if (level().isClientSide() || isRemoved()) return;
+            }
         }
         if (!tethered) return;
 
@@ -265,7 +283,7 @@ public class GrapplingHookEntity extends AbstractArrow {
             if (distance > TRACKING_LIMIT) retract();
             return;
         }
-        if (distance > getRopeCap() + SNAP_MARGIN || anchorBlock == null || level().getBlockState(anchorBlock).getCollisionShape(level(), anchorBlock).isEmpty()) {
+        if (distance > getRopeCap() + SNAP_MARGIN || !onContraption() && (anchorBlock == null || level().getBlockState(anchorBlock).getCollisionShape(level(), anchorBlock).isEmpty())) {
             snap();
             return;
         }
@@ -283,6 +301,59 @@ public class GrapplingHookEntity extends AbstractArrow {
                 swingAwarded = true;
                 ProspectAdvancements.award(serverPlayer, ProspectAdvancements.HOOKED_ON_A_FEELING);
             }
+        }
+    }
+
+    private boolean latchContraption() {
+        if (!tethered || isAnchored() || inGround || !(getOwner() instanceof Player owner)) return false;
+        Vec3 from = position();
+        Vec3 to = from.add(getDeltaMovement());
+        CreateCompat.Hit hit = CreateCompat.clip(level(), from, to);
+        if (hit == null) return false;
+        BlockHitResult block = level().clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        if (block.getType() != HitResult.Type.MISS && block.getLocation().distanceToSqr(from) < hit.distanceSqr()) return false;
+        setPos(hit.world());
+        setDeltaMovement(Vec3.ZERO);
+        double distance = ropePoint(owner).distanceTo(position());
+        anchorBlock = null;
+        entityData.set(CONTRAPTION, hit.contraption().getId());
+        entityData.set(CONTRAPTION_ANCHOR, hit.local().toVector3f());
+        entityData.set(FACE, hit.face());
+        entityData.set(LENGTH, (float) Math.max(MIN_LENGTH, distance));
+        setReelLength(Math.max(MIN_LENGTH, distance));
+        entityData.set(ANCHORED, true);
+        level().playSound(null, getX(), getY(), getZ(), getDefaultHitGroundSoundEvent(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        return true;
+    }
+
+    private boolean followContraption() {
+        Entity contraption = level().getEntity(getContraptionId());
+        Vec3 world = contraption != null && contraption.isAlive() ? CreateCompat.toGlobal(contraption, new Vec3(entityData.get(CONTRAPTION_ANCHOR))) : null;
+        if (world == null) {
+            if (!level().isClientSide()) dropFromContraption();
+            return false;
+        }
+        xo = getX();
+        yo = getY();
+        zo = getZ();
+        setPos(world);
+        setDeltaMovement(Vec3.ZERO);
+        return true;
+    }
+
+    private void dropFromContraption() {
+        entityData.set(CONTRAPTION, -1);
+        Direction face = getHitFace();
+        BlockPos behind = BlockPos.containing(position().subtract(face.getStepX() * 0.05, face.getStepY() * 0.05, face.getStepZ() * 0.05));
+        if (tethered && !level().getBlockState(behind).getCollisionShape(level(), behind).isEmpty()) {
+            anchorBlock = behind;
+            inGround = true;
+            return;
+        }
+        if (tethered) {
+            snap();
+        } else {
+            entityData.set(ANCHORED, false);
         }
     }
 
@@ -471,6 +542,7 @@ public class GrapplingHookEntity extends AbstractArrow {
 
     private void loosen() {
         tethered = false;
+        entityData.set(CONTRAPTION, -1);
         entityData.set(ANCHORED, false);
         entityData.set(HOOKED_ENTITY, -1);
         ACTIVE.values().removeIf(hook -> hook == this);

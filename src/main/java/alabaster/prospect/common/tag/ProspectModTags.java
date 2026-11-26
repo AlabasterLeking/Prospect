@@ -7,12 +7,14 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class ProspectModTags {
 
     public static final TagKey<Block> SPAWNS_SPARKLE_NODES = modBlockTag("spawns_sparkle_nodes");
+    public static final TagKey<Block> DOUSEABLE = modBlockTag("douseable");
 
     public static final TagKey<Item> RUBY_ORES = modItemTag("ruby_ores");
     public static final TagKey<Item> SAPPHIRE_ORES = modItemTag("sapphire_ores");
@@ -28,6 +30,8 @@ public class ProspectModTags {
     public static final TagKey<Item> CHAINS = modItemTag("chains");
 
     public static final TagKey<Item> ENCHANTABLE_PANS = modItemTag("enchantable/pans");
+
+    public static final TagKey<Biome> VOLCANIC_BIOMES = TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(Prospect.MODID, "panning/volcanic"));
 
     public static final TagKey<Structure> ABANDONED_MINES = modStructureTag("abandoned_mines");
     public static final TagKey<Structure> PROSPECTOR_CAMPS = modStructureTag("prospector_camps");

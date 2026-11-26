@@ -60,6 +60,7 @@ public class WanderingProspector extends WanderingTrader {
     @Override
     protected void updateTrades() {
         MerchantOffers offers = getOffers();
+        addOffersFromItemListings(offers, ProspectorTrades.BUYING, 2);
         addOffersFromItemListings(offers, ProspectorTrades.COMMON, 5);
 
         List<VillagerTrades.ItemListing> rare = new ArrayList<>(List.of(ProspectorTrades.RARE));

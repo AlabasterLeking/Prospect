@@ -1,6 +1,7 @@
 package alabaster.prospect.common.event;
 
 import alabaster.prospect.Prospect;
+import alabaster.prospect.client.ClientConfig;
 import alabaster.prospect.client.renderer.ChainRenderer;
 import alabaster.prospect.client.renderer.ChainKnotRenderer;
 import alabaster.prospect.client.renderer.LeadKnotRenderer;
@@ -44,6 +45,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
@@ -87,12 +89,18 @@ public class GrappleClientEvents {
     private static final double MANTLE_HEIGHT = 3.5;
     private static final double MANTLE_REACH = 1.2;
     private static final double MANTLE_STEP = 0.6;
-    private static final double MANTLE_CLEARANCE = 0.4;
-    private static final double MANTLE_FORWARD = 0.25;
-    private static final double MANTLE_MAX_LIFT = 1.0;
+    private static final double MANTLE_CLEARANCE = 0.05;
+    private static final double MANTLE_FORWARD = 0.15;
+    private static final double MANTLE_MAX_LIFT = 0.85;
     private static final double PLAYER_GRAVITY = 0.08;
-    private static final double LIFT_SCALE = 1.15;
+    private static final double LIFT_SCALE = 1.05;
     private static final int MANTLE_TICKS = 15;
+    private static final double CREAK_SPEED = 0.25;
+    private static final int CREAK_MIN_INTERVAL = 4;
+    private static final int CREAK_MAX_INTERVAL = 14;
+    private static final float TENSION_FOV = 0.08F;
+    private static final float TENSION_DECAY = 0.8F;
+    private static final float SWING_TENSION = 0.35F;
 
     private static int hookId = -1;
     private static int releasedId = -1;
@@ -104,6 +112,8 @@ public class GrappleClientEvents {
     private static int mantleTicks;
     private static double mantleTop;
     private static Vec3 mantleDirection = Vec3.ZERO;
+    private static int creakCooldown;
+    private static float tension;
 
     private static int ziplineId = -1;
     private static double ziplineT;
@@ -182,6 +192,8 @@ public class GrappleClientEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof LocalPlayer player) || player != Minecraft.getInstance().player) return;
+        tension *= TENSION_DECAY;
+        if (creakCooldown > 0) creakCooldown--;
         pendingReadout(player);
         if (ziplineId != -1) {
             rideTick(player);
@@ -249,7 +261,7 @@ public class GrappleClientEvents {
         RopeWrap wrap = updateWrap(hook, player);
         length += wrap.takeDelta();
         Vec3 anchor = hook.position();
-        if (lastAnchor != null && !anchor.equals(lastAnchor)) {
+        if (lastAnchor != null && !anchor.equals(lastAnchor) && !hook.onContraption()) {
             Vec3 point = GrapplingHookEntity.ropePoint(player);
             double before = wrap.fixedLength(lastAnchor) + point.distanceTo(wrap.pivot(lastAnchor));
             double after = wrap.fixedLength(anchor) + point.distanceTo(wrap.pivot(anchor));
@@ -298,6 +310,10 @@ public class GrappleClientEvents {
         if (!taut && !grounded && outward > TAUT_SPEED) {
             float strength = (float) Mth.clamp(outward, TAUT_SPEED, 1.0);
             player.level().playLocalSound(player.getX(), player.getEyeY(), player.getZ(), ProspectSounds.GRAPPLING_HOOK_TAUT.get(), SoundSource.PLAYERS, strength, 0.9F + player.getRandom().nextFloat() * 0.2F, false);
+            tension = Math.max(tension, strength);
+        }
+        if (!grounded) {
+            strain(player, velocity.length());
         }
         taut = true;
         double allowed = paying ? REEL_SPEED : 0.0;
@@ -349,6 +365,25 @@ public class GrappleClientEvents {
         }
         Vec3 velocity = player.getDeltaMovement();
         player.setDeltaMovement(mantleDirection.x * MANTLE_FORWARD, velocity.y, mantleDirection.z * MANTLE_FORWARD);
+    }
+
+    private static void strain(LocalPlayer player, double speed) {
+        if (speed < CREAK_SPEED) return;
+        float load = (float) Mth.clamp((speed - CREAK_SPEED) / (1.0 - CREAK_SPEED), 0.0, 1.0);
+        tension = Math.max(tension, load * SWING_TENSION);
+        if (creakCooldown > 0) return;
+        float volume = 0.15F + load * 0.35F;
+        float pitch = 0.8F + load * 0.4F + player.getRandom().nextFloat() * 0.1F;
+        player.level().playLocalSound(player.getX(), player.getEyeY(), player.getZ(), ProspectSounds.GRAPPLING_HOOK_CREAK.get(), SoundSource.PLAYERS, volume, pitch, false);
+        creakCooldown = Mth.lerpInt(load, CREAK_MAX_INTERVAL, CREAK_MIN_INTERVAL);
+    }
+
+    @SubscribeEvent
+    public static void onComputeFov(ComputeFovModifierEvent event) {
+        if (tension < 0.01F || !ClientConfig.ROPE_TENSION.get()) return;
+        if (event.getPlayer() != Minecraft.getInstance().player) return;
+        float scale = Minecraft.getInstance().options.fovEffectScale().get().floatValue();
+        event.setNewFovModifier(event.getNewFovModifier() * (1.0F - TENSION_FOV * tension * scale));
     }
 
     private static Vec3 inputDirection(LocalPlayer player) {
